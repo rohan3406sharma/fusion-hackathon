@@ -1,0 +1,5219 @@
+{
+  "name": "Sectivia U.S. supply-chain graph",
+  "description": "350 mapped supplier-customer relationships between 215 companies (214 U.S.-listed) across 6 sectors.",
+  "url": "https://sectivia.com/dataset/",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Sectivia (https://sectivia.com), CC BY 4.0",
+  "caveat": "Relationships were assembled by hand from company filings, investor presentations, product documentation and industry reporting. Some are stated outright by one of the two parties; others are a reasoned inference from what a company sells and who buys that category. Detailed supplier lists are commercially confidential almost everywhere, so no public map of this kind can be complete or fully sourced. Treat it as a researched starting point, not a register of contracts.",
+  "counts": {
+    "companies": 215,
+    "listed": 214,
+    "relations": 350,
+    "crossSectorRelations": 0,
+    "sectors": 6,
+    "segments": 44
+  },
+  "sectors": [
+    {
+      "id": "ai",
+      "name": "AI & digital infrastructure"
+    },
+    {
+      "id": "energi",
+      "name": "Energy, grid & critical infrastructure"
+    },
+    {
+      "id": "forsvar",
+      "name": "Defense, security & space"
+    },
+    {
+      "id": "medicin",
+      "name": "Medicine, pharma & life science"
+    },
+    {
+      "id": "quantum",
+      "name": "Quantum computing"
+    },
+    {
+      "id": "finans",
+      "name": "Banks, payments & capital markets"
+    }
+  ],
+  "segments": [
+    {
+      "id": "chips",
+      "sector": "ai",
+      "name": "Chips & accelerators"
+    },
+    {
+      "id": "equip",
+      "sector": "ai",
+      "name": "Semiconductor equipment & IP"
+    },
+    {
+      "id": "cloud",
+      "sector": "ai",
+      "name": "Cloud platforms"
+    },
+    {
+      "id": "datacentre",
+      "sector": "ai",
+      "name": "Data centers"
+    },
+    {
+      "id": "infra",
+      "sector": "ai",
+      "name": "Cooling, power & data center infrastructure"
+    },
+    {
+      "id": "aisw",
+      "sector": "ai",
+      "name": "AI software & productivity"
+    },
+    {
+      "id": "data",
+      "sector": "ai",
+      "name": "Data, analytics & enterprise AI"
+    },
+    {
+      "id": "consult",
+      "sector": "ai",
+      "name": "IT consultants & integrators"
+    },
+    {
+      "id": "elnet",
+      "sector": "energi",
+      "name": "Grid & electrification"
+    },
+    {
+      "id": "power",
+      "sector": "energi",
+      "name": "Power equipment"
+    },
+    {
+      "id": "solvind",
+      "sector": "energi",
+      "name": "Solar & wind"
+    },
+    {
+      "id": "batteri",
+      "sector": "energi",
+      "name": "Batteries & energy storage"
+    },
+    {
+      "id": "nuklear",
+      "sector": "energi",
+      "name": "Nuclear energy & uranium"
+    },
+    {
+      "id": "utilities",
+      "sector": "energi",
+      "name": "Utilities & power producers"
+    },
+    {
+      "id": "integrators",
+      "sector": "forsvar",
+      "name": "Defense integrators"
+    },
+    {
+      "id": "droner",
+      "sector": "forsvar",
+      "name": "Drones & autonomous systems"
+    },
+    {
+      "id": "platforms",
+      "sector": "forsvar",
+      "name": "Military platforms"
+    },
+    {
+      "id": "rum",
+      "sector": "forsvar",
+      "name": "Space industry & satellites"
+    },
+    {
+      "id": "komm",
+      "sector": "forsvar",
+      "name": "Communications & defense data"
+    },
+    {
+      "id": "dualuse",
+      "sector": "forsvar",
+      "name": "Dual-use technology"
+    },
+    {
+      "id": "iam",
+      "sector": "forsvar",
+      "name": "Identity & access management"
+    },
+    {
+      "id": "endpoint",
+      "sector": "forsvar",
+      "name": "Endpoint security"
+    },
+    {
+      "id": "network",
+      "sector": "forsvar",
+      "name": "Network security"
+    },
+    {
+      "id": "cloudsec",
+      "sector": "forsvar",
+      "name": "Cloud security"
+    },
+    {
+      "id": "datasec",
+      "sector": "forsvar",
+      "name": "Data security"
+    },
+    {
+      "id": "soc",
+      "sector": "forsvar",
+      "name": "SOC, XDR & threat detection"
+    },
+    {
+      "id": "vuln",
+      "sector": "forsvar",
+      "name": "Vulnerability management"
+    },
+    {
+      "id": "ir",
+      "sector": "forsvar",
+      "name": "Incident response & recovery"
+    },
+    {
+      "id": "diabetes",
+      "sector": "medicin",
+      "name": "Diabetes & metabolic disease"
+    },
+    {
+      "id": "bigpharma",
+      "sector": "medicin",
+      "name": "Big pharma"
+    },
+    {
+      "id": "biotech",
+      "sector": "medicin",
+      "name": "Biotech & innovation"
+    },
+    {
+      "id": "cdmo",
+      "sector": "medicin",
+      "name": "CDMO & pharma manufacturing"
+    },
+    {
+      "id": "tools",
+      "sector": "medicin",
+      "name": "Life science tools"
+    },
+    {
+      "id": "diagnostik",
+      "sector": "medicin",
+      "name": "Diagnostics"
+    },
+    {
+      "id": "medtech",
+      "sector": "medicin",
+      "name": "Medtech & devices"
+    },
+    {
+      "id": "distribution",
+      "sector": "medicin",
+      "name": "Distribution & pharmacy infrastructure"
+    },
+    {
+      "id": "hardware",
+      "sector": "quantum",
+      "name": "Quantum hardware & platforms"
+    },
+    {
+      "id": "enablers",
+      "sector": "quantum",
+      "name": "Enablers, test & components"
+    },
+    {
+      "id": "banker",
+      "sector": "finans",
+      "name": "Banks"
+    },
+    {
+      "id": "investbank",
+      "sector": "finans",
+      "name": "Investment banking & trading"
+    },
+    {
+      "id": "betalinger",
+      "sector": "finans",
+      "name": "Payment rails & networks"
+    },
+    {
+      "id": "fintech",
+      "sector": "finans",
+      "name": "Brokers & fintech"
+    },
+    {
+      "id": "boers",
+      "sector": "finans",
+      "name": "Exchanges & market data"
+    },
+    {
+      "id": "kapital",
+      "sector": "finans",
+      "name": "Asset & alternative managers"
+    }
+  ],
+  "companies": [
+    {
+      "id": "a",
+      "ticker": "A",
+      "name": "Agilent Technologies",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "tools",
+      "listed": true
+    },
+    {
+      "id": "abbv",
+      "ticker": "ABBV",
+      "name": "AbbVie",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "bigpharma",
+      "listed": true
+    },
+    {
+      "id": "abt",
+      "ticker": "ABT",
+      "name": "Abbott Laboratories",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diagnostik",
+      "listed": true
+    },
+    {
+      "id": "acn",
+      "ticker": "ACN",
+      "name": "Accenture",
+      "exchange": "NYSE",
+      "country": "Irland",
+      "sector": "ai",
+      "segment": "consult",
+      "listed": true
+    },
+    {
+      "id": "adbe",
+      "ticker": "ADBE",
+      "name": "Adobe",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "adi",
+      "ticker": "ADI",
+      "name": "Analog Devices",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "aep",
+      "ticker": "AEP",
+      "name": "American Electric Power",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "alab",
+      "ticker": "ALAB",
+      "name": "Astera Labs",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "algn",
+      "ticker": "ALGN",
+      "name": "Align Technology",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "alny",
+      "ticker": "ALNY",
+      "name": "Alnylam Pharmaceuticals",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "amat",
+      "ticker": "AMAT",
+      "name": "Applied Materials",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "equip",
+      "listed": true
+    },
+    {
+      "id": "amd",
+      "ticker": "AMD",
+      "name": "AMD",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "amgn",
+      "ticker": "AMGN",
+      "name": "Amgen",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "amzn",
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "cloud",
+      "listed": true
+    },
+    {
+      "id": "anet",
+      "ticker": "ANET",
+      "name": "Arista Networks",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "aph",
+      "ticker": "APH",
+      "name": "Amphenol",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "apo",
+      "ticker": "APO",
+      "name": "Apollo Global",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "kapital",
+      "listed": true
+    },
+    {
+      "id": "app",
+      "ticker": "APP",
+      "name": "AppLovin",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "arm",
+      "ticker": "ARM",
+      "name": "Arm Holdings",
+      "exchange": "NASDAQ",
+      "country": "Storbritannien",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "asts",
+      "ticker": "ASTS",
+      "name": "AST SpaceMobile",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "rum",
+      "listed": true
+    },
+    {
+      "id": "avav",
+      "ticker": "AVAV",
+      "name": "AeroVironment",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "droner",
+      "listed": true
+    },
+    {
+      "id": "avgo",
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "axon",
+      "ticker": "AXON",
+      "name": "Axon Enterprise",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "dualuse",
+      "listed": true
+    },
+    {
+      "id": "axp",
+      "ticker": "AXP",
+      "name": "American Express",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "betalinger",
+      "listed": true
+    },
+    {
+      "id": "bac",
+      "ticker": "BAC",
+      "name": "Bank of America",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "banker",
+      "listed": true
+    },
+    {
+      "id": "bah",
+      "ticker": "BAH",
+      "name": "Booz Allen Hamilton",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "komm",
+      "listed": true
+    },
+    {
+      "id": "bax",
+      "ticker": "BAX",
+      "name": "Baxter International",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "bdx",
+      "ticker": "BDX",
+      "name": "Becton Dickinson",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "biib",
+      "ticker": "BIIB",
+      "name": "Biogen",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "bio",
+      "ticker": "BIO",
+      "name": "Bio-Rad Laboratories",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diagnostik",
+      "listed": true
+    },
+    {
+      "id": "blk",
+      "ticker": "BLK",
+      "name": "BlackRock",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "kapital",
+      "listed": true
+    },
+    {
+      "id": "bmrn",
+      "ticker": "BMRN",
+      "name": "BioMarin Pharmaceutical",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "bmy",
+      "ticker": "BMY",
+      "name": "Bristol Myers Squibb",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "bigpharma",
+      "listed": true
+    },
+    {
+      "id": "boeing",
+      "ticker": "BA",
+      "name": "Boeing",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "platforms",
+      "listed": true
+    },
+    {
+      "id": "bsx",
+      "ticker": "BSX",
+      "name": "Boston Scientific",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "bwxt",
+      "ticker": "BWXT",
+      "name": "BWX Technologies",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "nuklear",
+      "listed": true
+    },
+    {
+      "id": "bx",
+      "ticker": "BX",
+      "name": "Blackstone",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "kapital",
+      "listed": true
+    },
+    {
+      "id": "c",
+      "ticker": "C",
+      "name": "Citigroup",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "banker",
+      "listed": true
+    },
+    {
+      "id": "caci",
+      "ticker": "CACI",
+      "name": "CACI International",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "komm",
+      "listed": true
+    },
+    {
+      "id": "cah",
+      "ticker": "CAH",
+      "name": "Cardinal Health",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "distribution",
+      "listed": true
+    },
+    {
+      "id": "carr",
+      "ticker": "CARR",
+      "name": "Carrier Global",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "infra",
+      "listed": true
+    },
+    {
+      "id": "cdns",
+      "ticker": "CDNS",
+      "name": "Cadence Design Systems",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "equip",
+      "listed": true
+    },
+    {
+      "id": "ceg",
+      "ticker": "CEG",
+      "name": "Constellation Energy",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "ci",
+      "ticker": "CI",
+      "name": "The Cigna Group",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "distribution",
+      "listed": true
+    },
+    {
+      "id": "cien",
+      "ticker": "CIEN",
+      "name": "Ciena",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "cme",
+      "ticker": "CME",
+      "name": "CME Group",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "boers",
+      "listed": true
+    },
+    {
+      "id": "cohr",
+      "ticker": "COHR",
+      "name": "Coherent",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "coin",
+      "ticker": "COIN",
+      "name": "Coinbase",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "fintech",
+      "listed": true
+    },
+    {
+      "id": "cor",
+      "ticker": "COR",
+      "name": "Cencora",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "distribution",
+      "listed": true
+    },
+    {
+      "id": "crdo",
+      "ticker": "CRDO",
+      "name": "Credo Technology",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "crl",
+      "ticker": "CRL",
+      "name": "Charles River Laboratories",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "cdmo",
+      "listed": true
+    },
+    {
+      "id": "crm",
+      "ticker": "CRM",
+      "name": "Salesforce",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "crwd",
+      "ticker": "CRWD",
+      "name": "CrowdStrike",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "endpoint",
+      "listed": true
+    },
+    {
+      "id": "crwv",
+      "ticker": "CRWV",
+      "name": "CoreWeave",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "cloud",
+      "listed": true
+    },
+    {
+      "id": "csco",
+      "ticker": "CSCO",
+      "name": "Cisco",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "ctsh",
+      "ticker": "CTSH",
+      "name": "Cognizant",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "consult",
+      "listed": true
+    },
+    {
+      "id": "cvlt",
+      "ticker": "CVLT",
+      "name": "Commvault Systems",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "ir",
+      "listed": true
+    },
+    {
+      "id": "cvs",
+      "ticker": "CVS",
+      "name": "CVS Health",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "distribution",
+      "listed": true
+    },
+    {
+      "id": "cw",
+      "ticker": "CW",
+      "name": "Curtiss-Wright",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "nuklear",
+      "listed": true
+    },
+    {
+      "id": "d",
+      "ticker": "D",
+      "name": "Dominion Energy",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "ddog",
+      "ticker": "DDOG",
+      "name": "Datadog",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "data",
+      "listed": true
+    },
+    {
+      "id": "dell",
+      "ticker": "DELL",
+      "name": "Dell Technologies",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "dgx",
+      "ticker": "DGX",
+      "name": "Quest Diagnostics",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diagnostik",
+      "listed": true
+    },
+    {
+      "id": "dhr",
+      "ticker": "DHR",
+      "name": "Danaher",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "tools",
+      "listed": true
+    },
+    {
+      "id": "dlr",
+      "ticker": "DLR",
+      "name": "Digital Realty",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "duk",
+      "ticker": "DUK",
+      "name": "Duke Energy",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "duol",
+      "ticker": "DUOL",
+      "name": "Duolingo",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "dxcm",
+      "ticker": "DXCM",
+      "name": "DexCom",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diabetes",
+      "listed": true
+    },
+    {
+      "id": "eme",
+      "ticker": "EME",
+      "name": "EMCOR Group",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "infra",
+      "listed": true
+    },
+    {
+      "id": "emr",
+      "ticker": "EMR",
+      "name": "Emerson Electric",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "elnet",
+      "listed": true
+    },
+    {
+      "id": "enph",
+      "ticker": "ENPH",
+      "name": "Enphase Energy",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "solvind",
+      "listed": true
+    },
+    {
+      "id": "entg",
+      "ticker": "ENTG",
+      "name": "Entegris",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "equip",
+      "listed": true
+    },
+    {
+      "id": "eqix",
+      "ticker": "EQIX",
+      "name": "Equinix",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "estc",
+      "ticker": "ESTC",
+      "name": "Elastic",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "soc",
+      "listed": true
+    },
+    {
+      "id": "etn",
+      "ticker": "ETN",
+      "name": "Eaton",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "power",
+      "listed": true
+    },
+    {
+      "id": "ew",
+      "ticker": "EW",
+      "name": "Edwards Lifesciences",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "exc",
+      "ticker": "EXC",
+      "name": "Exelon",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "fi",
+      "ticker": "FI",
+      "name": "Fiserv",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "betalinger",
+      "listed": true
+    },
+    {
+      "id": "fix",
+      "ticker": "FIX",
+      "name": "Comfort Systems USA",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "infra",
+      "listed": true
+    },
+    {
+      "id": "flnc",
+      "ticker": "FLNC",
+      "name": "Fluence Energy",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "batteri",
+      "listed": true
+    },
+    {
+      "id": "form",
+      "ticker": "FORM",
+      "name": "FormFactor",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "quantum",
+      "segment": "enablers",
+      "listed": true
+    },
+    {
+      "id": "fslr",
+      "ticker": "FSLR",
+      "name": "First Solar",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "solvind",
+      "listed": true
+    },
+    {
+      "id": "ftnt",
+      "ticker": "FTNT",
+      "name": "Fortinet",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "network",
+      "listed": true
+    },
+    {
+      "id": "gd",
+      "ticker": "GD",
+      "name": "General Dynamics",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "integrators",
+      "listed": true
+    },
+    {
+      "id": "ge",
+      "ticker": "GE",
+      "name": "GE Aerospace",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "dualuse",
+      "listed": true
+    },
+    {
+      "id": "gehc",
+      "ticker": "GEHC",
+      "name": "GE HealthCare",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "gev",
+      "ticker": "GEV",
+      "name": "GE Vernova",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "power",
+      "listed": true
+    },
+    {
+      "id": "gild",
+      "ticker": "GILD",
+      "name": "Gilead Sciences",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "googl",
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "cloud",
+      "listed": true
+    },
+    {
+      "id": "gpn",
+      "ticker": "GPN",
+      "name": "Global Payments",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "betalinger",
+      "listed": true
+    },
+    {
+      "id": "gs",
+      "ticker": "GS",
+      "name": "Goldman Sachs",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "investbank",
+      "listed": true
+    },
+    {
+      "id": "gsat",
+      "ticker": "GSAT",
+      "name": "Globalstar",
+      "exchange": "NYSE American",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "rum",
+      "listed": true
+    },
+    {
+      "id": "hei",
+      "ticker": "HEI",
+      "name": "HEICO",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "platforms",
+      "listed": true
+    },
+    {
+      "id": "hii",
+      "ticker": "HII",
+      "name": "Huntington Ingalls Industries",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "platforms",
+      "listed": true
+    },
+    {
+      "id": "holx",
+      "ticker": "HOLX",
+      "name": "Hologic",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diagnostik",
+      "listed": true
+    },
+    {
+      "id": "hon",
+      "ticker": "HON",
+      "name": "Honeywell",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "dualuse",
+      "listed": true
+    },
+    {
+      "id": "hood",
+      "ticker": "HOOD",
+      "name": "Robinhood",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "fintech",
+      "listed": true
+    },
+    {
+      "id": "hpe",
+      "ticker": "HPE",
+      "name": "HPE",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "hubb",
+      "ticker": "HUBB",
+      "name": "Hubbell",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "elnet",
+      "listed": true
+    },
+    {
+      "id": "hwm",
+      "ticker": "HWM",
+      "name": "Howmet Aerospace",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "platforms",
+      "listed": true
+    },
+    {
+      "id": "ibkr",
+      "ticker": "IBKR",
+      "name": "Interactive Brokers",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "fintech",
+      "listed": true
+    },
+    {
+      "id": "ibm",
+      "ticker": "IBM",
+      "name": "IBM",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "consult",
+      "listed": true
+    },
+    {
+      "id": "ice",
+      "ticker": "ICE",
+      "name": "Intercontinental Exchange",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "boers",
+      "listed": true
+    },
+    {
+      "id": "idxx",
+      "ticker": "IDXX",
+      "name": "IDEXX Laboratories",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diagnostik",
+      "listed": true
+    },
+    {
+      "id": "ilmn",
+      "ticker": "ILMN",
+      "name": "Illumina",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "tools",
+      "listed": true
+    },
+    {
+      "id": "incy",
+      "ticker": "INCY",
+      "name": "Incyte",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "intc",
+      "ticker": "INTC",
+      "name": "Intel",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "intu",
+      "ticker": "INTU",
+      "name": "Intuit",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "ionq",
+      "ticker": "IONQ",
+      "name": "IonQ",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "quantum",
+      "segment": "hardware",
+      "listed": true
+    },
+    {
+      "id": "iqv",
+      "ticker": "IQV",
+      "name": "IQVIA Holdings",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "cdmo",
+      "listed": true
+    },
+    {
+      "id": "irdm",
+      "ticker": "IRDM",
+      "name": "Iridium Communications",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "rum",
+      "listed": true
+    },
+    {
+      "id": "isrg",
+      "ticker": "ISRG",
+      "name": "Intuitive Surgical",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "jnj",
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "bigpharma",
+      "listed": true
+    },
+    {
+      "id": "jpm",
+      "ticker": "JPM",
+      "name": "JPMorgan Chase",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "banker",
+      "listed": true
+    },
+    {
+      "id": "kkr",
+      "ticker": "KKR",
+      "name": "KKR",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "kapital",
+      "listed": true
+    },
+    {
+      "id": "klac",
+      "ticker": "KLAC",
+      "name": "KLA",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "equip",
+      "listed": true
+    },
+    {
+      "id": "ktos",
+      "ticker": "KTOS",
+      "name": "Kratos Defense",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "droner",
+      "listed": true
+    },
+    {
+      "id": "ldos",
+      "ticker": "LDOS",
+      "name": "Leidos",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "komm",
+      "listed": true
+    },
+    {
+      "id": "leu",
+      "ticker": "LEU",
+      "name": "Centrus Energy",
+      "exchange": "NYSE American",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "nuklear",
+      "listed": true
+    },
+    {
+      "id": "lh",
+      "ticker": "LH",
+      "name": "Labcorp",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diagnostik",
+      "listed": true
+    },
+    {
+      "id": "lhx",
+      "ticker": "LHX",
+      "name": "L3Harris",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "integrators",
+      "listed": true
+    },
+    {
+      "id": "lly",
+      "ticker": "LLY",
+      "name": "Eli Lilly",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diabetes",
+      "listed": true
+    },
+    {
+      "id": "lmt",
+      "ticker": "LMT",
+      "name": "Lockheed Martin",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "integrators",
+      "listed": true
+    },
+    {
+      "id": "lrcx",
+      "ticker": "LRCX",
+      "name": "Lam Research",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "equip",
+      "listed": true
+    },
+    {
+      "id": "ma",
+      "ticker": "MA",
+      "name": "Mastercard",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "betalinger",
+      "listed": true
+    },
+    {
+      "id": "mchp",
+      "ticker": "MCHP",
+      "name": "Microchip Technology",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "mck",
+      "ticker": "MCK",
+      "name": "McKesson",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "distribution",
+      "listed": true
+    },
+    {
+      "id": "mco",
+      "ticker": "MCO",
+      "name": "Moody’s",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "boers",
+      "listed": true
+    },
+    {
+      "id": "mdb",
+      "ticker": "MDB",
+      "name": "MongoDB",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "data",
+      "listed": true
+    },
+    {
+      "id": "mdt",
+      "ticker": "MDT",
+      "name": "Medtronic",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "meta",
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "mod",
+      "ticker": "MOD",
+      "name": "Modine Manufacturing",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "infra",
+      "listed": true
+    },
+    {
+      "id": "mpwr",
+      "ticker": "MPWR",
+      "name": "Monolithic Power",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "mrk",
+      "ticker": "MRK",
+      "name": "Merck & Co.",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "bigpharma",
+      "listed": true
+    },
+    {
+      "id": "mrna",
+      "ticker": "MRNA",
+      "name": "Moderna",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "mrvl",
+      "ticker": "MRVL",
+      "name": "Marvell",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "ms",
+      "ticker": "MS",
+      "name": "Morgan Stanley",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "investbank",
+      "listed": true
+    },
+    {
+      "id": "msci",
+      "ticker": "MSCI",
+      "name": "MSCI",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "boers",
+      "listed": true
+    },
+    {
+      "id": "msft",
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "cloud",
+      "listed": true
+    },
+    {
+      "id": "msi",
+      "ticker": "MSI",
+      "name": "Motorola Solutions",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "dualuse",
+      "listed": true
+    },
+    {
+      "id": "mtz",
+      "ticker": "MTZ",
+      "name": "MasTec",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "elnet",
+      "listed": true
+    },
+    {
+      "id": "mu",
+      "ticker": "MU",
+      "name": "Micron",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "nbix",
+      "ticker": "NBIX",
+      "name": "Neurocrine Biosciences",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "ndaq",
+      "ticker": "NDAQ",
+      "name": "Nasdaq",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "boers",
+      "listed": true
+    },
+    {
+      "id": "nee",
+      "ticker": "NEE",
+      "name": "NextEra Energy",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "net",
+      "ticker": "NET",
+      "name": "Cloudflare",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "cloudsec",
+      "listed": true
+    },
+    {
+      "id": "noc",
+      "ticker": "NOC",
+      "name": "Northrop Grumman",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "integrators",
+      "listed": true
+    },
+    {
+      "id": "now",
+      "ticker": "NOW",
+      "name": "ServiceNow",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "nrg",
+      "ticker": "NRG",
+      "name": "NRG Energy",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "ntap",
+      "ticker": "NTAP",
+      "name": "NetApp",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "ntra",
+      "ticker": "NTRA",
+      "name": "Natera",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diagnostik",
+      "listed": true
+    },
+    {
+      "id": "nvda",
+      "ticker": "NVDA",
+      "name": "Nvidia",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "oklo",
+      "ticker": "OKLO",
+      "name": "Oklo",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "nuklear",
+      "listed": true
+    },
+    {
+      "id": "okta",
+      "ticker": "OKTA",
+      "name": "Okta",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "iam",
+      "listed": true
+    },
+    {
+      "id": "on",
+      "ticker": "ON",
+      "name": "ON Semiconductor",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "orcl",
+      "ticker": "ORCL",
+      "name": "Oracle",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "cloud",
+      "listed": true
+    },
+    {
+      "id": "panw",
+      "ticker": "PANW",
+      "name": "Palo Alto Networks",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "network",
+      "listed": true
+    },
+    {
+      "id": "pfe",
+      "ticker": "PFE",
+      "name": "Pfizer",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "bigpharma",
+      "listed": true
+    },
+    {
+      "id": "pltr",
+      "ticker": "PLTR",
+      "name": "Palantir",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "data",
+      "listed": true
+    },
+    {
+      "id": "pnc",
+      "ticker": "PNC",
+      "name": "PNC Financial",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "banker",
+      "listed": true
+    },
+    {
+      "id": "podd",
+      "ticker": "PODD",
+      "name": "Insulet",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "diabetes",
+      "listed": true
+    },
+    {
+      "id": "pstg",
+      "ticker": "PSTG",
+      "name": "Pure Storage",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "pwr",
+      "ticker": "PWR",
+      "name": "Quanta Services",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "elnet",
+      "listed": true
+    },
+    {
+      "id": "pypl",
+      "ticker": "PYPL",
+      "name": "PayPal",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "betalinger",
+      "listed": true
+    },
+    {
+      "id": "qbts",
+      "ticker": "QBTS",
+      "name": "D-Wave Quantum",
+      "exchange": "NYSE",
+      "country": "Canada",
+      "sector": "quantum",
+      "segment": "hardware",
+      "listed": true
+    },
+    {
+      "id": "qcom",
+      "ticker": "QCOM",
+      "name": "Qualcomm",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "qlys",
+      "ticker": "QLYS",
+      "name": "Qualys",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "vuln",
+      "listed": true
+    },
+    {
+      "id": "qubt",
+      "ticker": "QUBT",
+      "name": "Quantum Computing Inc.",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "quantum",
+      "segment": "hardware",
+      "listed": true
+    },
+    {
+      "id": "rbrk",
+      "ticker": "RBRK",
+      "name": "Rubrik",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "ir",
+      "listed": true
+    },
+    {
+      "id": "regn",
+      "ticker": "REGN",
+      "name": "Regeneron",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "rgti",
+      "ticker": "RGTI",
+      "name": "Rigetti Computing",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "quantum",
+      "segment": "hardware",
+      "listed": true
+    },
+    {
+      "id": "rklb",
+      "ticker": "RKLB",
+      "name": "Rocket Lab",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "rum",
+      "listed": true
+    },
+    {
+      "id": "rmd",
+      "ticker": "RMD",
+      "name": "ResMed",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "rok",
+      "ticker": "ROK",
+      "name": "Rockwell Automation",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "power",
+      "listed": true
+    },
+    {
+      "id": "rpd",
+      "ticker": "RPD",
+      "name": "Rapid7",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "vuln",
+      "listed": true
+    },
+    {
+      "id": "rtx",
+      "ticker": "RTX",
+      "name": "RTX",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "integrators",
+      "listed": true
+    },
+    {
+      "id": "rvty",
+      "ticker": "RVTY",
+      "name": "Revvity",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "tools",
+      "listed": true
+    },
+    {
+      "id": "s",
+      "ticker": "S",
+      "name": "SentinelOne",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "endpoint",
+      "listed": true
+    },
+    {
+      "id": "schw",
+      "ticker": "SCHW",
+      "name": "Charles Schwab",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "fintech",
+      "listed": true
+    },
+    {
+      "id": "smci",
+      "ticker": "SMCI",
+      "name": "Super Micro",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "datacentre",
+      "listed": true
+    },
+    {
+      "id": "smr",
+      "ticker": "SMR",
+      "name": "NuScale Power",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "nuklear",
+      "listed": true
+    },
+    {
+      "id": "snow",
+      "ticker": "SNOW",
+      "name": "Snowflake",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "data",
+      "listed": true
+    },
+    {
+      "id": "snps",
+      "ticker": "SNPS",
+      "name": "Synopsys",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "equip",
+      "listed": true
+    },
+    {
+      "id": "so",
+      "ticker": "SO",
+      "name": "Southern Company",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "spacex",
+      "ticker": "",
+      "name": "SpaceX",
+      "exchange": "",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "rum",
+      "listed": false
+    },
+    {
+      "id": "spgi",
+      "ticker": "SPGI",
+      "name": "S&P Global",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "boers",
+      "listed": true
+    },
+    {
+      "id": "stx",
+      "ticker": "STX",
+      "name": "Seagate",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "syk",
+      "ticker": "SYK",
+      "name": "Stryker",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "tdg",
+      "ticker": "TDG",
+      "name": "TransDigm Group",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "dualuse",
+      "listed": true
+    },
+    {
+      "id": "tdy",
+      "ticker": "TDY",
+      "name": "Teledyne Technologies",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "dualuse",
+      "listed": true
+    },
+    {
+      "id": "tenb",
+      "ticker": "TENB",
+      "name": "Tenable",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "vuln",
+      "listed": true
+    },
+    {
+      "id": "ter",
+      "ticker": "TER",
+      "name": "Teradyne",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "equip",
+      "listed": true
+    },
+    {
+      "id": "tln",
+      "ticker": "TLN",
+      "name": "Talen Energy",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "tmo",
+      "ticker": "TMO",
+      "name": "Thermo Fisher Scientific",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "tools",
+      "listed": true
+    },
+    {
+      "id": "tsla",
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "txn",
+      "ticker": "TXN",
+      "name": "Texas Instruments",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "txt",
+      "ticker": "TXT",
+      "name": "Textron",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "platforms",
+      "listed": true
+    },
+    {
+      "id": "unh",
+      "ticker": "UNH",
+      "name": "UnitedHealth",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "distribution",
+      "listed": true
+    },
+    {
+      "id": "usb",
+      "ticker": "USB",
+      "name": "U.S. Bancorp",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "banker",
+      "listed": true
+    },
+    {
+      "id": "uthr",
+      "ticker": "UTHR",
+      "name": "United Therapeutics",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "v",
+      "ticker": "V",
+      "name": "Visa",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "betalinger",
+      "listed": true
+    },
+    {
+      "id": "vrns",
+      "ticker": "VRNS",
+      "name": "Varonis Systems",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "datasec",
+      "listed": true
+    },
+    {
+      "id": "vrt",
+      "ticker": "VRT",
+      "name": "Vertiv",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "infra",
+      "listed": true
+    },
+    {
+      "id": "vrtx",
+      "ticker": "VRTX",
+      "name": "Vertex Pharmaceuticals",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "biotech",
+      "listed": true
+    },
+    {
+      "id": "vsat",
+      "ticker": "VSAT",
+      "name": "Viasat",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "rum",
+      "listed": true
+    },
+    {
+      "id": "vst",
+      "ticker": "VST",
+      "name": "Vistra",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "energi",
+      "segment": "utilities",
+      "listed": true
+    },
+    {
+      "id": "wat",
+      "ticker": "WAT",
+      "name": "Waters Corporation",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "tools",
+      "listed": true
+    },
+    {
+      "id": "wday",
+      "ticker": "WDAY",
+      "name": "Workday",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "aisw",
+      "listed": true
+    },
+    {
+      "id": "wdc",
+      "ticker": "WDC",
+      "name": "Western Digital",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "ai",
+      "segment": "chips",
+      "listed": true
+    },
+    {
+      "id": "wfc",
+      "ticker": "WFC",
+      "name": "Wells Fargo",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "banker",
+      "listed": true
+    },
+    {
+      "id": "wst",
+      "ticker": "WST",
+      "name": "West Pharmaceutical Services",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "cdmo",
+      "listed": true
+    },
+    {
+      "id": "xyz",
+      "ticker": "XYZ",
+      "name": "Block",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "finans",
+      "segment": "fintech",
+      "listed": true
+    },
+    {
+      "id": "zbh",
+      "ticker": "ZBH",
+      "name": "Zimmer Biomet",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "medtech",
+      "listed": true
+    },
+    {
+      "id": "zs",
+      "ticker": "ZS",
+      "name": "Zscaler",
+      "exchange": "NASDAQ",
+      "country": "USA",
+      "sector": "forsvar",
+      "segment": "cloudsec",
+      "listed": true
+    },
+    {
+      "id": "zts",
+      "ticker": "ZTS",
+      "name": "Zoetis",
+      "exchange": "NYSE",
+      "country": "USA",
+      "sector": "medicin",
+      "segment": "bigpharma",
+      "listed": true
+    }
+  ],
+  "relations": [
+    {
+      "supplier": "a",
+      "supplierTicker": "A",
+      "customer": "abbv",
+      "customerTicker": "ABBV",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "a",
+      "supplierTicker": "A",
+      "customer": "pfe",
+      "customerTicker": "PFE",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "abbv",
+      "supplierTicker": "ABBV",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "abbv",
+      "supplierTicker": "ABBV",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "abbv",
+      "supplierTicker": "ABBV",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "abt",
+      "supplierTicker": "ABT",
+      "customer": "dgx",
+      "customerTicker": "DGX",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "abt",
+      "supplierTicker": "ABT",
+      "customer": "lh",
+      "customerTicker": "LH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "adi",
+      "supplierTicker": "ADI",
+      "customer": "anet",
+      "customerTicker": "ANET",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "adi",
+      "supplierTicker": "ADI",
+      "customer": "dell",
+      "customerTicker": "DELL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "alab",
+      "supplierTicker": "ALAB",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "alny",
+      "supplierTicker": "ALNY",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "amat",
+      "supplierTicker": "AMAT",
+      "customer": "intc",
+      "customerTicker": "INTC",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amat",
+      "supplierTicker": "AMAT",
+      "customer": "mu",
+      "customerTicker": "MU",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amd",
+      "supplierTicker": "AMD",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amd",
+      "supplierTicker": "AMD",
+      "customer": "dell",
+      "customerTicker": "DELL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amd",
+      "supplierTicker": "AMD",
+      "customer": "googl",
+      "customerTicker": "GOOGL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amd",
+      "supplierTicker": "AMD",
+      "customer": "meta",
+      "customerTicker": "META",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amd",
+      "supplierTicker": "AMD",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amd",
+      "supplierTicker": "AMD",
+      "customer": "orcl",
+      "customerTicker": "ORCL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amgn",
+      "supplierTicker": "AMGN",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "crm",
+      "customerTicker": "CRM",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "ddog",
+      "customerTicker": "DDOG",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "duol",
+      "customerTicker": "DUOL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "intu",
+      "customerTicker": "INTU",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "mdb",
+      "customerTicker": "MDB",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "pltr",
+      "customerTicker": "PLTR",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "snow",
+      "customerTicker": "SNOW",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "amzn",
+      "supplierTicker": "AMZN",
+      "customer": "wday",
+      "customerTicker": "WDAY",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "anet",
+      "supplierTicker": "ANET",
+      "customer": "meta",
+      "customerTicker": "META",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "anet",
+      "supplierTicker": "ANET",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "aph",
+      "supplierTicker": "APH",
+      "customer": "nvda",
+      "customerTicker": "NVDA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "arm",
+      "supplierTicker": "ARM",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "arm",
+      "supplierTicker": "ARM",
+      "customer": "googl",
+      "customerTicker": "GOOGL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "arm",
+      "supplierTicker": "ARM",
+      "customer": "meta",
+      "customerTicker": "META",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "arm",
+      "supplierTicker": "ARM",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "arm",
+      "supplierTicker": "ARM",
+      "customer": "nvda",
+      "customerTicker": "NVDA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "arm",
+      "supplierTicker": "ARM",
+      "customer": "qcom",
+      "customerTicker": "QCOM",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "avgo",
+      "supplierTicker": "AVGO",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "avgo",
+      "supplierTicker": "AVGO",
+      "customer": "anet",
+      "customerTicker": "ANET",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "avgo",
+      "supplierTicker": "AVGO",
+      "customer": "googl",
+      "customerTicker": "GOOGL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "avgo",
+      "supplierTicker": "AVGO",
+      "customer": "meta",
+      "customerTicker": "META",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "avgo",
+      "supplierTicker": "AVGO",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "axp",
+      "supplierTicker": "AXP",
+      "customer": "coin",
+      "customerTicker": "COIN",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "axp",
+      "supplierTicker": "AXP",
+      "customer": "fi",
+      "customerTicker": "FI",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "axp",
+      "supplierTicker": "AXP",
+      "customer": "gpn",
+      "customerTicker": "GPN",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "axp",
+      "supplierTicker": "AXP",
+      "customer": "ms",
+      "customerTicker": "MS",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "axp",
+      "supplierTicker": "AXP",
+      "customer": "schw",
+      "customerTicker": "SCHW",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "bax",
+      "supplierTicker": "BAX",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bdx",
+      "supplierTicker": "BDX",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bdx",
+      "supplierTicker": "BDX",
+      "customer": "lh",
+      "customerTicker": "LH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "biib",
+      "supplierTicker": "BIIB",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bio",
+      "supplierTicker": "BIO",
+      "customer": "lh",
+      "customerTicker": "LH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bmrn",
+      "supplierTicker": "BMRN",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bmy",
+      "supplierTicker": "BMY",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bmy",
+      "supplierTicker": "BMY",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bsx",
+      "supplierTicker": "BSX",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "bwxt",
+      "supplierTicker": "BWXT",
+      "customer": "gev",
+      "customerTicker": "GEV",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "cah",
+      "supplierTicker": "CAH",
+      "customer": "cvs",
+      "customerTicker": "CVS",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "cah",
+      "supplierTicker": "CAH",
+      "customer": "unh",
+      "customerTicker": "UNH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "carr",
+      "supplierTicker": "CARR",
+      "customer": "dlr",
+      "customerTicker": "DLR",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "carr",
+      "supplierTicker": "CARR",
+      "customer": "eqix",
+      "customerTicker": "EQIX",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cdns",
+      "supplierTicker": "CDNS",
+      "customer": "amd",
+      "customerTicker": "AMD",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cdns",
+      "supplierTicker": "CDNS",
+      "customer": "avgo",
+      "customerTicker": "AVGO",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cdns",
+      "supplierTicker": "CDNS",
+      "customer": "intc",
+      "customerTicker": "INTC",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cdns",
+      "supplierTicker": "CDNS",
+      "customer": "nvda",
+      "customerTicker": "NVDA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cdns",
+      "supplierTicker": "CDNS",
+      "customer": "qcom",
+      "customerTicker": "QCOM",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cien",
+      "supplierTicker": "CIEN",
+      "customer": "eqix",
+      "customerTicker": "EQIX",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cien",
+      "supplierTicker": "CIEN",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cme",
+      "supplierTicker": "CME",
+      "customer": "gs",
+      "customerTicker": "GS",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "cme",
+      "supplierTicker": "CME",
+      "customer": "hood",
+      "customerTicker": "HOOD",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "cme",
+      "supplierTicker": "CME",
+      "customer": "ibkr",
+      "customerTicker": "IBKR",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "cme",
+      "supplierTicker": "CME",
+      "customer": "jpm",
+      "customerTicker": "JPM",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "cme",
+      "supplierTicker": "CME",
+      "customer": "ms",
+      "customerTicker": "MS",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "cme",
+      "supplierTicker": "CME",
+      "customer": "schw",
+      "customerTicker": "SCHW",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "cohr",
+      "supplierTicker": "COHR",
+      "customer": "anet",
+      "customerTicker": "ANET",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cohr",
+      "supplierTicker": "COHR",
+      "customer": "cien",
+      "customerTicker": "CIEN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "coin",
+      "supplierTicker": "COIN",
+      "customer": "blk",
+      "customerTicker": "BLK",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "cor",
+      "supplierTicker": "COR",
+      "customer": "ci",
+      "customerTicker": "CI",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crdo",
+      "supplierTicker": "CRDO",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "crdo",
+      "supplierTicker": "CRDO",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "alny",
+      "customerTicker": "ALNY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "bmrn",
+      "customerTicker": "BMRN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "bmy",
+      "customerTicker": "BMY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "incy",
+      "customerTicker": "INCY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "lly",
+      "customerTicker": "LLY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "pfe",
+      "customerTicker": "PFE",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "regn",
+      "customerTicker": "REGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crl",
+      "supplierTicker": "CRL",
+      "customer": "zts",
+      "customerTicker": "ZTS",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "crwv",
+      "supplierTicker": "CRWV",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "csco",
+      "supplierTicker": "CSCO",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "csco",
+      "supplierTicker": "CSCO",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "cw",
+      "supplierTicker": "CW",
+      "customer": "ceg",
+      "customerTicker": "CEG",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "cw",
+      "supplierTicker": "CW",
+      "customer": "duk",
+      "customerTicker": "DUK",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "cw",
+      "supplierTicker": "CW",
+      "customer": "smr",
+      "customerTicker": "SMR",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "cw",
+      "supplierTicker": "CW",
+      "customer": "so",
+      "customerTicker": "SO",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "dell",
+      "supplierTicker": "DELL",
+      "customer": "crwv",
+      "customerTicker": "CRWV",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "dgx",
+      "supplierTicker": "DGX",
+      "customer": "ci",
+      "customerTicker": "CI",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "dhr",
+      "supplierTicker": "DHR",
+      "customer": "amgn",
+      "customerTicker": "AMGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "dhr",
+      "supplierTicker": "DHR",
+      "customer": "lly",
+      "customerTicker": "LLY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "dhr",
+      "supplierTicker": "DHR",
+      "customer": "regn",
+      "customerTicker": "REGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "dlr",
+      "supplierTicker": "DLR",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "dxcm",
+      "supplierTicker": "DXCM",
+      "customer": "cvs",
+      "customerTicker": "CVS",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "eme",
+      "supplierTicker": "EME",
+      "customer": "dlr",
+      "customerTicker": "DLR",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "eme",
+      "supplierTicker": "EME",
+      "customer": "eqix",
+      "customerTicker": "EQIX",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "emr",
+      "supplierTicker": "EMR",
+      "customer": "ceg",
+      "customerTicker": "CEG",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "emr",
+      "supplierTicker": "EMR",
+      "customer": "duk",
+      "customerTicker": "DUK",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "emr",
+      "supplierTicker": "EMR",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "emr",
+      "supplierTicker": "EMR",
+      "customer": "vst",
+      "customerTicker": "VST",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "entg",
+      "supplierTicker": "ENTG",
+      "customer": "intc",
+      "customerTicker": "INTC",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "entg",
+      "supplierTicker": "ENTG",
+      "customer": "mu",
+      "customerTicker": "MU",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "eqix",
+      "supplierTicker": "EQIX",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "eqix",
+      "supplierTicker": "EQIX",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "etn",
+      "supplierTicker": "ETN",
+      "customer": "aep",
+      "customerTicker": "AEP",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "etn",
+      "supplierTicker": "ETN",
+      "customer": "duk",
+      "customerTicker": "DUK",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "etn",
+      "supplierTicker": "ETN",
+      "customer": "exc",
+      "customerTicker": "EXC",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "etn",
+      "supplierTicker": "ETN",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "fi",
+      "supplierTicker": "FI",
+      "customer": "pnc",
+      "customerTicker": "PNC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "fi",
+      "supplierTicker": "FI",
+      "customer": "wfc",
+      "customerTicker": "WFC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "fix",
+      "supplierTicker": "FIX",
+      "customer": "dlr",
+      "customerTicker": "DLR",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "fix",
+      "supplierTicker": "FIX",
+      "customer": "eqix",
+      "customerTicker": "EQIX",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "form",
+      "supplierTicker": "FORM",
+      "customer": "ionq",
+      "customerTicker": "IONQ",
+      "sector": "quantum",
+      "cross": false
+    },
+    {
+      "supplier": "form",
+      "supplierTicker": "FORM",
+      "customer": "qbts",
+      "customerTicker": "QBTS",
+      "sector": "quantum",
+      "cross": false
+    },
+    {
+      "supplier": "form",
+      "supplierTicker": "FORM",
+      "customer": "rgti",
+      "customerTicker": "RGTI",
+      "sector": "quantum",
+      "cross": false
+    },
+    {
+      "supplier": "fslr",
+      "supplierTicker": "FSLR",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "ge",
+      "supplierTicker": "GE",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "ge",
+      "supplierTicker": "GE",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "ge",
+      "supplierTicker": "GE",
+      "customer": "txt",
+      "customerTicker": "TXT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "gehc",
+      "supplierTicker": "GEHC",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "aep",
+      "customerTicker": "AEP",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "ceg",
+      "customerTicker": "CEG",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "duk",
+      "customerTicker": "DUK",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "nrg",
+      "customerTicker": "NRG",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "so",
+      "customerTicker": "SO",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "tln",
+      "customerTicker": "TLN",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gev",
+      "supplierTicker": "GEV",
+      "customer": "vst",
+      "customerTicker": "VST",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "gild",
+      "supplierTicker": "GILD",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "gild",
+      "supplierTicker": "GILD",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "gild",
+      "supplierTicker": "GILD",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "googl",
+      "supplierTicker": "GOOGL",
+      "customer": "app",
+      "customerTicker": "APP",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "gs",
+      "supplierTicker": "GS",
+      "customer": "kkr",
+      "customerTicker": "KKR",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "hei",
+      "supplierTicker": "HEI",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hei",
+      "supplierTicker": "HEI",
+      "customer": "gd",
+      "customerTicker": "GD",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hei",
+      "supplierTicker": "HEI",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hei",
+      "supplierTicker": "HEI",
+      "customer": "noc",
+      "customerTicker": "NOC",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hei",
+      "supplierTicker": "HEI",
+      "customer": "rtx",
+      "customerTicker": "RTX",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hii",
+      "supplierTicker": "HII",
+      "customer": "gd",
+      "customerTicker": "GD",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "holx",
+      "supplierTicker": "HOLX",
+      "customer": "dgx",
+      "customerTicker": "DGX",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "hon",
+      "supplierTicker": "HON",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hon",
+      "supplierTicker": "HON",
+      "customer": "gd",
+      "customerTicker": "GD",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hon",
+      "supplierTicker": "HON",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hon",
+      "supplierTicker": "HON",
+      "customer": "noc",
+      "customerTicker": "NOC",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hon",
+      "supplierTicker": "HON",
+      "customer": "txt",
+      "customerTicker": "TXT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hpe",
+      "supplierTicker": "HPE",
+      "customer": "dlr",
+      "customerTicker": "DLR",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "hubb",
+      "supplierTicker": "HUBB",
+      "customer": "duk",
+      "customerTicker": "DUK",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "hubb",
+      "supplierTicker": "HUBB",
+      "customer": "exc",
+      "customerTicker": "EXC",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "hubb",
+      "supplierTicker": "HUBB",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "hubb",
+      "supplierTicker": "HUBB",
+      "customer": "so",
+      "customerTicker": "SO",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "hwm",
+      "supplierTicker": "HWM",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hwm",
+      "supplierTicker": "HWM",
+      "customer": "gd",
+      "customerTicker": "GD",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hwm",
+      "supplierTicker": "HWM",
+      "customer": "ge",
+      "customerTicker": "GE",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hwm",
+      "supplierTicker": "HWM",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hwm",
+      "supplierTicker": "HWM",
+      "customer": "noc",
+      "customerTicker": "NOC",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hwm",
+      "supplierTicker": "HWM",
+      "customer": "rtx",
+      "customerTicker": "RTX",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "hwm",
+      "supplierTicker": "HWM",
+      "customer": "txt",
+      "customerTicker": "TXT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "ice",
+      "supplierTicker": "ICE",
+      "customer": "blk",
+      "customerTicker": "BLK",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ice",
+      "supplierTicker": "ICE",
+      "customer": "gs",
+      "customerTicker": "GS",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ice",
+      "supplierTicker": "ICE",
+      "customer": "ibkr",
+      "customerTicker": "IBKR",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ice",
+      "supplierTicker": "ICE",
+      "customer": "schw",
+      "customerTicker": "SCHW",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ilmn",
+      "supplierTicker": "ILMN",
+      "customer": "dgx",
+      "customerTicker": "DGX",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "ilmn",
+      "supplierTicker": "ILMN",
+      "customer": "lh",
+      "customerTicker": "LH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "ilmn",
+      "supplierTicker": "ILMN",
+      "customer": "ntra",
+      "customerTicker": "NTRA",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "ilmn",
+      "supplierTicker": "ILMN",
+      "customer": "regn",
+      "customerTicker": "REGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "ilmn",
+      "supplierTicker": "ILMN",
+      "customer": "vrtx",
+      "customerTicker": "VRTX",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "incy",
+      "supplierTicker": "INCY",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "intc",
+      "supplierTicker": "INTC",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "intc",
+      "supplierTicker": "INTC",
+      "customer": "dell",
+      "customerTicker": "DELL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "intc",
+      "supplierTicker": "INTC",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "amgn",
+      "customerTicker": "AMGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "biib",
+      "customerTicker": "BIIB",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "gild",
+      "customerTicker": "GILD",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "lly",
+      "customerTicker": "LLY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "mrk",
+      "customerTicker": "MRK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "nbix",
+      "customerTicker": "NBIX",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "pfe",
+      "customerTicker": "PFE",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "iqv",
+      "supplierTicker": "IQV",
+      "customer": "uthr",
+      "customerTicker": "UTHR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "jnj",
+      "supplierTicker": "JNJ",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "jnj",
+      "supplierTicker": "JNJ",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "jpm",
+      "supplierTicker": "JPM",
+      "customer": "blk",
+      "customerTicker": "BLK",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "klac",
+      "supplierTicker": "KLAC",
+      "customer": "intc",
+      "customerTicker": "INTC",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "klac",
+      "supplierTicker": "KLAC",
+      "customer": "mu",
+      "customerTicker": "MU",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "ktos",
+      "supplierTicker": "KTOS",
+      "customer": "rtx",
+      "customerTicker": "RTX",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "leu",
+      "supplierTicker": "LEU",
+      "customer": "ceg",
+      "customerTicker": "CEG",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "leu",
+      "supplierTicker": "LEU",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "leu",
+      "supplierTicker": "LEU",
+      "customer": "oklo",
+      "customerTicker": "OKLO",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "leu",
+      "supplierTicker": "LEU",
+      "customer": "tln",
+      "customerTicker": "TLN",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "leu",
+      "supplierTicker": "LEU",
+      "customer": "vst",
+      "customerTicker": "VST",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "lh",
+      "supplierTicker": "LH",
+      "customer": "unh",
+      "customerTicker": "UNH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "lhx",
+      "supplierTicker": "LHX",
+      "customer": "rtx",
+      "customerTicker": "RTX",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "lly",
+      "supplierTicker": "LLY",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "lly",
+      "supplierTicker": "LLY",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "lly",
+      "supplierTicker": "LLY",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "lrcx",
+      "supplierTicker": "LRCX",
+      "customer": "intc",
+      "customerTicker": "INTC",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "lrcx",
+      "supplierTicker": "LRCX",
+      "customer": "mu",
+      "customerTicker": "MU",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "ma",
+      "supplierTicker": "MA",
+      "customer": "bac",
+      "customerTicker": "BAC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ma",
+      "supplierTicker": "MA",
+      "customer": "c",
+      "customerTicker": "C",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ma",
+      "supplierTicker": "MA",
+      "customer": "jpm",
+      "customerTicker": "JPM",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ma",
+      "supplierTicker": "MA",
+      "customer": "pypl",
+      "customerTicker": "PYPL",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ma",
+      "supplierTicker": "MA",
+      "customer": "usb",
+      "customerTicker": "USB",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ma",
+      "supplierTicker": "MA",
+      "customer": "wfc",
+      "customerTicker": "WFC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ma",
+      "supplierTicker": "MA",
+      "customer": "xyz",
+      "customerTicker": "XYZ",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "mchp",
+      "supplierTicker": "MCHP",
+      "customer": "tsla",
+      "customerTicker": "TSLA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mchp",
+      "supplierTicker": "MCHP",
+      "customer": "vrt",
+      "customerTicker": "VRT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mck",
+      "supplierTicker": "MCK",
+      "customer": "cvs",
+      "customerTicker": "CVS",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "mco",
+      "supplierTicker": "MCO",
+      "customer": "bac",
+      "customerTicker": "BAC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "mco",
+      "supplierTicker": "MCO",
+      "customer": "jpm",
+      "customerTicker": "JPM",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "mco",
+      "supplierTicker": "MCO",
+      "customer": "kkr",
+      "customerTicker": "KKR",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "mdt",
+      "supplierTicker": "MDT",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "mod",
+      "supplierTicker": "MOD",
+      "customer": "dlr",
+      "customerTicker": "DLR",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mpwr",
+      "supplierTicker": "MPWR",
+      "customer": "amd",
+      "customerTicker": "AMD",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mpwr",
+      "supplierTicker": "MPWR",
+      "customer": "nvda",
+      "customerTicker": "NVDA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mrk",
+      "supplierTicker": "MRK",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "mrk",
+      "supplierTicker": "MRK",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "mrvl",
+      "supplierTicker": "MRVL",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mrvl",
+      "supplierTicker": "MRVL",
+      "customer": "googl",
+      "customerTicker": "GOOGL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mrvl",
+      "supplierTicker": "MRVL",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "msci",
+      "supplierTicker": "MSCI",
+      "customer": "blk",
+      "customerTicker": "BLK",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "msft",
+      "supplierTicker": "MSFT",
+      "customer": "acn",
+      "customerTicker": "ACN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "msft",
+      "supplierTicker": "MSFT",
+      "customer": "adbe",
+      "customerTicker": "ADBE",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "msft",
+      "supplierTicker": "MSFT",
+      "customer": "ctsh",
+      "customerTicker": "CTSH",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "msft",
+      "supplierTicker": "MSFT",
+      "customer": "now",
+      "customerTicker": "NOW",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "msft",
+      "supplierTicker": "MSFT",
+      "customer": "snow",
+      "customerTicker": "SNOW",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mtz",
+      "supplierTicker": "MTZ",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "mu",
+      "supplierTicker": "MU",
+      "customer": "amd",
+      "customerTicker": "AMD",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mu",
+      "supplierTicker": "MU",
+      "customer": "dell",
+      "customerTicker": "DELL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "mu",
+      "supplierTicker": "MU",
+      "customer": "nvda",
+      "customerTicker": "NVDA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nbix",
+      "supplierTicker": "NBIX",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "ndaq",
+      "supplierTicker": "NDAQ",
+      "customer": "gs",
+      "customerTicker": "GS",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "ndaq",
+      "supplierTicker": "NDAQ",
+      "customer": "hood",
+      "customerTicker": "HOOD",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "noc",
+      "supplierTicker": "NOC",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "noc",
+      "supplierTicker": "NOC",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "ntap",
+      "supplierTicker": "NTAP",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "ntra",
+      "supplierTicker": "NTRA",
+      "customer": "unh",
+      "customerTicker": "UNH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "acn",
+      "customerTicker": "ACN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "crwv",
+      "customerTicker": "CRWV",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "dell",
+      "customerTicker": "DELL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "googl",
+      "customerTicker": "GOOGL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "hpe",
+      "customerTicker": "HPE",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "ibm",
+      "customerTicker": "IBM",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "meta",
+      "customerTicker": "META",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "orcl",
+      "customerTicker": "ORCL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "smci",
+      "customerTicker": "SMCI",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "nvda",
+      "supplierTicker": "NVDA",
+      "customer": "tsla",
+      "customerTicker": "TSLA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "okta",
+      "supplierTicker": "OKTA",
+      "customer": "net",
+      "customerTicker": "NET",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "on",
+      "supplierTicker": "ON",
+      "customer": "tsla",
+      "customerTicker": "TSLA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "on",
+      "supplierTicker": "ON",
+      "customer": "vrt",
+      "customerTicker": "VRT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "pfe",
+      "supplierTicker": "PFE",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "pfe",
+      "supplierTicker": "PFE",
+      "customer": "cor",
+      "customerTicker": "COR",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "pfe",
+      "supplierTicker": "PFE",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "podd",
+      "supplierTicker": "PODD",
+      "customer": "cvs",
+      "customerTicker": "CVS",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "pstg",
+      "supplierTicker": "PSTG",
+      "customer": "meta",
+      "customerTicker": "META",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "pwr",
+      "supplierTicker": "PWR",
+      "customer": "aep",
+      "customerTicker": "AEP",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "pwr",
+      "supplierTicker": "PWR",
+      "customer": "d",
+      "customerTicker": "D",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "pwr",
+      "supplierTicker": "PWR",
+      "customer": "duk",
+      "customerTicker": "DUK",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "pwr",
+      "supplierTicker": "PWR",
+      "customer": "exc",
+      "customerTicker": "EXC",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "pwr",
+      "supplierTicker": "PWR",
+      "customer": "nee",
+      "customerTicker": "NEE",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "pwr",
+      "supplierTicker": "PWR",
+      "customer": "so",
+      "customerTicker": "SO",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "qcom",
+      "supplierTicker": "QCOM",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "rmd",
+      "supplierTicker": "RMD",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "rok",
+      "supplierTicker": "ROK",
+      "customer": "fslr",
+      "customerTicker": "FSLR",
+      "sector": "energi",
+      "cross": false
+    },
+    {
+      "supplier": "rtx",
+      "supplierTicker": "RTX",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "rtx",
+      "supplierTicker": "RTX",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "rvty",
+      "supplierTicker": "RVTY",
+      "customer": "bmy",
+      "customerTicker": "BMY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "smci",
+      "supplierTicker": "SMCI",
+      "customer": "crwv",
+      "customerTicker": "CRWV",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "snps",
+      "supplierTicker": "SNPS",
+      "customer": "amd",
+      "customerTicker": "AMD",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "snps",
+      "supplierTicker": "SNPS",
+      "customer": "avgo",
+      "customerTicker": "AVGO",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "snps",
+      "supplierTicker": "SNPS",
+      "customer": "intc",
+      "customerTicker": "INTC",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "snps",
+      "supplierTicker": "SNPS",
+      "customer": "nvda",
+      "customerTicker": "NVDA",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "snps",
+      "supplierTicker": "SNPS",
+      "customer": "qcom",
+      "customerTicker": "QCOM",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "spacex",
+      "supplierTicker": "",
+      "customer": "asts",
+      "customerTicker": "ASTS",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "spacex",
+      "supplierTicker": "",
+      "customer": "gsat",
+      "customerTicker": "GSAT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "spacex",
+      "supplierTicker": "",
+      "customer": "irdm",
+      "customerTicker": "IRDM",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "spacex",
+      "supplierTicker": "",
+      "customer": "vsat",
+      "customerTicker": "VSAT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "apo",
+      "customerTicker": "APO",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "axp",
+      "customerTicker": "AXP",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "bac",
+      "customerTicker": "BAC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "blk",
+      "customerTicker": "BLK",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "bx",
+      "customerTicker": "BX",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "gs",
+      "customerTicker": "GS",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "jpm",
+      "customerTicker": "JPM",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "ms",
+      "customerTicker": "MS",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "spgi",
+      "supplierTicker": "SPGI",
+      "customer": "schw",
+      "customerTicker": "SCHW",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "stx",
+      "supplierTicker": "STX",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "stx",
+      "supplierTicker": "STX",
+      "customer": "googl",
+      "customerTicker": "GOOGL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "syk",
+      "supplierTicker": "SYK",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "tdg",
+      "supplierTicker": "TDG",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdg",
+      "supplierTicker": "TDG",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdg",
+      "supplierTicker": "TDG",
+      "customer": "noc",
+      "customerTicker": "NOC",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdg",
+      "supplierTicker": "TDG",
+      "customer": "rtx",
+      "customerTicker": "RTX",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "avav",
+      "customerTicker": "AVAV",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "boeing",
+      "customerTicker": "BA",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "hii",
+      "customerTicker": "HII",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "ktos",
+      "customerTicker": "KTOS",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "lhx",
+      "customerTicker": "LHX",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "lmt",
+      "customerTicker": "LMT",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "noc",
+      "customerTicker": "NOC",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "rklb",
+      "customerTicker": "RKLB",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "tdy",
+      "supplierTicker": "TDY",
+      "customer": "rtx",
+      "customerTicker": "RTX",
+      "sector": "forsvar",
+      "cross": false
+    },
+    {
+      "supplier": "ter",
+      "supplierTicker": "TER",
+      "customer": "intc",
+      "customerTicker": "INTC",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "ter",
+      "supplierTicker": "TER",
+      "customer": "mu",
+      "customerTicker": "MU",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "ter",
+      "supplierTicker": "TER",
+      "customer": "qcom",
+      "customerTicker": "QCOM",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "tmo",
+      "supplierTicker": "TMO",
+      "customer": "amgn",
+      "customerTicker": "AMGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "tmo",
+      "supplierTicker": "TMO",
+      "customer": "idxx",
+      "customerTicker": "IDXX",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "tmo",
+      "supplierTicker": "TMO",
+      "customer": "jnj",
+      "customerTicker": "JNJ",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "tmo",
+      "supplierTicker": "TMO",
+      "customer": "lly",
+      "customerTicker": "LLY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "tmo",
+      "supplierTicker": "TMO",
+      "customer": "mrna",
+      "customerTicker": "MRNA",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "tmo",
+      "supplierTicker": "TMO",
+      "customer": "pfe",
+      "customerTicker": "PFE",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "txn",
+      "supplierTicker": "TXN",
+      "customer": "dell",
+      "customerTicker": "DELL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "txn",
+      "supplierTicker": "TXN",
+      "customer": "vrt",
+      "customerTicker": "VRT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "uthr",
+      "supplierTicker": "UTHR",
+      "customer": "ci",
+      "customerTicker": "CI",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "uthr",
+      "supplierTicker": "UTHR",
+      "customer": "cvs",
+      "customerTicker": "CVS",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "bac",
+      "customerTicker": "BAC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "c",
+      "customerTicker": "C",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "hood",
+      "customerTicker": "HOOD",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "jpm",
+      "customerTicker": "JPM",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "pnc",
+      "customerTicker": "PNC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "pypl",
+      "customerTicker": "PYPL",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "usb",
+      "customerTicker": "USB",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "wfc",
+      "customerTicker": "WFC",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "v",
+      "supplierTicker": "V",
+      "customer": "xyz",
+      "customerTicker": "XYZ",
+      "sector": "finans",
+      "cross": false
+    },
+    {
+      "supplier": "vrt",
+      "supplierTicker": "VRT",
+      "customer": "dlr",
+      "customerTicker": "DLR",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "vrt",
+      "supplierTicker": "VRT",
+      "customer": "eqix",
+      "customerTicker": "EQIX",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "vrt",
+      "supplierTicker": "VRT",
+      "customer": "msft",
+      "customerTicker": "MSFT",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "vrtx",
+      "supplierTicker": "VRTX",
+      "customer": "ci",
+      "customerTicker": "CI",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "vrtx",
+      "supplierTicker": "VRTX",
+      "customer": "mck",
+      "customerTicker": "MCK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wat",
+      "supplierTicker": "WAT",
+      "customer": "abbv",
+      "customerTicker": "ABBV",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wat",
+      "supplierTicker": "WAT",
+      "customer": "lly",
+      "customerTicker": "LLY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wdc",
+      "supplierTicker": "WDC",
+      "customer": "amzn",
+      "customerTicker": "AMZN",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "wdc",
+      "supplierTicker": "WDC",
+      "customer": "dell",
+      "customerTicker": "DELL",
+      "sector": "ai",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "abbv",
+      "customerTicker": "ABBV",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "amgn",
+      "customerTicker": "AMGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "bmy",
+      "customerTicker": "BMY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "jnj",
+      "customerTicker": "JNJ",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "lly",
+      "customerTicker": "LLY",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "mrk",
+      "customerTicker": "MRK",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "pfe",
+      "customerTicker": "PFE",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "wst",
+      "supplierTicker": "WST",
+      "customer": "regn",
+      "customerTicker": "REGN",
+      "sector": "medicin",
+      "cross": false
+    },
+    {
+      "supplier": "zbh",
+      "supplierTicker": "ZBH",
+      "customer": "cah",
+      "customerTicker": "CAH",
+      "sector": "medicin",
+      "cross": false
+    }
+  ]
+}

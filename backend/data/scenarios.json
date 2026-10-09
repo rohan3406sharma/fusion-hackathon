@@ -1,0 +1,189 @@
+[
+ {
+  "time_horizon_year": 2035,
+  "data_source": "synthetic_footprint",
+  "propagation_max_depth": 6,
+  "inventory_scale": 1.0,
+  "substitution_scale": 1.0,
+  "dependency_scale": 1.0,
+  "compound_amplification": 0.0,
+  "monte_carlo_runs": 500,
+  "monte_carlo_seed": 42,
+  "builtin": true,
+  "synthetic": true,
+  "id": "sc_punjab_flood",
+  "name": "Punjab-Haryana Monsoon Flood",
+  "description": "Synthetic riverine flood footprint over the Punjab/Haryana wheat-rice belt (SYNTHETIC footprint, not a hazard map).",
+  "hazards": [
+   {
+    "hazard_type": "flood",
+    "intensity": 0.75,
+    "duration_days": 21,
+    "center_lat": 30.4,
+    "center_lon": 76.2,
+    "radius_km": 120,
+    "regions": [],
+    "affected_entity_ids": [],
+    "label": "Monsoon flood"
+   }
+  ]
+ },
+ {
+  "time_horizon_year": 2035,
+  "data_source": "synthetic_footprint",
+  "propagation_max_depth": 6,
+  "inventory_scale": 1.0,
+  "substitution_scale": 1.0,
+  "dependency_scale": 1.0,
+  "compound_amplification": 0.0,
+  "monte_carlo_runs": 500,
+  "monte_carlo_seed": 42,
+  "builtin": true,
+  "synthetic": true,
+  "id": "sc_brazil_drought",
+  "name": "Southeast Brazil Multi-Season Drought",
+  "description": "Synthetic drought over Sao Paulo / Minas Gerais affecting sugarcane, coffee and citrus.",
+  "hazards": [
+   {
+    "hazard_type": "drought",
+    "intensity": 0.65,
+    "duration_days": 120,
+    "center_lat": -21.5,
+    "center_lon": -47.0,
+    "radius_km": 350,
+    "regions": [],
+    "affected_entity_ids": [],
+    "label": "Multi-season drought"
+   }
+  ]
+ },
+ {
+  "time_horizon_year": 2035,
+  "data_source": "synthetic_footprint",
+  "propagation_max_depth": 6,
+  "inventory_scale": 1.0,
+  "substitution_scale": 1.0,
+  "dependency_scale": 1.0,
+  "compound_amplification": 0.0,
+  "monte_carlo_runs": 500,
+  "monte_carlo_seed": 42,
+  "builtin": true,
+  "synthetic": true,
+  "id": "sc_ca_heatwave",
+  "name": "California Central Valley Heatwave",
+  "description": "Synthetic extreme-heat event over orchards, vegetables, cold storage and the local grid.",
+  "hazards": [
+   {
+    "hazard_type": "heat",
+    "intensity": 0.8,
+    "duration_days": 14,
+    "center_lat": 36.7,
+    "center_lon": -119.8,
+    "radius_km": 250,
+    "regions": [],
+    "affected_entity_ids": [],
+    "label": "Extreme heat"
+   }
+  ]
+ },
+ {
+  "time_horizon_year": 2035,
+  "data_source": "synthetic_footprint",
+  "propagation_max_depth": 6,
+  "inventory_scale": 1.0,
+  "substitution_scale": 1.0,
+  "dependency_scale": 1.0,
+  "compound_amplification": 0.0,
+  "monte_carlo_runs": 500,
+  "monte_carlo_seed": 42,
+  "builtin": true,
+  "synthetic": true,
+  "id": "sc_mekong_flood",
+  "name": "Mekong Delta Flood",
+  "description": "Synthetic delta flood affecting rice, coffee highlands margin and the Cat Lai terminal.",
+  "hazards": [
+   {
+    "hazard_type": "flood",
+    "intensity": 0.7,
+    "duration_days": 28,
+    "center_lat": 10.4,
+    "center_lon": 106.0,
+    "radius_km": 160,
+    "regions": [],
+    "affected_entity_ids": [],
+    "label": "Delta flood"
+   }
+  ]
+ },
+ {
+  "time_horizon_year": 2035,
+  "data_source": "synthetic_footprint",
+  "propagation_max_depth": 6,
+  "inventory_scale": 1.0,
+  "substitution_scale": 1.0,
+  "dependency_scale": 1.0,
+  "compound_amplification": 0.1,
+  "monte_carlo_runs": 500,
+  "monte_carlo_seed": 42,
+  "builtin": true,
+  "synthetic": true,
+  "id": "sc_nweurope_compound",
+  "name": "NW Europe Compound Heat then Drought",
+  "description": "Synthetic consecutive heat and drought. The 10% compound amplification is an analyst assumption, not an estimate.",
+  "hazards": [
+   {
+    "hazard_type": "heat",
+    "intensity": 0.6,
+    "duration_days": 14,
+    "center_lat": 52.0,
+    "center_lon": 5.5,
+    "radius_km": 350,
+    "regions": [],
+    "affected_entity_ids": [],
+    "label": "Heatwave"
+   },
+   {
+    "hazard_type": "drought",
+    "intensity": 0.55,
+    "duration_days": 60,
+    "center_lat": 52.0,
+    "center_lon": 5.5,
+    "radius_km": 350,
+    "regions": [],
+    "affected_entity_ids": [],
+    "label": "Following drought"
+   }
+  ]
+ },
+ {
+  "time_horizon_year": 2035,
+  "data_source": "synthetic_footprint",
+  "propagation_max_depth": 6,
+  "inventory_scale": 1.0,
+  "substitution_scale": 1.0,
+  "dependency_scale": 1.0,
+  "compound_amplification": 0.0,
+  "monte_carlo_runs": 500,
+  "monte_carlo_seed": 42,
+  "builtin": true,
+  "synthetic": true,
+  "id": "sc_rotterdam_port_flood",
+  "name": "Rotterdam Terminal Flood (single node)",
+  "description": "Synthetic flood that disables one port node only, to expose logistics bottleneck propagation.",
+  "hazards": [
+   {
+    "hazard_type": "flood",
+    "intensity": 0.9,
+    "duration_days": 10,
+    "center_lat": null,
+    "center_lon": null,
+    "radius_km": null,
+    "regions": [],
+    "affected_entity_ids": [
+     "port_rtm"
+    ],
+    "label": "Terminal inundation"
+   }
+  ]
+ }
+]

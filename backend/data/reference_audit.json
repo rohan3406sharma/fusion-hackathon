@@ -1,0 +1,21 @@
+{
+ "present": true,
+ "n_companies": 215,
+ "n_relations": 350,
+ "sectors": {
+  "medicin": 53,
+  "ai": 62,
+  "energi": 25,
+  "finans": 29,
+  "forsvar": 41,
+  "quantum": 5
+ },
+ "countries_usa_share": 0.986,
+ "companies_without_any_link": 23,
+ "relations_with_source_field": 0,
+ "relations_with_what_field": 0,
+ "food_and_beverage_segments_found": [],
+ "has_weights": false,
+ "has_coordinates": false,
+ "verdict": "No Food & Beverage coverage, no link weights, no facility coordinates: used only to test generic graph tooling."
+}

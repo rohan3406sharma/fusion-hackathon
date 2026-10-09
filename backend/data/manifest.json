@@ -1,0 +1,25 @@
+{
+  "version": "0.1.0",
+  "domain": "food_and_beverage",
+  "datasets": [
+    {"id": "fnb_entities", "file": "fnb_entities.json", "kind": "synthetic_entities", "synthetic": true,
+     "licence": "Project-generated (no third-party licence); invented names", "provenance": "backend/data/generate_dataset.py, fixed seed",
+     "fields": "see docs/DATA_DICTIONARY.md", "limitations": "Invented companies. Locations are approximate synthetic coordinates in real regions. Vulnerabilities, inventories and alternatives are archetype defaults plus seeded jitter, not measurements."},
+    {"id": "fnb_relations", "file": "fnb_relations.json", "kind": "synthetic_relationships", "synthetic": true,
+     "licence": "Project-generated", "provenance": "Stylised commodity/logistics patterns written by hand in the generator",
+     "fields": "see docs/DATA_DICTIONARY.md", "limitations": "No relationship is a disclosed contract. Dependency shares, specificity and substitutability are assumptions. Financial-channel edges are not propagated."},
+    {"id": "scenarios", "file": "scenarios.json", "kind": "synthetic_climate_scenarios", "synthetic": true,
+     "licence": "Project-generated", "provenance": "Hand-defined circular footprints and intensity indices",
+     "fields": "hazards[], durations, scales", "limitations": "No return periods, probabilities or physical units. Not derived from hazard maps."},
+    {"id": "sectivia_reference", "file": "reference/sectivia/*", "kind": "real_reference_not_used_for_fnb", "synthetic": false,
+     "licence": "CC BY 4.0", "attribution": "Supply-chain data: Sectivia (https://sectivia.com), CC BY 4.0",
+     "provenance": "Supplied by the project owner; 215 companies, 350 relations, six non-food sectors",
+     "fields": "supplier_id, customer_id, sector, segment, ...", "limitations": "No food & beverage coverage, no weights, no coordinates, some inferred links. Used only to test generic graph tooling and audited in reference_audit.json."}
+  ],
+  "external_sources": [
+    {"name": "World Bank Climate Change Knowledge Portal", "status": "not integrated", "licence": "CC BY 4.0 (per evidence review)", "note": "Country/sub-national climate aggregates; not hazard footprints. Provider interface in models/climate.py is ready for it."},
+    {"name": "Open-Meteo (ERA5, CMIP6 downscaled, GloFAS flood API)", "status": "not integrated", "licence": "Free non-commercial up to 10,000 calls/day (per evidence review)", "note": "Flood API returns river discharge, not inundation depth."}
+  ],
+  "required_attribution": "Supply-chain data (reference only): Sectivia (https://sectivia.com), CC BY 4.0",
+  "last_generated": "2026-10-09"
+}

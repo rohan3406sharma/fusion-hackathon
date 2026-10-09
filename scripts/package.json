@@ -1,0 +1,1 @@
+{"name":"fin04-e2e","private":true,"type":"module","scripts":{"e2e":"node e2e_smoke.mjs"},"dependencies":{"puppeteer-core":"^25.13.0"}}
