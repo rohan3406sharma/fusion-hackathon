@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FIN-04 Climate Exposure Graph: Food & Beverage
 
 A network-aware climate stress-testing and decision-support prototype. It shows how a flood, heatwave or drought at one farm, plant, port or warehouse can propagate through a **synthetic** Food & Beverage supply chain, and compares a *location-only* estimate with a *network-aware* one.
@@ -62,3 +63,7 @@ Most striking scenario for hidden exposure: *Rotterdam Terminal Flood (single no
 
 ## Repository map
 `backend/app/` (api, models, services, schemas, domain) · `backend/data/` (generator, dataset, manifest, reference) · `backend/tests/` · `frontend/src/` (pages, components, lib, state, api) · `docs/` · `scripts/e2e_smoke.mjs`.
+=======
+# fusion-hackathon
+Climate risk intelligence for investment portfolios using interactive dependency graphs, cascading risk simulation, and financial exposure analysis.
+>>>>>>> origin/main
