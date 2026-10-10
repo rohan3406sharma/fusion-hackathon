@@ -27,7 +27,7 @@ export const run: RunResult = {
     { order: '2', label: 'Second-order', entities: 0, loss_musd: 0, evidence: 'e2' }, { order: '3', label: 'Third-order', entities: 0, loss_musd: 0, evidence: 'e3' }],
   entities: [impact('farm', 'Test Wheat Farm', 'direct', 0, 0.6), impact('mill', 'Test Flour Mill', 'propagated', 1, 0.2), impact('bakery', 'Test Bakery', 'unaffected', null, 0), impact('cafe', 'Test Coffee Roaster', 'unaffected', null, 0)],
   by_food_category: [], by_entity_type: [], by_region: [], critical_paths: [],
-  comparison: { location_only_loss_musd: 5, network_aware_loss_musd: 7, absolute_difference_musd: 2, relative_difference: 0.4, portfolio_location_loss_musd: 0, portfolio_network_loss_musd: 0, portfolio_absolute_difference_musd: 0, portfolio_relative_difference: null, portfolio_rows: [], hidden_exposure_count: 0, scope_note: 's' },
+  comparison: { location_only_loss_musd: 5, network_aware_loss_musd: 7, absolute_difference_musd: 2, relative_difference: 0.4, portfolio_location_loss_musd: 0, portfolio_network_loss_musd: 0, portfolio_absolute_difference_musd: 0, portfolio_relative_difference: null, portfolio_rows: [], hidden_exposure_count: 0, scope_note: 's', portfolio_location_impact: 0, portfolio_network_impact: 0, portfolio_hidden_share: null, hidden_exposure_curve: [{ threshold: 0.05, count: 0 }] },
   bottlenecks: [{ entity_id: 'mill', name: 'Test Flour Mill', score: 55.5, downstream_reach: 3, betweenness: 0.12, out_degree: 3, weighted_out_dependency: 1.4, note: '' }],
   assumptions: ['a'], limitations: ['Synthetic limitation'], units: {},
 }
@@ -47,4 +47,33 @@ export function mockFetch(overrides: Record<string, () => Response | Promise<Res
     if (!key) return json({ detail: `no mock for ${url}` }, 404)
     return routes[key]()
   })
+}
+
+const fev = (rank: number, id: string, label: string, impact: number, reach: number, hiddenOnly: boolean) => ({
+  rank, id, kind: 'node' as const, hazard: 'flood', label, origin_id: 'farm', country: 'India', region: 'R', portfolio_network_impact: impact,
+  portfolio_location_impact: hiddenOnly ? 0 : impact / 2, hidden_share: hiddenOnly ? 1 : 0.5, hidden_only: hiddenOnly, variants: 0,
+  holdings_affected: reach, entities_hit_directly: 1, top_holdings: [{ entity_id: 'bakery', name: 'Test Bakery', weight: 0.5, direct_disruption: 0, network_disruption: 0.2 }],
+  p_top5: rank === 1 ? 0.97 : 0.3, median_rank: rank, rank_iqr: [rank, rank], fragile: rank !== 1 && rank <= 5,
+  hazard_component: { hazard_type: 'flood' as const, intensity: 0.8, duration_days: 21, regions: [], affected_entity_ids: ['farm'], label },
+})
+export const finderResult = {
+  n_events: 780, n_node_events: 226, n_footprint_events: 554, n_distinct_events: 268, n_hidden_only: 2, runtime_seconds: 0.4,
+  events: [fev(1, 'e1', 'Drought around Test Region', 0.08, 9, false)],
+  hidden_only_events: [fev(1, 'h1', 'Flood at Test Port', 0.011, 3, true), fev(2, 'h2', 'Heat at Test Grid', 0.009, 7, true)],
+  hidden_share_curve: [{ threshold: 0.5, events: 10 }],
+  holdings: [{ entity_id: 'bakery', name: 'Test Bakery', weight: 0.5, entity_type: 'manufacturer' }, { entity_id: 'cafe', name: 'Test Coffee Roaster', weight: 0.5, entity_type: 'manufacturer' }],
+  matrix: [{ entity_id: 'mill', name: 'Test Flour Mill', entity_type: 'processor', worst_event_id: 'node:mill:flood', total: 0.01, holdings_reached: 2, values: { bakery: 0.006, cafe: 0.004 } }],
+  single_points_of_failure: [{ entity_id: 'mill', name: 'Test Flour Mill', entity_type: 'processor', is_holding: false, holdings: [{ entity_id: 'bakery', name: 'Test Bakery', weight: 0.5, direct_disruption: 0, network_disruption: 0.35 }] }],
+  structural_bound: { n_pairs: 10, method: 'm', top: [{ entities: ['Test Flour Mill', 'Test Wheat Farm'], impact: 0.02 }], greedy: { entities: ['Test Flour Mill', 'Test Wheat Farm'], impact: 0.02 }, greedy_matches: true, note: 'n' },
+  stability: { n_draws: 200, seed: 42, shortlist: 100, kendall_tau_top20: 0.98, kendall_tau_top20_hidden_only: 0.93, note: 'n' },
+  parameters: {}, units: {}, assumptions: ['Synthetic event library'], limitations: ['Not validation'],
+}
+export const optimiseResult = {
+  budget_musd: 3, tail_events: 10, n_events: 50, baseline_objective: 0.0325, plan_objective: 0.0310, reduction: 0.0015, reduction_fraction: 0.046,
+  greedy_objective: 0.0310, local_search_improved: false, plan: [{ label: 'Protect Test Flour Mill', type: 'facility_protection', entity_ids: ['mill'], magnitude: 0.4, annualised_cost_musd: 1.1, single_reduction: 0.0009 }],
+  plan_cost_musd: 1.1, plan_interventions: [], candidates: [], frontier: [],
+  exhaustive: { pool_size: 5, pool_note: 'all candidates', n_feasible_plans: 31, best_objective: 0.0310, best_plan: ['Protect Test Flour Mill'], optimality_gap: 0, note: 'g' },
+  cost_sensitivity: [{ cost_factor: 0.5, plan: [], objective: 0.031, jaccard_with_base: 1 }, { cost_factor: 2, plan: [], objective: 0.031, jaccard_with_base: 0.5 }],
+  robustness: { n_draws: 50, seed: 7, median_reduction: 0.0015, p05: 0.0009, p95: 0.0022, share_positive: 1 },
+  evaluations: 40, runtime_seconds: 0.6, method: 'Decision variables …', units: {}, assumptions: [],
 }

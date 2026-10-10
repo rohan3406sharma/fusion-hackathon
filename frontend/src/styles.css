@@ -22,6 +22,8 @@ body { margin: 0; min-height: 100vh; }
 h1, h2, h3 { font-family: var(--font-serif); font-weight: 600; letter-spacing: -0.01em; }
 *, *::before, *::after { border-radius: 0 !important; }
 :focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+/* scroll containers must contain their absolutely positioned (sr-only) descendants, or those widen the page */
+.overflow-x-auto, .overflow-auto { position: relative; }
 .range { accent-color: var(--color-gold-dark); width: 100%; }
 .num { font-variant-numeric: tabular-nums; }
 .eyebrow { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-warm); font-weight: 500; }

@@ -1,6 +1,7 @@
 import os
 
 os.environ["FIN04_DATABASE_URL"] = "sqlite://"   # in-memory
+os.environ["FIN04_LLM_PROVIDER"] = "deterministic"   # tests never call a real model unless they inject a provider explicitly
 
 import pytest
 from fastapi.testclient import TestClient

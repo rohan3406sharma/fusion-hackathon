@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s05 search</title></head>
+  <body>
+    <template id="s05-search-template">
+      <style>
+        #s05-search { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s05-search .stage { position: absolute; inset: 0; }
+        #s05-search .vwrap { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+        #s05-search .vwrap video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border-radius: 0 0 14px 14px; }
+        #s05-search .fx-callout .v { font-variant-numeric: tabular-nums; }
+      </style>
+      <div id="s05-search" data-composition-id="s05-search" data-width="1920" data-height="1080">
+        <div class="stage">
+          <div class="shot"></div>
+          <div class="vwrap" id="s05-vw01"><video id="s05-rec01" data-rec="rec-01-finder" data-hf-media-start-basis="local" src="captures/rec/rec-01-finder.mp4" muted playsinline data-start="0.5" data-duration="6.174" data-media-start="0.063" data-track-index="3"></video></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's05-search', FX = window.FX, CAP = window.CAP
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const W = (l, w, n) => L(FX.word(l, w, n || 0))
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const { cam, frame } = FX.browser(root.querySelector('.shot'), 'localhost · FIN-04 · Hidden exposure finder', '● Live app')
+          FX.h('img', { src: CAP.stills['overview'].file }, frame)
+          const imgTop = FX.h('img', { src: CAP.stills['finder-top'].file, style: { opacity: 0 } }, frame)
+          // the real screen recording: open the finder, press Search
+          const R = FX.rec('rec-01-finder')
+          const vwrap = root.querySelector('#s05-vw01')
+          frame.appendChild(vwrap)   // static video tag (so the renderer extracts its frames), moved into the browser frame
+          FX.demoChrome(stage, tl)
+          FX.camSet(tl, cam, FX.camRest, 0)
+          const tEnd = L(R.end)
+          tl.set(imgTop, { opacity: 1 }, tEnd - 0.3)
+          tl.to(vwrap, { opacity: 0, duration: 0.25 }, tEnd - 0.25)
+
+          // ---- 780 events, scored in under a second ----
+          const rE = FX.rect('finder-top', 'kpiEvents'), rH = FX.rect('finder-top', 'kpiHidden'), rT = FX.rect('finder-top', 'kpiTau'), rR = FX.rect('finder-top', 'kpiRuntime')
+          const leftPair = { x: rE.x, y: rE.y, w: rH.x + rH.w - rE.x, h: rE.h }, rightPair = { x: rT.x, y: rT.y, w: rR.x + rR.w - rT.x, h: rR.h }
+          const camL = FX.camFocus(leftPair, { pad: 250, max: 1.8, dy: -90 }), camR = FX.camFocus(rightPair, { pad: 250, max: 1.8, dy: -90 })
+          const t780 = L(FX.cue('count_780'))
+          FX.camTo(tl, cam, camL, tEnd - 0.2, 1.1)
+          const hlE = FX.hl(frame, rE, { pad: 6 }), hlH = FX.hl(frame, rH, { pad: 6 }), hlR = FX.hl(frame, rR, { pad: 6 })
+          tl.to(hlE, { opacity: 1, duration: 0.3 }, t780)
+          const sE = FX.screenRect(camL, rE)
+          const c780 = FX.callout(stage, { k: 'Synthetic events scored', v: '<span class="n">0</span>', s: 'Floods, heatwaves and droughts — 268 distinct after merging near-duplicates' }, sE.x, sE.y + sE.h + 46, 640)
+          tl.fromTo(c780, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, t780)
+          FX.countTo(tl, c780.querySelector('.n'), 0, 780, t780 + 0.05, 1.0, (v) => Math.round(v).toLocaleString('en-US'))
+          // runtime
+          const tSec = W('L21', 'second') - 0.75
+          tl.to([hlE, c780], { opacity: 0, duration: 0.3 }, tSec - 0.2)
+          FX.camTo(tl, cam, camR, tSec - 0.1, 0.9)
+          tl.to(hlR, { opacity: 1, duration: 0.3 }, tSec + 0.6)
+          const sR = FX.screenRect(camR, rR)
+          const cRun = FX.callout(stage, { k: 'Runtime (this capture)', v: '0.69 s', s: '226 single-node + 554 footprint events, plus 200 uncertainty draws' }, sR.x + sR.w - 560, sR.y + sR.h + 46, 560)
+          tl.fromTo(cRun, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, tSec + 0.6)
+
+          // ---- 165 hidden-only events ----
+          const t165 = L(FX.cue('count_165'))
+          tl.to([hlR, cRun], { opacity: 0, duration: 0.3 }, t165 - 0.55)
+          FX.camTo(tl, cam, camL, t165 - 0.5, 0.8)
+          tl.to(hlH, { opacity: 1, duration: 0.3, boxShadow: '0 0 0 9999px rgba(12,16,22,0.45)' }, t165 + 0.1)
+          const sH = FX.screenRect(camL, rH)
+          const c165 = FX.callout(stage, { k: 'Hidden-only events', v: '<span class="n">0</span>', s: 'No holding is hit directly — yet the portfolio still loses value.' }, sH.x - 80, sH.y + sH.h + 46, 640)
+          c165.classList.add('hz')
+          tl.fromTo(c165, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, t165 + 0.1)
+          FX.countTo(tl, c165.querySelector('.n'), 0, 165, t165 + 0.15, 0.9, (v) => Math.round(v))
+          // slow push-in while the line plays out, so the hold never reads as a frozen frame
+          const k = 1.045, camHold = { s: camL.s * k, x: 960 - k * (960 - camL.x), y: 540 - k * (540 - camL.y) }
+          tl.to(cam, { scale: camHold.s, x: camHold.x, y: camHold.y, duration: 6.4, ease: 'sine.inOut' }, t165 + 0.4)
+          // settle back toward the table for the next scene
+          const tOut = L(FX.scene(ID).end) - 1.0
+          tl.to([hlH, c165], { opacity: 0, duration: 0.35 }, tOut - 0.2)
+          FX.camTo(tl, cam, FX.camRest, tOut, 1.0, 'power2.inOut')
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

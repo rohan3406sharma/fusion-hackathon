@@ -31,7 +31,7 @@ def create_app() -> FastAPI:
                   description="Food & Beverage supply-chain climate stress testing on a SYNTHETIC demonstration dataset. "
                               "Outputs are model estimates under stated assumptions, not forecasts.")
     app.add_middleware(CORSMiddleware, allow_origins=get_settings().cors_list, allow_methods=["*"], allow_headers=["*"])
-    for r in (routes.system, routes.graph, routes.scen, routes.ana, routes.mit, routes.dat):
+    for r in (routes.system, routes.graph, routes.scen, routes.ana, routes.mit, routes.dat, routes.cop):
         app.include_router(r)
 
     @app.exception_handler(Exception)

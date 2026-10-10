@@ -9,3 +9,14 @@ frontend/dist/
 .DS_Store
 *.log
 node_modules/
+backend/data/hazard_layers/cache/
+# Video production generated files and local environments
+video-production/.venv-tts/
+video-production/node_modules/
+video-production/renders/
+video-production/captures/rec/
+video-production/assets/audio/
+video-production/assets/voice/*.wav
+
+# Downloaded hazard-data cache
+backend/data/hazard_layers/cache/

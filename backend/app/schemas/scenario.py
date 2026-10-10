@@ -6,6 +6,7 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field, model_validator
 
 HazardType = Literal["flood", "heat", "drought"]
+HoldingView = Literal["company", "business_unit"]     # how a portfolio holding is defined (see domain/holdings.py)
 
 
 class HazardComponent(BaseModel):
@@ -40,6 +41,8 @@ class ScenarioSpec(BaseModel):
     substitution_scale: float = Field(default=1.0, ge=0, le=2)
     dependency_scale: float = Field(default=1.0, ge=0.25, le=1.5)
     compound_amplification: float = Field(default=0.0, ge=0, le=0.5, description="Analyst-set uplift when >1 hazard overlaps; not an estimate")
+    use_graph_alternatives: bool = Field(default=True, description="Relief from modelled same-product producers, limited by their spare capacity and their own disruption")
+    cycle_damping: float = Field(default=0.5, ge=0, le=1, description="Multiplier on links inside feedback loops (1 = undamped); an assumption")
     monte_carlo_runs: int = Field(default=500, ge=0, le=5000)
     monte_carlo_seed: int = Field(default=42, ge=0, le=2**31 - 1)
 
@@ -54,3 +57,4 @@ class ScenarioRecord(ScenarioSpec):
 class RunOptions(BaseModel):
     max_depth: Optional[int] = Field(default=None, ge=1, le=10)
     top_paths: int = Field(default=10, ge=0, le=50)
+    holding_view: HoldingView = "company"

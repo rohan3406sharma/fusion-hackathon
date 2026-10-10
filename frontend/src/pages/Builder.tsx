@@ -32,7 +32,7 @@ export default function Builder() {
   const [name, setName] = useState('Custom food-chain stress test')
   const [desc, setDesc] = useState('')
   const [hazards, setHazards] = useState<HazardDraft[]>([blankHazard()])
-  const [adv, setAdv] = useState({ propagation_max_depth: 6, inventory_scale: 1, substitution_scale: 1, dependency_scale: 1, compound_amplification: 0, monte_carlo_runs: 500, monte_carlo_seed: 42, time_horizon_year: 2035 })
+  const [adv, setAdv] = useState({ propagation_max_depth: 6, inventory_scale: 1, substitution_scale: 1, dependency_scale: 1, compound_amplification: 0, monte_carlo_runs: 500, monte_carlo_seed: 42, time_horizon_year: 2035, use_graph_alternatives: true, cycle_damping: 0.5 })
   const [entQ, setEntQ] = useState('')
   const [busy, setBusy] = useState(false)
   const [serverErr, setServerErr] = useState<string | null>(null)
@@ -43,7 +43,7 @@ export default function Builder() {
   const loadFrom = (s: ScenarioSpec) => {
     setName(`${s.name} (copy)`); setDesc(s.description)
     setHazards(s.hazards.map((h) => ({ ...h, mode: h.radius_km ? 'footprint' : h.regions.length ? 'regions' : 'entities' })))
-    setAdv({ propagation_max_depth: s.propagation_max_depth, inventory_scale: s.inventory_scale, substitution_scale: s.substitution_scale, dependency_scale: s.dependency_scale, compound_amplification: s.compound_amplification, monte_carlo_runs: s.monte_carlo_runs, monte_carlo_seed: s.monte_carlo_seed, time_horizon_year: s.time_horizon_year })
+    setAdv({ propagation_max_depth: s.propagation_max_depth, inventory_scale: s.inventory_scale, substitution_scale: s.substitution_scale, dependency_scale: s.dependency_scale, compound_amplification: s.compound_amplification, monte_carlo_runs: s.monte_carlo_runs, monte_carlo_seed: s.monte_carlo_seed, time_horizon_year: s.time_horizon_year, use_graph_alternatives: s.use_graph_alternatives ?? true, cycle_damping: s.cycle_damping ?? 0.5 })
   }
   useEffect(() => { if (active) loadFrom(active) }, [active?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -141,6 +141,9 @@ export default function Builder() {
               <Field label={`Substitution & alternatives ×${adv.substitution_scale.toFixed(2)}`}><input type="range" min={0} max={2} step={0.05} value={adv.substitution_scale} onChange={(e) => setAdv({ ...adv, substitution_scale: Number(e.target.value) })} className="range" aria-label="Substitution scale" /></Field>
               <Field label={`Dependency strength ×${adv.dependency_scale.toFixed(2)}`}><input type="range" min={0.25} max={1.5} step={0.05} value={adv.dependency_scale} onChange={(e) => setAdv({ ...adv, dependency_scale: Number(e.target.value) })} className="range" aria-label="Dependency scale" /></Field>
               <Field label={`Compound amplification ${(adv.compound_amplification * 100).toFixed(0)}%`} hint="Analyst assumption; applies only where hazards overlap"><input type="range" min={0} max={0.5} step={0.05} disabled={hazards.length < 2} value={adv.compound_amplification} onChange={(e) => setAdv({ ...adv, compound_amplification: Number(e.target.value) })} className="range" aria-label="Compound amplification" /></Field>
+              <Field label={`Feedback-loop damping ×${adv.cycle_damping.toFixed(2)}`} hint="Multiplier on links inside supply loops (1 = undamped)"><input type="range" min={0} max={1} step={0.05} value={adv.cycle_damping} onChange={(e) => setAdv({ ...adv, cycle_damping: Number(e.target.value) })} className="range" aria-label="Feedback-loop damping" /></Field>
+              <label className="flex items-start gap-2 text-xs"><input type="checkbox" className="mt-0.5" checked={adv.use_graph_alternatives} onChange={(e) => setAdv({ ...adv, use_graph_alternatives: e.target.checked })} aria-label="Use modelled alternative suppliers" />
+                <span>Use modelled alternative suppliers: same-product producers in the graph can cover a shortfall from their spare capacity, unless they are hit too</span></label>
               <div className="grid grid-cols-2 items-start gap-3">
                 <Field label="MC runs"><input type="number" className="field" min={0} max={5000} value={adv.monte_carlo_runs} onChange={(e) => setAdv({ ...adv, monte_carlo_runs: num(e.target.value) })} /></Field>
                 <Field label="Seed"><input type="number" className="field" min={0} value={adv.monte_carlo_seed} onChange={(e) => setAdv({ ...adv, monte_carlo_seed: num(e.target.value) })} /></Field>

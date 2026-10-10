@@ -24,7 +24,7 @@ function Rel({ rows, onOpen, empty }: { rows: Neighbour[]; onOpen: (id: string) 
 export default function EntityPage() {
   const { id } = useParams()
   const nav = useNavigate()
-  const { graph, activeId, run, impacts } = useApp()
+  const { graph, activeId, run, impacts, depthOverride } = useApp()
   const [detail, setDetail] = useState<EntityDetail | null>(null)
   const [deps, setDeps] = useState<Dependencies | null>(null)
   const [impact, setImpact] = useState<EntityImpactPayload | null>(null)
@@ -36,7 +36,7 @@ export default function EntityPage() {
     if (!id || !activeId) return
     let dead = false
     setErr(null); setDetail(null); setDeps(null); setImpact(null); setMit(null)
-    Promise.all([api.entity(id), api.dependencies(id), api.entityImpact(id, activeId)])
+    Promise.all([api.entity(id), api.dependencies(id), api.entityImpact(id, activeId, depthOverride)])
       .then(([d, dp, im]) => { if (dead) return; setDetail(d); setDeps(dp); setImpact(im)
         if (im.impact.status !== 'unaffected') {
           api.mitigationCompare(activeId, [
@@ -44,7 +44,7 @@ export default function EntityPage() {
             { type: 'supplier_diversification', entity_ids: [id], magnitude: 0.5, label: 'Shift 50% of each supplier to alternatives' },
             { type: 'input_substitution', entity_ids: [id], magnitude: 0.2, label: 'Qualify substitute inputs (+0.2)' },
             { type: 'facility_protection', entity_ids: [id], magnitude: 0.4, label: 'Protect this facility (-40% vulnerability)' },
-          ], 0.1).then((m) => !dead && setMit(m)).catch(() => undefined)
+          ], 0.1, depthOverride).then((m) => !dead && setMit(m)).catch(() => undefined)
         } })
       .catch((e: Error) => !dead && setErr(e.message))
     return () => { dead = true }
@@ -87,6 +87,22 @@ export default function EntityPage() {
               <div key={k} className="flex justify-between gap-3 border-b border-taupe pb-1"><dt className="text-warm">{k}</dt><dd className="text-right">{v}</dd></div>))}
           </dl>
           <p className="mt-3 text-[0.7rem] text-warm">Provenance: {detail.provenance} · confidence {detail.confidence}</p>
+          {detail.company && (
+            <div className="mt-4 border-l-2 border-gold pl-3 text-xs" data-testid="company-membership">
+              <p className="eyebrow">Business unit of a synthetic company{detail.company.in_demo_portfolio ? ' · held in the demo portfolio' : ''}</p>
+              <p className="mt-1"><strong>{detail.company.name}</strong>: {detail.company.segment}, <span className="num">{fmtPct(detail.company.share)}</span> of the company's value added.</p>
+              <p className="mt-1 text-warm">Other units: {detail.company.segments.filter((x) => x.entity_id !== detail.id).map((x, i) => <span key={x.entity_id}>{i > 0 && ' · '}<Link className="underline decoration-taupe underline-offset-4" to={`/entity/${x.entity_id}`}>{x.segment}</Link> ({fmtPct(x.share)})</span>)}
+                {detail.company.other_businesses_share > 0 && <> · {fmtPct(detail.company.other_businesses_share)} outside food &amp; beverage, not modelled.</>}</p>
+              <p className="mt-1 text-warm">In the company view a holding's disruption is the value-added-weighted average of its units; switch to business units in the top bar to treat each unit on its own.</p>
+            </div>
+          )}
+          {detail.jrc_flood_rp100 && (
+            <div className="mt-4 border-l-2 border-gold pl-3 text-xs" data-testid="jrc-flood">
+              <p className="eyebrow">Real hazard context · JRC river flood, {detail.jrc_flood_rp100.return_period_years}-yr</p>
+              <p className="mt-1"><strong className="num">{fmtPct(detail.jrc_flood_rp100.flooded_share)}</strong> of the area within {detail.jrc_flood_rp100.radius_km} km is modelled as flooded ({fmtPct(detail.jrc_flood_rp100.deep_share)} deeper than 1 m); sea and water count as not flooded.{detail.jrc_flood_rp100.window_coverage != null && detail.jrc_flood_rp100.window_coverage < 0.9 && <> Only {fmtPct(detail.jrc_flood_rp100.window_coverage)} of the circle lies inside this map tile.</>}</p>
+              <p className="mt-1 text-warm">Sampled around this entity's synthetic approximate location: hazard context, not the exposure of a real facility, and no validation of the simulated loss. River flooding only. {detail.jrc_flood_rp100.source}, {detail.jrc_flood_rp100.licence}, © European Union; aggregated to shares by this project.</p>
+            </div>
+          )}
         </Panel>
         <Panel title="Direct hazard exposure & disruption" subtitle={`Scenario: ${run?.scenario.name}`}>
           <div className="space-y-4 text-xs">

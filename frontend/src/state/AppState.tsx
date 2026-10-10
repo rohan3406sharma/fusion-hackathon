@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { api } from '../api/client'
-import type { EntityImpact, GraphPayload, Metadata, MonteCarloResult, RunResult, ScenarioRecord } from '../api/types'
+import type { EntityImpact, GraphPayload, HoldingView, Metadata, MonteCarloResult, RunResult, ScenarioRecord } from '../api/types'
 
 interface Ctx {
   metadata: Metadata | null
@@ -12,11 +12,13 @@ interface Ctx {
   impacts: Map<string, EntityImpact>
   mc: MonteCarloResult | null
   depthOverride: number | null
+  holdingView: HoldingView
   loading: boolean
   mcLoading: boolean
   error: string | null
   setActive: (id: string) => void
   setDepth: (d: number | null) => void
+  setHoldingView: (v: HoldingView) => void
   refreshScenarios: (selectId?: string) => Promise<void>
   runMonteCarlo: (n: number, seed: number) => Promise<void>
   reload: () => void
@@ -24,6 +26,9 @@ interface Ctx {
 const KEY = 'fin04.activeScenario'
 const readSaved = (): string | null => { try { return localStorage.getItem(KEY) } catch { return null } }
 const save = (id: string) => { try { localStorage.setItem(KEY, id) } catch { /* storage unavailable */ } }
+const VIEW_KEY = 'fin04.holdingView'
+const readView = (): HoldingView => { try { return localStorage.getItem(VIEW_KEY) === 'business_unit' ? 'business_unit' : 'company' } catch { return 'company' } }
+const saveView = (v: HoldingView) => { try { localStorage.setItem(VIEW_KEY, v) } catch { /* storage unavailable */ } }
 const AppCtx = createContext<Ctx | null>(null)
 export const useApp = () => {
   const c = useContext(AppCtx)
@@ -39,6 +44,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [run, setRun] = useState<RunResult | null>(null)
   const [mc, setMc] = useState<MonteCarloResult | null>(null)
   const [depthOverride, setDepth] = useState<number | null>(null)
+  const [holdingView, setView] = useState<HoldingView>(readView)
   const [loading, setLoading] = useState(true)
   const [mcLoading, setMcLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -64,11 +70,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     save(activeId)
     const my = ++seq.current
     setLoading(true)
-    api.run(activeId, depthOverride)
+    api.run(activeId, depthOverride, holdingView)
       .then((r) => { if (my === seq.current) { setRun(r); setMc(null); setError(null) } })
       .catch((e: Error) => { if (my === seq.current) setError(e.message) })
       .finally(() => { if (my === seq.current) setLoading(false) })
-  }, [activeId, depthOverride])
+  }, [activeId, depthOverride, holdingView])
 
   const refreshScenarios = useCallback(async (selectId?: string) => {
     const s = await api.scenarios()
@@ -87,8 +93,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const impacts = useMemo(() => new Map((run?.entities ?? []).map((e) => [e.entity_id, e])), [run])
   const active = scenarios.find((s) => s.id === activeId) ?? null
   const value: Ctx = {
-    metadata, graph, scenarios, activeId, active, run, impacts, mc, depthOverride, loading, mcLoading, error,
+    metadata, graph, scenarios, activeId, active, run, impacts, mc, depthOverride, holdingView, loading, mcLoading, error,
     setActive: (id) => { setDepth(null); setActiveId(id) }, setDepth, refreshScenarios, runMonteCarlo, reload: () => setTick((t) => t + 1),
+    setHoldingView: (v) => { saveView(v); setView(v) },
   }
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>
 }

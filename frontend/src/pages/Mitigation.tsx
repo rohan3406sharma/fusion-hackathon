@@ -39,7 +39,7 @@ function OptionCard({ o, base }: { o: MitigationOption; base: number }) {
 }
 
 export default function Mitigation() {
-  const { graph, activeId, active } = useApp()
+  const { graph, activeId, active, depthOverride } = useApp()
   const [drafts, setDrafts] = useState<Draft[]>([{ key: 1, type: 'inventory_buffer', entity_ids: [], magnitude: 14 }])
   const [p, setP] = useState(0.1)
   const [res, setRes] = useState<MitigationResult | null>(null)
@@ -52,14 +52,14 @@ export default function Mitigation() {
     if (!activeId) return
     let dead = false
     setRec(null); setRes(null)
-    api.recommendations(activeId, p, 8).then((r) => !dead && setRec(r)).catch((e: Error) => !dead && setErr(e.message))
+    api.recommendations(activeId, p, 8, depthOverride).then((r) => !dead && setRec(r)).catch((e: Error) => !dead && setErr(e.message))
     return () => { dead = true }
-  }, [activeId, p])
+  }, [activeId, p, depthOverride])
 
   const compare = async () => {
     if (!activeId) return
     setBusy(true); setErr(null)
-    try { setRes(await api.mitigationCompare(activeId, drafts.map(({ key, ...d }) => d), p)) } catch (e) { setErr((e as Error).message) } finally { setBusy(false) }
+    try { setRes(await api.mitigationCompare(activeId, drafts.map(({ key, ...d }) => d), p, depthOverride)) } catch (e) { setErr((e as Error).message) } finally { setBusy(false) }
   }
   const upd = (k: number, patch: Partial<Draft>) => setDrafts((ds) => ds.map((d) => (d.key === k ? { ...d, ...patch } : d)))
   const chart = res ? [{ name: 'Baseline', direct: res.baseline.direct_loss_musd, indirect: res.baseline.indirect_loss_musd },

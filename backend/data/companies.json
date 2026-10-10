@@ -1,0 +1,84 @@
+{
+ "name": "Synthetic company structures for the demo portfolio",
+ "synthetic": true,
+ "share_basis": "value_added",
+ "note": "Holdings not listed here are single-business companies. Segment shares are computed at load time from entity value added; other_businesses_share is outside the Food & Beverage scope and never modelled.",
+ "companies": [
+  {
+   "id": "co_five_rivers",
+   "name": "Five Rivers Consumer Group",
+   "synthetic": true,
+   "pattern": "Diversified consumer group: packaged foods and an own flour mill, plus large businesses outside food and beverage (not modelled)",
+   "segments": [
+    {
+     "entity_id": "biscuit_in",
+     "segment": "Biscuits and snacks"
+    },
+    {
+     "entity_id": "mill_pb",
+     "segment": "Flour milling"
+    },
+    {
+     "entity_id": "cookoil_in",
+     "segment": "Packaged cooking oil"
+    }
+   ],
+   "other_businesses_share": 0.55
+  },
+  {
+   "id": "co_lone_star",
+   "name": "Lone Star Snacks and Beverages",
+   "synthetic": true,
+   "pattern": "Multi-category food and beverage group: three product lines in three US regions",
+   "segments": [
+    {
+     "entity_id": "snack_us",
+     "segment": "Snacks"
+    },
+    {
+     "entity_id": "softdrink_us",
+     "segment": "Soft drinks"
+    },
+    {
+     "entity_id": "juice_us",
+     "segment": "Juices"
+    }
+   ],
+   "other_businesses_share": 0.0
+  },
+  {
+   "id": "co_great_plains",
+   "name": "Great Plains Foods",
+   "synthetic": true,
+   "pattern": "Vertically integrated: owns the flour mill that supplies its cereal plant",
+   "segments": [
+    {
+     "entity_id": "cereal_us",
+     "segment": "Breakfast cereal"
+    },
+    {
+     "entity_id": "mill_ks",
+     "segment": "Flour milling"
+    }
+   ],
+   "other_businesses_share": 0.0
+  },
+  {
+   "id": "co_lowlands_dairy",
+   "name": "Lowlands Dairy Group",
+   "synthetic": true,
+   "pattern": "Vertically integrated: owns the milk plant that supplies its packing plant",
+   "segments": [
+    {
+     "entity_id": "dairy_pack_nl",
+     "segment": "Cheese and yogurt"
+    },
+    {
+     "entity_id": "dairy_proc_fr",
+     "segment": "Milk processing"
+    }
+   ],
+   "other_businesses_share": 0.0
+  }
+ ]
+}

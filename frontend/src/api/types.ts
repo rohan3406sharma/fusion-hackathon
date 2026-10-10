@@ -8,6 +8,7 @@ export interface ScenarioSpec {
   name: string; description: string; hazards: Hazard[]; time_horizon_year: number; data_source: 'synthetic_footprint'
   propagation_max_depth: number; inventory_scale: number; substitution_scale: number; dependency_scale: number
   compound_amplification: number; monte_carlo_runs: number; monte_carlo_seed: number
+  use_graph_alternatives?: boolean; cycle_damping?: number
 }
 export interface ScenarioRecord extends ScenarioSpec { id: string; builtin: boolean; synthetic: boolean; created_at?: string }
 export interface GraphNode {
@@ -37,14 +38,27 @@ export interface CriticalPath {
   origin_id: string; terminal_id: string; entity_ids: string[]; names: string[]; hops: PathHop[]
   cumulative_transmission: number; terminal_total_loss_musd: number
 }
-export interface ComparisonRow {
+/** How a portfolio holding is defined: a company made of business units (segments), or each held unit on its own (v0.3). */
+export type HoldingView = 'company' | 'business_unit'
+export type HoldingKind = 'single_business' | 'multi_segment'
+/** Company-structure fields shared by holding rows; present only for multi-segment companies. */
+export interface CompanyStructure {
+  kind?: HoldingKind; primary_entity_id?: string | null
+  other_businesses_share?: number | null; network_disruption_if_other_hit?: number | null; network_disruption_one_node?: number | null
+}
+export interface SegmentRow { entity_id: string; name: string; segment: string; share: number; location_disruption?: number; direct_disruption?: number; network_disruption: number }
+export interface ComparisonRow extends CompanyStructure {
   entity_id: string; name: string; location_disruption: number; network_disruption: number; location_loss_musd: number
-  network_loss_musd: number; rank_location: number; rank_network: number; rank_change: number; hidden_exposure: boolean
+  network_loss_musd: number; rank_location: number; rank_network: number; rank_change: number; hidden_exposure: boolean; weight: number
+  segments?: SegmentRow[] | null
 }
 export interface Comparison {
   location_only_loss_musd: number; network_aware_loss_musd: number; absolute_difference_musd: number; relative_difference: number | null
   portfolio_location_loss_musd: number; portfolio_network_loss_musd: number; portfolio_absolute_difference_musd: number
   portfolio_relative_difference: number | null; portfolio_rows: ComparisonRow[]; hidden_exposure_count: number; scope_note: string
+  portfolio_location_impact: number; portfolio_network_impact: number; portfolio_hidden_share: number | null
+  hidden_exposure_curve: { threshold: number; count: number }[]
+  holding_view?: HoldingView; portfolio_network_impact_if_other_hit?: number | null; portfolio_network_impact_one_node?: number | null
 }
 export interface RunSummary {
   n_entities: number; n_exposed_facilities: number; n_affected_downstream: number; direct_loss_musd: number; indirect_loss_musd: number
@@ -63,7 +77,8 @@ export interface Quantiles { mean: number; median: number; p05: number; p25: num
 export interface MonteCarloResult {
   n_simulations: number; seed: number; total_loss: Quantiles; direct_loss: Quantiles; indirect_loss: Quantiles; network_minus_location: Quantiles
   histogram: { lo: number; hi: number; count: number }[]
-  sensitivity: { parameter: string; spearman_with_total_loss: number; description: string }[]
+  sensitivity: { parameter: string; spearman_with_total_loss: number; approx_variance_share?: number; description: string }[]
+  indirect_sensitivity?: { parameter: string; spearman_with_total_loss: number; approx_variance_share?: number; description: string }[]
   top_entities: { entity_id: string; name: string; median_loss_musd: number; p05_loss_musd: number; p95_loss_musd: number; probability_affected: number }[]
   assumptions: string[]; interpretation: string; deterministic_total_loss_musd: number
 }
@@ -72,6 +87,9 @@ export interface EntityDetail extends GraphNode {
   spare_capacity_fraction: number; exposed_asset_share: number | null; flood_vulnerability: number; heat_vulnerability: number
   drought_vulnerability: number; provenance: string; location_status: string; in_degree: number; out_degree: number
   supplier_concentration_hhi: number | null; single_source_inputs: string[]; missing_fields: string[]
+  jrc_flood_rp100?: { cells: number; window_coverage?: number; flooded_share: number; deep_share: number; radius_km: number; return_period_years: number; source: string; licence: string; meaning: string } | null
+  company?: { id: string; name: string; segment: string; share: number; other_businesses_share: number; pattern: string | null; in_demo_portfolio: boolean; synthetic: boolean
+    segments: { entity_id: string; name: string; segment: string; share: number }[] } | null
 }
 export interface Neighbour {
   relation_id: string; entity_id: string; name: string; product: string; dependency: number; input_specificity: number
@@ -110,4 +128,78 @@ export interface Metadata {
   hazards: { hazard_type: string; k: number; tau: number; recovery: number }[]
   hazard_providers: { name: string; synthetic: boolean; description: string; limitations: string }[]
   unavailable_integrations: string[]; model_status: { calibrated: boolean; validated: boolean; note: string }
+}
+
+export interface HoldingMeta {
+  entity_id: string; name: string; weight: number; entity_type: string; country?: string | null; kind?: HoldingKind; primary_entity_id?: string
+  other_businesses_share?: number; pattern?: string | null
+  segments?: { entity_id: string; name: string; segment: string; share: number; entity_type: string; country: string | null }[]
+}
+export interface Portfolio { name: string; synthetic: boolean; weighting: string; holding_view?: HoldingView; n_business_units?: number; n_multi_segment?: number; holdings: HoldingMeta[] }
+export interface FinderRequest {
+  hazards?: ('flood' | 'heat' | 'drought')[]; intensity?: number; radii_km?: number[]; min_vulnerability?: number; top_k?: number
+  shortlist?: number; stability_draws?: number; seed?: number; include_pairs?: boolean; max_depth?: number; weights?: Record<string, number>
+  holding_view?: HoldingView
+}
+export interface HoldingImpact extends CompanyStructure {
+  entity_id: string; name: string; weight: number; direct_disruption: number; network_disruption: number; segments?: SegmentRow[] | null
+}
+export interface StructureView {
+  view: 'business_unit' | 'company' | 'company_if_other_hit' | 'company_one_node'; label: string; n_holdings: number; n_distinct_events: number
+  n_hidden_only: number; top_hidden_only: { id: string; label: string; impact: number } | null; mean_top10_impact: number
+}
+export interface StructureComparison { views: StructureView[]; n_multi_segment: number; multi_segment_holdings: string[]; hidden_only_events_on_own_sites: number | null; note: string }
+export interface FinderEvent {
+  rank: number; id: string; kind: 'node' | 'footprint'; hazard: string; label: string; origin_id: string | null; country: string | null; region: string | null
+  portfolio_network_impact: number; portfolio_location_impact: number; hidden_share: number; hidden_only: boolean; variants: number
+  holdings_affected: number; entities_hit_directly: number; top_holdings: HoldingImpact[]
+  p_top5: number | null; median_rank: number | null; rank_iqr: number[] | null; fragile: boolean | null; hazard_component: Hazard
+  jrc_flood_check?: string | null
+  portfolio_network_impact_if_other_hit?: number | null; portfolio_network_impact_one_node?: number | null
+}
+export interface FinderResult {
+  n_events: number; n_node_events: number; n_footprint_events: number; n_distinct_events: number; n_hidden_only: number; runtime_seconds: number
+  events: FinderEvent[]; hidden_only_events: FinderEvent[]; hidden_share_curve: { threshold: number; events: number }[]
+  holdings: HoldingMeta[]
+  matrix: { entity_id: string; name: string; entity_type: string; worst_event_id: string; total: number; holdings_reached: number; values: Record<string, number> }[]
+  single_points_of_failure: { entity_id: string; name: string; entity_type: string; holdings: HoldingImpact[]; is_holding: boolean }[]
+  structural_bound: { n_pairs: number; method: string; top: { entities: string[]; impact: number }[]; greedy: { entities: string[]; impact: number }; greedy_matches: boolean; note: string } | null
+  stability: { n_draws: number; seed: number; shortlist: number; kendall_tau_top20: number | null; kendall_tau_top20_hidden_only: number | null; note: string } | null
+  hazard_layer?: { name: string; citation: string; licence: string; source: string; retrieved: string; mode: string; flood_events_checked: number
+    flood_events_without_modelled_flooding: number; top20_flood_events_consistent: number; top20_flood_events: number
+    entities_total?: number; entities_with_any_flooding?: number; entities_window_clipped?: number; caveat: string } | null
+  parameters: Record<string, unknown>; units: Record<string, string>; assumptions: string[]; limitations: string[]
+  holding_view?: HoldingView; structure_comparison?: StructureComparison | null
+}
+export interface OptimiseRequest {
+  budget_musd: number; finder?: FinderRequest; tail_events?: number; candidates?: Intervention[]; max_candidates?: number
+  exhaustive_check?: boolean; robustness_draws?: number; seed?: number
+}
+export interface OptimiseCandidate { label: string; type: string; entity_ids: string[]; magnitude: number | null; annualised_cost_musd: number; single_reduction: number }
+export interface OptimiseResult {
+  budget_musd: number; tail_events: number; n_events: number; baseline_objective: number; plan_objective: number; reduction: number
+  reduction_fraction: number | null; greedy_objective: number; local_search_improved: boolean; plan: OptimiseCandidate[]; plan_cost_musd: number
+  plan_interventions: Intervention[]; candidates: OptimiseCandidate[]; frontier: { label: string; cumulative_cost_musd: number; objective: number }[]
+  exhaustive: { pool_size: number; pool_note: string; n_feasible_plans: number; best_objective: number; best_plan: string[]; optimality_gap: number | null; note: string } | null
+  cost_sensitivity: { cost_factor: number; plan: string[]; objective: number; jaccard_with_base: number }[]
+  robustness: { n_draws: number; seed: number; median_reduction: number; p05: number; p95: number; share_positive: number } | null
+  evaluations: number; runtime_seconds: number; method: string; units: Record<string, string>; assumptions: string[]
+}
+
+export type Provenance = 'synthetic_input' | 'model_assumption' | 'real_hazard_context' | 'unvalidated_model_output' | 'model_robustness' | 'empirically_validated'
+export type CopilotFocus =
+  | { kind: 'finder_event'; event_id: string; finder: FinderRequest }
+  | { kind: 'scenario'; scenario_id: string; max_depth?: number | null; holding_view?: HoldingView }
+  | { kind: 'mitigation_plan'; optimise: OptimiseRequest }
+export interface CopilotFact { id: string; label: string; value: string | number | boolean | null; rendered: string; unit: string; provenance: Provenance; source: string }
+export interface CopilotSentence { text: string; cites: string[]; provenance: Provenance[]; template: boolean }
+export interface CopilotAnswer {
+  title: string; question: string; mode: 'llm' | 'deterministic'; provider: string; model: string | null; fallback_reason: string | null; latency_ms: number
+  sections: Record<string, CopilotSentence[]>; unsupported: string[]; standing_notes: string[]; facts: CopilotFact[]
+  validation: { attempted?: boolean; accepted?: boolean; violations?: string[]; details?: string[]; sentences_checked?: number; sentences_failed?: number }
+}
+export interface CopilotReport { title: string; mode: 'llm' | 'deterministic'; fallback_reason: string | null; markdown: string }
+export interface CopilotStatus {
+  configured_provider: string; deterministic: boolean
+  ollama: { reachable: boolean; model: string; model_present: boolean; url?: string }; anthropic: { configured: boolean; model: string }
 }

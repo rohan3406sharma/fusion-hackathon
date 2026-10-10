@@ -64,7 +64,8 @@ await step('4c depth slider reruns model', async () => {
 })
 await step('J1 select Rotterdam Terminal Flood; results show hidden exposure + path to graph', async () => {
   await page.select('[aria-label="Active scenario"]', 'sc_rotterdam_port_flood'); await sleep(1200)
-  await clickText('a', 'Scenario results'); await page.waitForFunction(() => document.body.innerText.toLowerCase().includes('hidden exposure'), { timeout: 15000 })
+  await clickText('a', 'Scenario results')
+  await page.waitForFunction(() => document.querySelector('h1')?.textContent.includes('Rotterdam Terminal Flood') && [...document.querySelectorAll('td span')].some((x) => x.textContent.trim().toLowerCase() === 'hidden exposure'), { timeout: 15000 })
   const t = await page.evaluate(() => document.body.innerText)
   if (!/▲\s*\d/.test(t)) throw new Error('no rank gain shown'); if (/▼\s*7/.test(t)) throw new Error('tie artefact: every tied holding shows a rank fall')
   await page.evaluate(() => [...document.querySelectorAll('a')].find((a) => a.textContent === 'View in graph').click())
@@ -83,6 +84,12 @@ await step('J2 Monte Carlo on Rotterdam + export contains scenario, assumptions,
   for (const k of ['Rotterdam Terminal Flood', '## Assumptions', '## Limitations', 'Monte Carlo', 'SYNTHETIC']) if (!m.includes(k)) throw new Error('report lacks ' + k)
   if (!c.split('\n')[1].includes('Rotterdam Terminal Flood')) throw new Error('csv lacks scenario'); return 'report + csv verified'
 })
+await step('C4 copilot on Scenario results (live local model)', async () => {
+  await page.evaluate(() => document.getElementById('copilot').scrollIntoView()); await page.waitForSelector('#copilot-q'); await clickText('button', 'Ask')
+  await page.waitForSelector('[data-testid=copilot-answer]', { timeout: 170000 })
+  const t = await page.$eval('[data-testid=copilot-answer]', (e) => e.innerText)
+  if (!/\$\d/.test(t) || !/Rotterdam/.test(t)) throw new Error('expected engine figures and the scenario in the answer'); await shot('C4-copilot-results'); return 'ok'
+})
 await step('J2b selection persists across reload; JSON export carries scenario, assumptions, uncertainty', async () => {
   await page.reload({ waitUntil: 'networkidle0' }); await page.waitForSelector('[aria-label="Active scenario"]'); await sleep(800)
   const v = await page.$eval('[aria-label="Active scenario"]', (e) => e.value); if (v !== 'sc_rotterdam_port_flood') throw new Error('scenario not persisted: ' + v)
@@ -97,6 +104,75 @@ await step('J3 mitigation: load a recommendation, compare with baseline', async 
   await clickText('a', 'Mitigation laboratory'); await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => b.textContent === 'Load'), { timeout: 30000 })
   await clickText('button', 'Load'); await clickText('button', 'Compare with baseline'); await page.waitForFunction(() => document.body.innerText.toLowerCase().includes('baseline vs mitigated'), { timeout: 20000 })
   await sleep(500); await shot('J3-mitigation'); return 'ok'
+})
+await step('F1 finder: search the event library, hidden-only ranking with stability', async () => {
+  await clickText('a', 'Hidden exposure finder'); await page.waitForSelector('[data-testid=hidden-table]', { timeout: 30000 })
+  const rows = await page.$$eval('[data-testid=hidden-table] tbody tr', (r) => r.length); if (rows < 5) throw new Error('few rows: ' + rows)
+  const first = await page.$eval('[data-testid=hidden-table] tbody tr', (r) => r.textContent)
+  if (!/Hidden only/i.test(first) || !/%/.test(first)) throw new Error('row content: ' + first.slice(0, 80))
+  await page.select('select[aria-label="Sort events"]', 'reach'); await sleep(200)
+  const reach = await page.$$eval('[data-testid=hidden-table] tbody tr td:nth-child(6)', (c) => c.map((x) => Number(x.textContent)))
+  if (reach.some((v, i) => i && v > reach[i - 1])) throw new Error('not sorted by reach: ' + reach)
+  await page.select('select[aria-label="Sort events"]', 'impact'); await sleep(200)
+  await shot('F1-finder'); return `${rows} rows; top: ${first.slice(1, 50)}`
+})
+await step('F2 finder: open top hidden-only event as a scenario; Results reproduce its impact', async () => {
+  const impact = await page.$eval('[data-testid=hidden-table] tbody tr td:nth-child(3)', (c) => c.textContent.trim())
+  await page.evaluate(() => [...document.querySelectorAll('[data-testid=hidden-table] tbody tr:first-child button')].find((b) => b.textContent.includes('Open as scenario')).click())
+  await page.waitForFunction(() => location.pathname === '/results', { timeout: 20000 })
+  await page.waitForFunction(() => document.body.innerText.includes('Finder:'), { timeout: 20000 })
+  await page.waitForFunction((v) => [...document.querySelectorAll('[data-testid=kpi]')].some((k) => k.textContent.includes(`0.00% → ${v}`)), { timeout: 20000 }, impact)
+  return `finder ${impact} = results portfolio impact`
+})
+await step('F3 finder: optimiser plan within budget with brute-force gap', async () => {
+  await clickText('a', 'Hidden exposure finder'); await page.waitForSelector('[data-testid=hidden-table]')
+  await clickText('button', 'Optimise'); await page.waitForSelector('[data-testid=optimiser-result]', { timeout: 60000 })
+  const t = await page.$eval('[data-testid=optimiser-result]', (e) => e.innerText)
+  if (!/brute force over \d+ feasible plans/.test(t)) throw new Error('no gap check: ' + t.slice(0, 120))
+  await shot('F3-optimiser'); return t.split('\n').slice(0, 4).join(' | ')
+})
+await step('F4 finder: holdings as companies vs business units (same events, different holding definition)', async () => {
+  await clickText('a', 'Hidden exposure finder'); await page.waitForSelector('[data-testid=structure-table]', { timeout: 30000 })
+  const kpi = () => page.evaluate(() => [...document.querySelectorAll('[data-testid=kpi]')].find((k) => k.textContent.includes('Hidden-only events'))?.querySelector('.font-serif')?.textContent)
+  const company = await kpi()
+  const rows = await page.$$eval('[data-testid=structure-table] tbody tr', (r) => r.map((x) => x.textContent))
+  if (rows.length !== 4 || !rows[0].includes('Business units')) throw new Error('structure table: ' + rows.join(' | '))
+  if (!(await page.$('[data-testid=company-breakdown]'))) throw new Error('no company breakdown shown')
+  await clickText('button', 'Business units')
+  await page.waitForFunction((c) => !document.querySelector('[data-testid=structure-table]') && [...document.querySelectorAll('[data-testid=kpi]')].some((k) => k.textContent.includes('Hidden-only events') && !k.textContent.includes(`Hidden-only events${c}`)), { timeout: 30000 }, company)
+  const units = await kpi()
+  if (!rows[0].includes(units)) throw new Error(`business-unit count ${units} not the table's ${rows[0]}`)
+  await clickText('button', 'Companies'); await page.waitForSelector('[data-testid=structure-table]', { timeout: 30000 })
+  await shot('F4-companies'); return `hidden-only: companies ${company}, business units ${units}`
+})
+await step('C1 copilot (live local model): explain the top hidden-only event; values come from the engine', async () => {
+  await clickText('a', 'Hidden exposure finder'); await page.waitForSelector('[data-testid=hidden-table]', { timeout: 30000 })
+  const impact = await page.$eval('[data-testid=hidden-table] tbody tr td:nth-child(3)', (c) => c.textContent.trim())
+  await page.evaluate(() => document.querySelector('[data-testid=hidden-table] tbody tr button[aria-label^="Explain"]').click())
+  await page.waitForSelector('#copilot-q'); await clickText('button', 'Ask')
+  await page.waitForSelector('[data-testid=copilot-loading]', { timeout: 10000 })
+  await page.waitForSelector('[data-testid=copilot-answer]', { timeout: 170000 })
+  const t = await page.$eval('[data-testid=copilot-answer]', (e) => e.innerText)
+  if (!t.includes(impact)) throw new Error('engine impact ' + impact + ' not in answer')
+  for (const k of ['WHY IT MATTERS', 'WHAT REMAINS UNCERTAIN', 'No empirical validation']) if (!t.toUpperCase().includes(k.toUpperCase())) throw new Error('missing ' + k)
+  if (/validated against|will happen|forecast of/i.test(t.replace(/not been validated against any observed event|not validated|no empirical validation|not a forecast|nothing here is a forecast/gi, ''))) throw new Error('overclaim in answer')
+  const mode = await page.$eval('[data-testid=copilot-answer] .inline-block', (e) => e.textContent); await shot('C1-copilot-finder')
+  return `mode: ${mode.trim()}; impact ${impact} present`
+})
+await step('C2 copilot: declines an unsupported question', async () => {
+  await page.$eval('#copilot-q', (e) => { const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set; set.call(e, 'How likely is this and how much would we save?'); e.dispatchEvent(new Event('input', { bubbles: true })) })
+  await clickText('button', 'Ask'); await page.waitForSelector('[data-testid=copilot-unsupported]', { timeout: 170000 })
+  const u = await page.$eval('[data-testid=copilot-unsupported]', (e) => e.innerText)
+  if (!/no event probabilities/.test(u) || !/no claim about real-world savings/.test(u)) throw new Error('not declined: ' + u)
+  return 'declined: probability + savings'
+})
+await step('C3 copilot: executive summary downloads with evidence table and caveats', async () => {
+  fs.readdirSync(DL).forEach((f) => fs.unlinkSync(path.join(DL, f)))
+  await clickText('button', 'Executive summary'); await page.waitForSelector('[data-testid=copilot-report]', { timeout: 170000 })
+  await clickText('button', 'Download .md'); await sleep(1200)
+  const f = fs.readdirSync(DL).find((x) => x.endsWith('.md')); const m = fs.readFileSync(path.join(DL, f), 'utf8')
+  for (const k of ['# Executive summary', '## Evidence table', '`events[].portfolio_network_impact`', '## Standing notes', 'not forecasts']) if (!m.includes(k)) throw new Error('report lacks ' + k)
+  return f
 })
 await step('5-7 configure a shock and run propagation', async () => {
   await clickText('a', 'Scenario builder'); await page.waitForSelector('[aria-label="Scenario name"]')
@@ -146,11 +222,11 @@ await step('entity page + methodology', async () => {
 })
 await step('responsive: no horizontal overflow on any screen at 390px', async () => {
   await page.setViewport({ width: 390, height: 844 }); const bad = []
-  for (const p of ['/', '/network', '/scenario', '/results', '/entity/port_rtm', '/mitigation', '/methodology']) {
-    await page.goto(URL_ + p, { waitUntil: 'networkidle0' }); await sleep(p.startsWith('/mitigation') || p.startsWith('/entity') ? 4500 : 1500)
+  for (const p of ['/', '/finder', '/network', '/scenario', '/results', '/entity/port_rtm', '/mitigation', '/methodology']) {
+    await page.goto(URL_ + p, { waitUntil: 'networkidle0' }); await sleep(p.startsWith('/mitigation') || p.startsWith('/entity') || p.startsWith('/finder') ? 4500 : 1500)
     const w = await page.evaluate(() => document.documentElement.scrollWidth); if (w > 392) bad.push(`${p}=${w}`)
   }
-  if (bad.length) throw new Error('overflow: ' + bad.join(', ')); return '7 screens ok'
+  if (bad.length) throw new Error('overflow: ' + bad.join(', ')); return '8 screens ok'
 })
 await step('responsive: mobile nav', async () => {
   await page.setViewport({ width: 390, height: 800 }); await page.goto(URL_, { waitUntil: 'networkidle0' }); await page.waitForSelector('[aria-label="Open navigation"]')

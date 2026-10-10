@@ -21,7 +21,9 @@ def to_markdown(r: RunResult, mc=None) -> str:
     L += [f"| {o.label} | {o.entities} | {o.loss_musd:,.1f} | {o.evidence} |" for o in r.orders]
     L += ["", "## Location-only vs network-aware", "",
           f"- Whole network: {c.location_only_loss_musd:,.1f} -> {c.network_aware_loss_musd:,.1f} (diff {c.absolute_difference_musd:,.1f}; relative {c.relative_difference})",
-          f"- Demo portfolio: {c.portfolio_location_loss_musd:,.1f} -> {c.portfolio_network_loss_musd:,.1f}; hidden exposures: {c.hidden_exposure_count}",
+          f"- Demo portfolio (unweighted USD M sum): {c.portfolio_location_loss_musd:,.1f} -> {c.portfolio_network_loss_musd:,.1f}; hidden exposures: {c.hidden_exposure_count}",
+          f"- Demo portfolio, position-weighted share of annual value added lost: {c.portfolio_location_impact:.4%} location-only vs {c.portfolio_network_impact:.4%} network-aware",
+          "- Hidden-exposure count by cut-off: " + ", ".join(f"{x['threshold']:.0%}: {x['count']}" for x in c.hidden_exposure_curve),
           f"- {c.scope_note}", "", "## Top affected entities", "", "| Entity | Status | Hop | Direct | Final | Total loss (USD M) |", "|---|---|---|---|---|---|"]
     for e in sorted(r.entities, key=lambda e: -e.total_loss_musd)[:15]:
         L.append(f"| {e.name} (SYN) | {e.status} | {e.hop_order} | {e.direct_disruption:.2f} | {e.final_disruption:.2f} | {e.total_loss_musd:,.1f} |")

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s06 top event</title></head>
+  <body>
+    <template id="s06-top-event-template">
+      <style>
+        #s06-top-event { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s06-top-event .stage { position: absolute; inset: 0; }
+        #s06-top-event .fx-callout.hz .v { color: #f08a72; }
+        #s06-top-event .fx-callout.gd .v { color: var(--gold); }
+      </style>
+      <div id="s06-top-event" data-composition-id="s06-top-event" data-width="1920" data-height="1080">
+        <div class="stage"><div class="shot"></div></div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's06-top-event', FX = window.FX, CAP = window.CAP
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const W = (l, w, n) => L(FX.word(l, w, n || 0))
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const { cam, frame } = FX.browser(root.querySelector('.shot'), 'localhost · FIN-04 · Hidden exposure finder', '● Live app')
+          FX.h('img', { src: CAP.stills['finder-table'].file }, frame)
+          const imgM = FX.h('img', { src: CAP.stills['finder-matrix'].file, style: { opacity: 0 } }, frame)
+          FX.demoChrome(stage, tl)
+          FX.camSet(tl, cam, FX.camRest, 0)
+          const R = (k) => FX.rect('finder-table', k)
+          const r1 = R('r1'), rEv = R('r1event'), rImp = R('r1impact'), rLoc = R('r1loc'), rP5 = R('r1p5'), r4 = R('r4p5'), r5 = R('r5p5')
+          const band = { x: rEv.x, y: r1.y, w: rP5.x + rP5.w - rEv.x, h: r1.h }
+          const camRow = FX.camFocus(band, { pad: 120, max: 1.45, dy: -170 })
+          const rows15 = { x: rEv.x, y: r1.y, w: band.w, h: R('r5').y + R('r5').h - r1.y }
+          const camRows = FX.camFocus(rows15, { pad: 120, max: 1.45, dy: -40 })
+
+          // ---- L23: the worst hidden-only event ----
+          const tW = W('L23', 'worst') - 0.3
+          FX.camTo(tl, cam, camRow, tW - 0.2, 1.1)
+          const hlEv = FX.hl(frame, { x: r1.x, y: r1.y, w: r1.w, h: r1.h }, { pad: 4 })
+          tl.to(hlEv, { opacity: 1, boxShadow: '0 0 0 9999px rgba(12,16,22,0.42)', duration: 0.45 }, tW + 0.5)
+          const sRow = FX.screenRect(camRow, r1)
+          const cWho = FX.callout(stage, { k: 'Rank 1 · hidden-only', v: 'A drought at a power-grid operator', s: 'Dutch Regional Grid Operator (synthetic) — not one of the 18 holdings.' }, 150, sRow.y + sRow.h + 60, 940)
+          cWho.querySelector('.v').style.fontSize = '58px'
+          tl.fromTo(cWho, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, W('L23', 'dutch') - 0.2)
+          tl.to(cWho, { opacity: 0, duration: 0.3 }, L(FX.line('L24').start) - 0.1)
+
+          // ---- L24: 0.00% vs 1.13% ----
+          const tZ = L(FX.cue('zero')), t113 = L(FX.cue('one13'))
+          const hlLoc = FX.hl(frame, rLoc, { pad: 2, cls: 'hz' }), hlImp = FX.hl(frame, rImp, { pad: 2 })
+          tl.to(hlEv, { boxShadow: '0 0 0 9999px rgba(12,16,22,0.42)', borderColor: 'rgba(212,174,60,0)', duration: 0.3 }, tZ - 0.6)
+          tl.to(hlLoc, { opacity: 1, duration: 0.3 }, tZ - 0.15)
+          const sLoc = FX.screenRect(camRow, rLoc), sImp = FX.screenRect(camRow, rImp)
+          const cLoc = FX.callout(stage, { k: 'Location-only screen', v: '0.00%', s: 'No holding is hit directly.', cls: 'hz' }, sLoc.x - 80, sLoc.y + sLoc.h + 60, 470)
+          tl.fromTo(cLoc, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, tZ - 0.1)
+          tl.to(hlImp, { opacity: 1, duration: 0.3 }, t113 - 0.15)
+          const cImp = FX.callout(stage, { k: 'Network-aware model', v: '1.13%', s: 'of the portfolio’s annual value added — modelled, synthetic data, not a forecast.', cls: 'gd' }, sImp.x - 470, sImp.y + sImp.h + 60, 500)
+          tl.fromTo(cImp, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, t113 - 0.1)
+
+          // ---- L25: stable across 200 draws; fragile rows flagged ----
+          const t200 = W('L25', '200') - 0.2
+          tl.to([cLoc, cImp, hlLoc, hlImp], { opacity: 0, duration: 0.3 }, t200 - 0.35)
+          const hlP5 = FX.hl(frame, rP5, { pad: 2 })
+          tl.to(hlP5, { opacity: 1, duration: 0.3 }, t200)
+          const sP5 = FX.screenRect(camRow, rP5)
+          const cP5 = FX.callout(stage, { k: 'Ranking stability', v: '100%', s: 'of 200 uncertainty draws keep it in the hidden-only top 5. Internal consistency — not validation.', cls: 'gd' }, sP5.x + sP5.w - 640, sP5.y + sP5.h + 60, 640)
+          tl.fromTo(cP5, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, t200 + 0.1)
+          const tFr = L(FX.cue('fragile'))
+          tl.to([cP5, hlP5], { opacity: 0, duration: 0.3 }, W('L25', 'rankings') - 0.3)
+          tl.to(hlEv, { boxShadow: '0 0 0 9999px rgba(12,16,22,0)', duration: 0.3 }, W('L25', 'rankings') - 0.3)
+          FX.camTo(tl, cam, camRows, W('L25', 'rankings') - 0.25, 0.9)
+          const hl4 = FX.hl(frame, r4, { pad: 2, cls: 'hz' }), hl5 = FX.hl(frame, r5, { pad: 2, cls: 'hz' })
+          tl.to([hl4, hl5], { opacity: 1, duration: 0.3, stagger: 0.12 }, tFr - 0.6)
+          const s4 = FX.screenRect(camRows, r4)
+          const cFr = FX.callout(stage, { k: 'Flagged fragile', v: '39% · 38%', s: 'In the top 5 on the central estimate, but not in most draws.', cls: 'hz' }, s4.x - 700, s4.y - 30, 600)
+          tl.fromTo(cFr, { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, tFr - 0.4)
+
+          // ---- L26: who can hurt whom ----
+          const tM = L(FX.cue('matrix')) - 0.55
+          tl.to([hl4, hl5, cFr, hlEv], { opacity: 0, duration: 0.3 }, tM - 0.3)
+          tl.to(imgM, { opacity: 1, duration: 0.5 }, tM)
+          const RM = (k) => FX.rect('finder-matrix', k)
+          const both = { x: RM('matrixPanel').x, y: RM('matrixPanel').y, w: RM('spofPanel').x + RM('spofPanel').w - RM('matrixPanel').x, h: RM('matrixPanel').h }
+          const camM = FX.camFocus(both, { pad: 60, max: 1.2, min: 0.8 })
+          FX.camTo(tl, cam, camM, tM, 1.0)
+          const m1 = RM('m1'), m3 = RM('m3')
+          const hlM1 = FX.hl(frame, { x: m1.x, y: m1.y, w: 935, h: m1.h }, { pad: 2 }), hlM3 = FX.hl(frame, { x: m3.x, y: m3.y, w: 935, h: m3.h }, { pad: 2 })
+          tl.to(hlM1, { opacity: 1, duration: 0.3 }, W('L26', 'upstream') - 0.2)
+          tl.to(hlM3, { opacity: 1, duration: 0.3 }, W('L26', 'several') - 0.2)
+          const sp = RM('spof1'), hlSp = FX.hl(frame, sp, { pad: 6, cls: 'hz' })
+          tl.to(hlSp, { opacity: 1, duration: 0.3 }, W('L26', 'quietly') - 0.2)
+          const sSp = FX.screenRect(camM, sp)
+          const cSp = FX.callout(stage, { k: 'Top single point of failure', v: 'Rotterdam terminal', s: 'A 60-day outage alone disrupts Hamburg Coffee Roasters by 24% and Antwerp Chocolatier by 21% (modelled).', cls: 'hz' }, sSp.x - 40, sSp.y + sSp.h + 140, 560)
+          cSp.querySelector('.v').style.fontSize = '56px'
+          tl.fromTo(cSp, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, W('L26', 'quietly') - 0.1)
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

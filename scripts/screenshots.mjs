@@ -15,7 +15,7 @@ for (const [tag, vp] of [['d', { width: 1440, height: 1000 }], ['m', { width: 39
   await page.goto(URL_, { waitUntil: 'networkidle0' })
   await page.waitForSelector('[aria-label="Active scenario"]')
   await page.select('[aria-label="Active scenario"]', process.env.SCENARIO ?? 'sc_rotterdam_port_flood'); await new Promise((r) => setTimeout(r, 1200))
-  for (const [name, p, wait] of [['1-overview', '/'], ['2-graph', '/network'], ['3-builder', '/scenario'], ['4-results', '/results'], ['5-entity', '/entity/port_rtm'], ['6-mitigation', '/mitigation'], ['7-method', '/methodology']]) {
+  for (const [name, p, wait] of [['1-overview', '/'], ['1b-finder', '/finder'], ['2-graph', '/network'], ['3-builder', '/scenario'], ['4-results', '/results'], ['5-entity', '/entity/port_rtm'], ['6-mitigation', '/mitigation'], ['7-method', '/methodology']]) {
     await page.evaluate((u) => { history.pushState({}, '', u); dispatchEvent(new PopStateEvent('popstate')) }, p)
     await new Promise((r) => setTimeout(r, 2500))
     await page.screenshot({ path: path.join(OUT, `${tag}-${name}.png`), fullPage: true })

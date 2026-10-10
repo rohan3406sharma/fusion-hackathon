@@ -17,17 +17,18 @@ def spec(**kw):
 
 
 def chain():
-    ents = [make_entity("a"), make_entity("b", alternative_supplier_availability=0.2), make_entity("c")]
-    rels = [make_rel("a", "b", dep=0.5, spec=0.8, sub=0.25), make_rel("b", "c", dep=1.0, spec=1.0, sub=0.0)]
+    # distinct outputs so the chain has no in-graph alternative producers (keeps the hand checks exact)
+    ents = [make_entity("a"), make_entity("b", alternative_supplier_availability=0.2, output_product="dough"), make_entity("c", output_product="bread")]
+    rels = [make_rel("a", "b", dep=0.5, spec=0.8, sub=0.25), make_rel("b", "c", dep=1.0, spec=1.0, sub=0.0, product="dough")]
     return ents, rels
 
 
 def test_hand_checked_two_hop_propagation():
     ents, rels = chain()
     net = compile_network(ents, rels)
-    tr = transmission(net, T=30)
-    assert tr[0, 0] == pytest.approx(0.5 * 0.8 * (1 - 0.2) * (1 - 0.25))          # 0.24
-    hist, conv = propagate(net, np.array([[1.0, 0, 0]]), tr, max_depth=5)
+    tr = transmission(net, T=30, use_graph_alternatives=False)
+    assert tr[0, 0] == pytest.approx(0.5 * 0.8 * (1 - 0.2) * (1 - 0.25))          # 0.24 (legacy: alt applies to the whole input)
+    hist, conv, _ = propagate(net, np.array([[1.0, 0, 0]]), tr, max_depth=5)
     assert hist[1][0].tolist() == pytest.approx([1, 0.24, 0])
     assert hist[2][0].tolist() == pytest.approx([1, 0.24, 0.24])                 # B->C fully dependent
     assert conv
@@ -36,7 +37,7 @@ def test_hand_checked_two_hop_propagation():
 def test_depth_limits_reach():
     ents, rels = chain()
     net = compile_network(ents, rels)
-    hist, _ = propagate(net, np.array([[1.0, 0, 0]]), transmission(net, 30), max_depth=1)
+    hist, _, _ = propagate(net, np.array([[1.0, 0, 0]]), transmission(net, 30, use_graph_alternatives=False), max_depth=1)
     assert hist[-1][0, 2] == 0
 
 
@@ -45,7 +46,8 @@ def test_inventory_and_lead_time_reduce_transmission():
     ents[1] = make_entity("b", inventory_days=20, alternative_supplier_availability=0.2)
     rels[0] = make_rel("a", "b", dep=0.5, spec=0.8, sub=0.25, storable=True, lead=5)
     net = compile_network(ents, rels)
-    t_long, t_short, t_inv = transmission(net, T=100)[0, 0], transmission(net, T=20)[0, 0], transmission(net, T=100, inventory_scale=2)[0, 0]
+    tr = lambda **kw: transmission(net, use_graph_alternatives=False, **kw)[0, 0]  # noqa: E731
+    t_long, t_short, t_inv = tr(T=100), tr(T=20), tr(T=100, inventory_scale=2)
     assert t_short == 0.0                                        # buffer (25d) covers 20d disruption
     assert t_inv < t_long
     assert t_long == pytest.approx(0.24 * (100 - 25) / 100)
@@ -61,7 +63,7 @@ def test_no_double_counting_two_suppliers_same_input():
     ents = [make_entity("a1"), make_entity("a2"), make_entity("t")]
     rels = [make_rel("a1", "t", dep=0.5), make_rel("a2", "t", dep=0.5)]
     net = compile_network(ents, rels)
-    hist, _ = propagate(net, np.array([[1.0, 1.0, 0]]), transmission(net, 30), 3)
+    hist, _, _ = propagate(net, np.array([[1.0, 1.0, 0]]), transmission(net, 30), 3)
     assert hist[-1][0, 2] == pytest.approx(1.0, abs=1e-6) and hist[-1].max() <= 1.0     # additive within one input, capped at 1
 
 
@@ -69,7 +71,7 @@ def test_noisy_or_across_different_inputs():
     ents = [make_entity("a1"), make_entity("a2", output_product="sugar"), make_entity("t")]
     rels = [make_rel("a1", "t", dep=0.5), make_rel("a2", "t", dep=0.5, product="sugar")]
     net = compile_network(ents, rels)
-    hist, _ = propagate(net, np.array([[1.0, 1.0, 0]]), transmission(net, 30), 3)
+    hist, _, _ = propagate(net, np.array([[1.0, 1.0, 0]]), transmission(net, 30), 3)
     assert hist[-1][0, 2] == pytest.approx(1 - 0.5 * 0.5)
 
 
@@ -77,16 +79,16 @@ def test_cycle_terminates_and_is_bounded():
     ents = [make_entity("a"), make_entity("b")]
     rels = [make_rel("a", "b", dep=1.0), make_rel("b", "a", dep=1.0)]
     net = compile_network(ents, rels)
-    hist, conv = propagate(net, np.array([[0.5, 0.0]]), transmission(net, 30), max_depth=50)
+    hist, conv, _ = propagate(net, np.array([[0.5, 0.0]]), transmission(net, 30), max_depth=50)
     assert conv and 0 <= hist[-1].min() and hist[-1].max() <= 1.0 and len(hist) <= 51
 
 
 def test_empty_and_disconnected_graphs():
     net = compile_network([make_entity("a"), make_entity("b")], [])
-    hist, conv = propagate(net, np.array([[0.7, 0.0]]), transmission(net, 30), 4)
+    hist, conv, _ = propagate(net, np.array([[0.7, 0.0]]), transmission(net, 30), 4)
     assert conv and hist[-1][0].tolist() == [0.7, 0.0]
     net0 = compile_network([], [])
-    hist0, _ = propagate(net0, np.zeros((1, 0)), transmission(net0, 30), 3)
+    hist0, _, _ = propagate(net0, np.zeros((1, 0)), transmission(net0, 30), 3)
     assert hist0[-1].shape == (1, 0)
 
 
@@ -190,4 +192,69 @@ def test_large_inventory_blocks_storable_transmission():
 def test_monte_carlo_samples_alternatives():
     ents, rels = chain()
     out = run_monte_carlo(ents, rels, spec(), 100, 1, 1.0)
-    assert "alternatives" in {s["parameter"] for s in out["sensitivity"]}
+    assert {"market_alternatives", "spare_capacity", "damage_steepness", "recovery_time"} <= {s["parameter"] for s in out["sensitivity"]}
+
+
+# ---- v0.2 engine rules -------------------------------------------------------------------------------------------
+from app.models.propagation import compile_network as _compile, simulate  # noqa: E402
+
+
+def test_market_alternatives_apply_only_to_unmodelled_share():
+    ents, rels = chain()
+    net = _compile(ents, rels)
+    # a supplies 50% of b's flour: entity assumption alt=0.2 now covers only the unmodelled 50% -> 0.1
+    assert transmission(net, 30)[0, 0] == pytest.approx(0.5 * 0.8 * (1 - 0.2 * 0.5) * (1 - 0.25))
+
+
+def test_graph_alternative_relief_depends_on_alternative_being_unhit():
+    ents = [make_entity("a", output_product="flour"), make_entity("w", output_product="flour", revenue_musd=100, spare_capacity_fraction=0.1),
+            make_entity("b", output_product="bread", alternative_supplier_availability=0.0)]
+    rels = [make_rel("a", "b", dep=1.0, annual_flow_musd=10.0)]
+    net = _compile(ents, rels)
+    assert net.alt_matrix[0, 1] == pytest.approx(10 / 10)          # spare 10 shared by 1 link / flow 10
+    fine, _, eff_fine = simulate(net, np.array([[1.0, 0.0, 0.0]]), 30)
+    hit, _, eff_hit = simulate(net, np.array([[1.0, 1.0, 0.0]]), 30)
+    assert eff_fine[0, 0] == pytest.approx(0.05)                   # relief capped at 0.95
+    assert eff_hit[0, 0] == pytest.approx(1.0)                     # alternative also disrupted -> no relief
+    assert fine[-1][0, 2] < hit[-1][0, 2]
+
+
+def test_non_storable_alternatives_must_be_domestic():
+    ents = [make_entity("a", output_product="power", country="X"), make_entity("w", output_product="power", country="Y"),
+            make_entity("b", output_product="bread", country="X")]
+    net = _compile(ents, [make_rel("a", "b", product="power", storable=False)])
+    assert net.alt_matrix.sum() == 0
+
+
+def test_cycle_damping_prevents_saturation():
+    ents = [make_entity("a", output_product="x"), make_entity("b", output_product="y")]
+    rels = [make_rel("a", "b", dep=1.0, product="x"), make_rel("b", "a", dep=1.0, product="y")]
+    net = _compile(ents, rels)
+    assert net.cycle_edge.all()
+    damped, conv, _ = simulate(net, np.array([[0.5, 0.0]]), 30, cycle_damping=0.5, max_depth=60)
+    full, _, _ = simulate(net, np.array([[0.5, 0.0]]), 30, cycle_damping=1.0, max_depth=60)
+    assert conv and damped[-1][0, 0] == pytest.approx(0.5 / 0.875, abs=1e-4)   # fixed point d_a = 0.5 + 0.125 d_a
+    assert full[-1][0, 0] > 0.99
+
+
+def test_per_run_duration_vector():
+    ents, rels = chain()
+    net = _compile(ents, rels)
+    ents[1] = make_entity("b", inventory_days=20, alternative_supplier_availability=0.2, output_product="dough")
+    rels[0] = make_rel("a", "b", dep=0.5, spec=0.8, sub=0.25, storable=True, lead=5)
+    net = _compile(ents, rels)
+    tr = transmission(net, np.array([20.0, 100.0]))
+    assert tr.shape == (2, 2) and tr[0, 0] == 0.0 and tr[1, 0] > 0
+
+
+def test_sensitivity_now_detects_network_assumptions_on_real_dataset():
+    from app.config import get_settings
+    from app.domain.dataset import FnbDataset
+    ds = FnbDataset.load(get_settings().data_dir)
+    sc = next(s for s in ds.scenarios if s["id"] == "sc_brazil_drought")
+    spec_ = ScenarioSpec(**{k: v for k, v in sc.items() if k not in ("id", "builtin", "synthetic")})
+    out = run_monte_carlo(ds.entities, ds.relations, spec_, 400, 3, 0.0)
+    ind = {s["parameter"]: s["spearman_with_total_loss"] for s in out["indirect_sensitivity"]}
+    top2 = [s["parameter"] for s in out["indirect_sensitivity"][:2]]
+    assert ind["dependency"] > 0.2 and ind["substitutability"] < -0.2
+    assert set(top2) & {"dependency", "substitutability"}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s11 payoff</title></head>
+  <body>
+    <template id="s11-payoff-template">
+      <style>
+        #s11-payoff { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s11-payoff .stage, #s11-payoff .phase { position: absolute; inset: 0; }
+        #s11-payoff .mapcam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+        #s11-payoff svg.map { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #s11-payoff .clear { position: absolute; left: 0; right: 0; bottom: 120px; text-align: center; font-family: var(--label); font-weight: 700;
+          font-size: 58px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--safe); }
+        #s11-payoff .clear b { display: inline-block; width: 70px; height: 70px; margin-right: 20px; vertical-align: -10px; border-radius: 50%;
+          border: 4px solid var(--safe); font-size: 42px; line-height: 62px; text-align: center; }
+        #s11-payoff .scrim { position: absolute; inset: 0; background: rgba(12,16,22,0.0); }
+        #s11-payoff .fence { position: absolute; left: 0; right: 0; top: 400px; text-align: center; font-size: 104px; }
+        #s11-payoff .end { position: absolute; left: 0; right: 0; top: 300px; text-align: center; }
+        #s11-payoff .end .fx-eyebrow { font-size: 30px; letter-spacing: 0.42em; }
+        #s11-payoff .end h1 { font-size: 160px; margin-top: 16px; }
+        #s11-payoff .end .tag { font-family: var(--serif); font-style: italic; font-size: 58px; color: var(--text); margin-top: 34px; }
+        #s11-payoff .end .rule { width: 160px; height: 3px; background: var(--gold); margin: 40px auto 0; transform-origin: 50% 50%; }
+        #s11-payoff .credits { position: absolute; left: 0; right: 0; bottom: 56px; text-align: center; font-family: var(--body); font-size: 19px; color: var(--muted); line-height: 1.6; }
+      </style>
+      <div id="s11-payoff" data-composition-id="s11-payoff" data-width="1920" data-height="1080">
+        <div class="stage">
+          <div class="phase pMap"><div class="mapcam" data-layout-allow-overflow><svg class="map" viewBox="0 0 1920 1080"></svg></div><div class="clear"><b>✓</b>Every site: clear</div></div>
+          <div class="phase pGraph"><div class="shot"></div></div>
+          <div class="scrim"></div>
+          <div class="phase pFence"><h2 class="fx-headline fence">Climate risk doesn't stop at the <em>factory fence.</em></h2></div>
+          <div class="phase pEnd"><div class="end"><div class="fx-eyebrow">FIN-04</div><h1 class="fx-headline">Climate Exposure <em>Graph</em></h1>
+            <div class="tag">Find the exposure your site checks can't see.</div><div class="rule"></div></div>
+            <div class="credits">A network-aware climate stress test on a synthetic food &amp; beverage supply chain · results are model estimates, not forecasts<br />River-flood hazard: JRC / Copernicus CEMS (Baugh et al. 2024, CC BY 4.0) · Map: Natural Earth · Narration: Kokoro-82M, local · Original score generated in code</div></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's11-payoff', FX = window.FX, CAP = window.CAP, GEO = window.GEO
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const W = (l, w, n) => L(FX.word(l, w, n || 0))
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const ph = (c) => root.querySelector('.' + c)
+          const chap = FX.chapter(stage, '07', 'The answer')
+          tl.fromTo(chap, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.4)
+
+          // ---- the clean climate map, again ----
+          const svg = root.querySelector('svg.map'), cam = root.querySelector('.mapcam'), N = GEO.nodes
+          FX.svg('path', { d: GEO.dotPath, fill: '#33404f' }, svg)
+          const gE = FX.svg('g', { opacity: 0 }, svg)
+          GEO.edges.forEach(([s, t]) => FX.svg('path', { d: FX.curve(N[s], N[t], 0.16).d, fill: 'none', stroke: '#8b97a8', 'stroke-width': 0.9, 'stroke-opacity': 0.3 }, gE))
+          const hold = GEO.holdings.map((id) => FX.svg('circle', { cx: N[id].x, cy: N[id].y, r: 5.2, fill: '#62b88d', stroke: '#0c1016', 'stroke-width': 1.2 }, svg))
+          const rings = GEO.holdings.map((id) => FX.svg('circle', { cx: N[id].x, cy: N[id].y, r: 6, fill: 'none', stroke: '#62b88d', 'stroke-width': 1.6, opacity: 0 }, svg))
+          const tBack = L(FX.line('L43').start)
+          tl.fromTo(cam, { scale: 1.06, x: -60, y: -30 }, { scale: 1, x: 0, y: 0, duration: 2.6, ease: 'power2.out' }, 0)
+          const clear = ph('pMap').querySelector('.clear')
+          tl.fromTo(clear, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, W('L43', 'clean') - 0.2)
+          rings.forEach((r, k) => FX.burst(tl, r, W('L43', 'clean') - 0.1 + k * 0.02, { opacity: 0.85, scale: 0.8, transformOrigin: '50% 50%' }, { opacity: 0, scale: 3, duration: 1.0, ease: 'power2.out' }))
+          // the hidden web, then fly toward the Netherlands
+          const tFly = L(FX.line('L44').start)
+          tl.to(clear, { opacity: 0, y: -20, duration: 0.4 }, tFly - 0.1)
+          tl.to(gE, { opacity: 1, duration: 1.0 }, tFly)
+          const g = N.grid_nl, zs = 4.2
+          tl.to(cam, { scale: zs, x: 960 - zs * g.x, y: 540 - zs * g.y, duration: 5.0, ease: 'power2.inOut' }, tFly + 0.2)
+          const gR = FX.svg('circle', { cx: g.x, cy: g.y, r: 4, fill: 'none', stroke: '#e0553b', 'stroke-width': 1.4, opacity: 0 }, svg)
+          const gD = FX.svg('circle', { cx: g.x, cy: g.y, r: 2.6, fill: '#e0553b', opacity: 0 }, svg)
+          const tGrid = L(FX.cue('pay_grid'))
+          tl.to(gD, { opacity: 1, duration: 0.2 }, tGrid - 0.5)
+          ;[0, 0.4].forEach((d) => FX.burst(tl, gR, tGrid - 0.5 + d, { opacity: 1, scale: 1, transformOrigin: '50% 50%' }, { opacity: 0, scale: 5, duration: 0.9, ease: 'power2.out' }))
+
+          // ---- from the map (sites) to the graph (exposure): the answer the app found ----
+          const { cam: gcam, frame } = FX.browser(ph('pGraph').querySelector('.shot'), 'localhost · FIN-04 · Supply-chain graph', '● Live app')
+          FX.h('img', { src: CAP.stills['graph-path'].file }, frame)
+          const nodes = CAP.stills['graph-path'].extra.nodes, canvas = FX.rect('graph-path', 'canvas')
+          const camG = FX.camFocus({ x: canvas.x, y: canvas.y + 40, w: canvas.w + 340, h: canvas.h - 80 }, { pad: 40, max: 1.3 })
+          FX.camSet(tl, gcam, { s: camG.s * 1.25, x: 960 - camG.s * 1.25 * nodes.grid_nl.x, y: 540 - camG.s * 1.25 * nodes.grid_nl.y }, 0)
+          tl.fromTo(ph('pGraph'), { opacity: 0 }, { opacity: 1, duration: 0.45 }, tGrid + 0.05)
+          FX.camTo(tl, gcam, camG, tGrid + 0.05, 1.3, 'power3.out')
+          const sv = FX.svg('svg', { viewBox: '0 0 1920 1080', style: 'position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible' }, frame)
+          ;[['grid_nl', 'dairy_pack_nl', 0.35], ['dairy_pack_nl', 'retail_eu', 1.05]].forEach(([a, b, d]) => {
+            const A = nodes[a], B = nodes[b]
+            const ln = FX.svg('line', { x1: A.x, y1: A.y, x2: A.x, y2: A.y, stroke: '#ffb39c', 'stroke-width': 9, 'stroke-linecap': 'round', opacity: 0 }, sv)
+            tl.set(ln, { opacity: 0.9 }, tGrid + d)
+            tl.fromTo(ln, { attr: { x2: A.x, y2: A.y } }, { attr: { x2: B.x, y2: B.y }, duration: 0.65, ease: 'power1.inOut', immediateRender: false }, tGrid + d)
+          })
+          const sD = FX.toScreen(camG, nodes.dairy_pack_nl)
+          const cA = FX.callout(stage, { k: 'The answer, in this model', v: '0.00% → 1.13%', s: 'Location-only vs network-aware · drought at the Dutch grid operator', cls: '' }, sD.x - 330, sD.y + 120, 640)
+          cA.querySelector('.v').style.color = 'var(--gold)'
+          tl.fromTo(cA, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, tGrid + 1.0)
+
+          // ---- the factory fence ----
+          const tF = L(FX.line('L45').start) - 0.3
+          const scrim = root.querySelector('.scrim')
+          tl.to(scrim, { backgroundColor: 'rgba(12,16,22,0.86)', duration: 0.6 }, tF)
+          tl.to(cA, { opacity: 0, duration: 0.3 }, tF)
+          const fence = ph('pFence').querySelector('.fence')
+          const fw = FX.words(fence)
+          const sp = FX.line('L45').words
+          fw.forEach((w, k) => tl.fromTo(w, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, L(sp[Math.min(k, sp.length - 1)].s) - 0.05))
+
+          // ---- title lockup ----
+          const tT = L(FX.cue('pay_title'))
+          tl.to(fence, { opacity: 0, y: -30, duration: 0.45, ease: 'power2.in' }, tT - 0.55)
+          tl.to(ph('pGraph'), { opacity: 0, duration: 0.6 }, tT - 0.55)
+          tl.to(scrim, { backgroundColor: 'rgba(12,16,22,0.0)', duration: 0.6 }, tT - 0.4)
+          tl.to(ph('pMap'), { opacity: 0, duration: 0.5 }, tT - 0.55)
+          const end = ph('pEnd').querySelector('.end')
+          tl.fromTo(end.children[0], { opacity: 0, y: -14, scale: 1.08 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out' }, tT - 0.15)
+          tl.fromTo(end.children[1], { opacity: 0, y: 40, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' }, W('L46', 'climate') - 0.3)
+          tl.fromTo(end.children[2], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, W('L46', 'find') - 0.15)
+          tl.fromTo(end.children[3], { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: 'power3.inOut' }, W('L46', 'find') + 0.3)
+          tl.fromTo(ph('pEnd').querySelector('.credits'), { opacity: 0 }, { opacity: 1, duration: 0.8 }, W('L46', 'see') + 0.3)
+          tl.to(chap, { opacity: 0, duration: 0.4 }, tT - 0.4)
+          // final fade to black over the last moments of the score
+          const tEnd = L(FX.TL.total)
+          tl.to(stage, { opacity: 0, duration: 1.1, ease: 'power1.in' }, tEnd - 1.15)
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

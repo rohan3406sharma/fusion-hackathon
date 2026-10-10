@@ -100,6 +100,13 @@ class DirectExposureInputs:
     exposure: np.ndarray      # (N,)
     amplification: float
     effective_duration_days: float
+    durations: np.ndarray     # (C,) event days per component
+    recovery: np.ndarray      # (C,) recovery days per component
+
+    def effective_T(self, recovery_mult=1.0) -> np.ndarray:
+        """Effective disruption window(s) = max over components of duration + recovery x multiplier; (S,)."""
+        m = np.atleast_1d(np.asarray(recovery_mult, dtype=float))[:, None]
+        return (self.durations[None, :] + self.recovery[None, :] * m).max(axis=1)
 
 
 def build_direct_inputs(entities: list[Entity], spec: ScenarioSpec) -> DirectExposureInputs:
@@ -112,13 +119,16 @@ def build_direct_inputs(entities: list[Entity], spec: ScenarioSpec) -> DirectExp
     attr = {"flood": "flood_vulnerability", "heat": "heat_vulnerability", "drought": "drought_vulnerability"}
     vuln = np.vstack([[getattr(e, attr[c.hazard_type]) for e in entities] for c in comps])
     exposure = np.array([1.0 if e.exposed_asset_share is None else e.exposed_asset_share for e in entities])
-    eff = max(c.duration_days + HAZARD_PARAMS[c.hazard_type]["recovery"] for c in comps)
-    return DirectExposureInputs(weights, intensity, k, dur, vuln, exposure, spec.compound_amplification, eff)
+    durations = np.array([c.duration_days for c in comps], dtype=float)
+    recovery = np.array([HAZARD_PARAMS[c.hazard_type]["recovery"] for c in comps], dtype=float)
+    eff = float((durations + recovery).max())
+    return DirectExposureInputs(weights, intensity, k, dur, vuln, exposure, spec.compound_amplification, eff, durations, recovery)
 
 
 def direct_disruption(inp: DirectExposureInputs, intensity: np.ndarray | None = None, vuln: np.ndarray | None = None,
-                      exposure: np.ndarray | None = None) -> np.ndarray:
-    """Vectorised over simulations. intensity: (S,C) or (C,), vuln: (S,C,N) or (C,N). Returns (S,N) disruption fractions."""
+                      exposure: np.ndarray | None = None, k: np.ndarray | None = None) -> np.ndarray:
+    """Vectorised over simulations. intensity: (S,C) or (C,), vuln: (S,C,N) or (C,N), k: (S,C) or (C,).
+    Returns (S,N) disruption fractions."""
     I = inp.intensity if intensity is None else intensity
     V = inp.vuln if vuln is None else vuln
     E = inp.exposure if exposure is None else exposure
@@ -126,7 +136,8 @@ def direct_disruption(inp: DirectExposureInputs, intensity: np.ndarray | None = 
     V = V if V.ndim == 3 else V[None]           # (S|1,C,N)
     H = np.clip(I[:, :, None] * inp.weights[None], 0, 1)    # (S,C,N)
     raw = H * np.atleast_2d(E)[:, None, :] * V
-    sev = 1 - np.exp(-inp.k[None, :, None] * raw)
+    K = np.atleast_2d(inp.k if k is None else k)       # (S|1,C)
+    sev = 1 - np.exp(-K[:, :, None] * raw)
     f_c = sev * inp.dur_factor[None, :, None]
     f = 1 - np.prod(1 - f_c, axis=1)            # (S,N)
     if inp.amplification > 0 and f_c.shape[1] > 1:

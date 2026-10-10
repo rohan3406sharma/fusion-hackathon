@@ -1,0 +1,20 @@
+{
+  "name": "fin04-explainer-video",
+  "private": true,
+  "type": "module",
+  "description": "Five-minute narrated explainer for the FIN-04 Climate Exposure Graph, built with HyperFrames from real captures of the running app.",
+  "scripts": {
+    "capture": "node scripts/capture.mjs",
+    "tts": "node scripts/tts.mjs",
+    "align": "node scripts/align.mjs",
+    "music": "../.venv/bin/python scripts/make_music.py",
+    "check": "hyperframes check",
+    "snapshot": "hyperframes snapshot",
+    "preview": "hyperframes preview",
+    "render": "hyperframes render . -o renders/fin04-explainer.mp4 --quality high"
+  },
+  "devDependencies": {
+    "hyperframes": "0.8.115",
+    "puppeteer-core": "25.13.0"
+  }
+}

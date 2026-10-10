@@ -13,14 +13,20 @@ from pydantic import BaseModel, Field
 
 from .. import __version__
 from ..db import ScenarioRow, session
+from ..domain.holdings import build_holdings, holding_meta
 from ..models import analytics, backtest
 from ..models.climate import HAZARD_PARAMS, PROVIDERS
 from ..models.mitigation import candidate_interventions, evaluate_interventions
 from ..schemas.domain import Entity, EntityDetail
+from ..copilot import service as copilot
+from ..schemas.copilot import AskRequest, AskResponse, FactsRequest, FactsResponse, ReportRequest, ReportResponse, StatusResponse
+from ..schemas.finder import FinderRequest, FinderResult, OptimiseRequest, PromoteRequest
 from ..schemas.mitigation import MitigationRequest
 from ..schemas.results import Comparison, CriticalPath, EntityImpact, MonteCarloResult, RunResult
-from ..schemas.scenario import RunOptions, ScenarioRecord, ScenarioSpec
+from ..schemas.scenario import HoldingView, RunOptions, ScenarioRecord, ScenarioSpec
 from ..services import report, scenarios as sc
+from ..services.finder import run_finder
+from ..services.optimise import run_optimise
 from ..services.runner import execute
 from ..services.state import get_state
 
@@ -30,6 +36,7 @@ scen = APIRouter(prefix="/api/v1/scenarios", tags=["scenarios"])
 ana = APIRouter(prefix="/api/v1/analysis", tags=["analysis"])
 mit = APIRouter(prefix="/api/v1/mitigation", tags=["mitigation"])
 dat = APIRouter(prefix="/api/v1/data", tags=["data provenance"])
+cop = APIRouter(prefix="/api/v1/copilot", tags=["ai copilot"])
 
 
 # ------------------------------------------------------------------ system
@@ -109,8 +116,28 @@ def get_entity(entity_id: str) -> EntityDetail:
         tot = sum(r.dependency for r in ins)
         hhi = round(sum((r.dependency / tot) ** 2 for r in ins), 4)
     single = sorted(p for p, v in shares.items() if len(v) == 1 and v[0] >= 0.6)
+    layer = ds.hazard_layers.get("jrc_flood_rp100")
+    jrc = None
+    if layer and entity_id in layer["entities"]:
+        jrc = {**layer["entities"][entity_id], "radius_km": layer["radius_km"], "return_period_years": layer["return_period_years"],
+               "source": "JRC / Copernicus CEMS global river flood hazard v" + layer["dataset_version"], "licence": "CC BY 4.0",
+               "meaning": layer["meaning"]}
     return EntityDetail(**e.model_dump(), in_degree=len(ins), out_degree=len(outs), supplier_concentration_hhi=hhi,
-                        single_source_inputs=single, missing_fields=ds.missing_fields(e))
+                        single_source_inputs=single, missing_fields=ds.missing_fields(e), jrc_flood_rp100=jrc, company=_company_of(entity_id))
+
+
+def _company_of(entity_id: str) -> Optional[dict]:
+    """The synthetic company this business unit belongs to, with its share of that company's value added."""
+    ds = get_state().dataset
+    cid = ds.company_of.get(entity_id)
+    if cid is None:
+        return None
+    h = next(x for x in build_holdings(ds, {cid: 1.0}, "company").holdings)
+    seg = next(s for s in h.segments if s.entity_id == entity_id)
+    held = any(ds.company_of.get(k) == cid for k in ds.portfolio_weights)
+    return {"id": cid, "name": h.name, "segment": seg.label, "share": round(seg.share, 4), "other_businesses_share": h.other_share,
+            "pattern": h.pattern, "in_demo_portfolio": held, "synthetic": True,
+            "segments": [{"entity_id": s.entity_id, "name": s.name, "segment": s.label, "share": round(s.share, 4)} for s in h.segments]}
 
 
 @graph.get("/entities/{entity_id}/dependencies")
@@ -130,13 +157,13 @@ def entity_dependencies(entity_id: str, depth: int = Query(3, ge=1, le=6)) -> di
 
 
 @graph.get("/entities/{entity_id}/impact")
-def entity_impact(entity_id: str, scenario_id: str = sc.DEFAULT_SCENARIO_ID) -> dict:
+def entity_impact(entity_id: str, scenario_id: str = sc.DEFAULT_SCENARIO_ID, max_depth: Optional[int] = Query(None, ge=1, le=10)) -> dict:
     ds = get_state().dataset
     _entity(entity_id)
     sid, spec = sc.resolve(scenario_id, None)
-    res = sc.run(spec, sid)
+    res = sc.run(spec, sid, max_depth)
     row = next(r for r in res.entities if r.entity_id == entity_id)
-    ex = execute(ds.entities, ds.relations, spec)
+    ex = execute(ds.entities, ds.relations, spec, max_depth)
     net = ex.net
     i = net.idx[entity_id]
     inc = []
@@ -178,17 +205,18 @@ def get_scenario(scenario_id: str) -> ScenarioRecord:
 @scen.post("/{scenario_id}/run", response_model=RunResult)
 def run_scenario(scenario_id: str, options: RunOptions = RunOptions()) -> RunResult:
     sid, spec = sc.resolve(scenario_id, None)
-    return sc.run(spec, sid, options.max_depth, options.top_paths)
+    return sc.run(spec, sid, options.max_depth, options.top_paths, options.holding_view)
 
 
 @scen.get("/{scenario_id}/report")
 def scenario_report(scenario_id: str, format: Literal["md", "csv"] = "md", include_monte_carlo: bool = False,
-                    n_simulations: Optional[int] = Query(None, ge=20, le=5000), seed: Optional[int] = Query(None, ge=0)) -> PlainTextResponse:
+                    n_simulations: Optional[int] = Query(None, ge=20, le=5000), seed: Optional[int] = Query(None, ge=0),
+                    max_depth: Optional[int] = Query(None, ge=1, le=10), holding_view: HoldingView = "company") -> PlainTextResponse:
     sid, spec = sc.resolve(scenario_id, None)
-    res = sc.run(spec, sid)
+    res = sc.run(spec, sid, max_depth, holding_view=holding_view)
     if format == "csv":
         return PlainTextResponse(report.to_csv(res), media_type="text/csv")
-    mc = sc.monte_carlo(spec, n_simulations or spec.monte_carlo_runs or 500, seed if seed is not None else spec.monte_carlo_seed) if include_monte_carlo else None
+    mc = sc.monte_carlo(spec, n_simulations or spec.monte_carlo_runs or 500, seed if seed is not None else spec.monte_carlo_seed, max_depth) if include_monte_carlo else None
     return PlainTextResponse(report.to_markdown(res, mc), media_type="text/markdown")
 
 
@@ -196,6 +224,11 @@ def scenario_report(scenario_id: str, format: Literal["md", "csv"] = "md", inclu
 class PropagationRequest(sc.ScenarioRef):
     max_depth: Optional[int] = Field(default=None, ge=1, le=10)
     top_paths: int = Field(default=10, ge=0, le=50)
+    holding_view: HoldingView = "company"
+
+
+class ComparisonRequest(sc.ScenarioRef):
+    holding_view: HoldingView = "company"
 
 
 class MonteCarloRequest(sc.ScenarioRef):
@@ -207,7 +240,7 @@ class MonteCarloRequest(sc.ScenarioRef):
 @ana.post("/propagation", response_model=RunResult)
 def propagation(req: PropagationRequest) -> RunResult:
     sid, spec = sc.resolve(req.scenario_id, req.scenario)
-    return sc.run(spec, sid, req.max_depth, req.top_paths)
+    return sc.run(spec, sid, req.max_depth, req.top_paths, req.holding_view)
 
 
 @ana.post("/monte-carlo", response_model=MonteCarloResult)
@@ -217,9 +250,9 @@ def monte_carlo(req: MonteCarloRequest) -> MonteCarloResult:
 
 
 @ana.post("/network-vs-location", response_model=Comparison)
-def network_vs_location(req: sc.ScenarioRef) -> Comparison:
+def network_vs_location(req: ComparisonRequest) -> Comparison:
     sid, spec = sc.resolve(req.scenario_id, req.scenario)
-    return sc.run(spec, sid).comparison
+    return sc.run(spec, sid, holding_view=req.holding_view).comparison
 
 
 @ana.get("/systemic-risk")
@@ -236,9 +269,9 @@ def systemic_risk(scenario_id: Optional[str] = None, limit: int = Query(25, ge=1
 
 
 @ana.get("/critical-paths", response_model=list[CriticalPath])
-def critical_paths(scenario_id: str = sc.DEFAULT_SCENARIO_ID, top: int = Query(10, ge=1, le=50)) -> list[CriticalPath]:
+def critical_paths(scenario_id: str = sc.DEFAULT_SCENARIO_ID, top: int = Query(10, ge=1, le=50), max_depth: Optional[int] = Query(None, ge=1, le=10)) -> list[CriticalPath]:
     sid, spec = sc.resolve(scenario_id, None)
-    return sc.run(spec, sid, None, top).critical_paths
+    return sc.run(spec, sid, max_depth, top).critical_paths
 
 
 class BacktestRequest(sc.ScenarioRef):
@@ -262,6 +295,51 @@ def run_backtest(req: BacktestRequest) -> dict:
     return {"label": label, "scenario_id": sid, **backtest.evaluate(sim, obs)}
 
 
+# ------------------------------------------------------------------ portfolio reverse stress test (Hidden Exposure Finder)
+@graph.get("/portfolio")
+def portfolio(holding_view: HoldingView = "company") -> dict:
+    """The synthetic demo portfolio. Company view: holdings are companies (some own several business units and businesses
+    outside Food & Beverage, which are not modelled); business-unit view: every held unit is its own holding (v0.3)."""
+    ds = get_state().dataset
+    hs = build_holdings(ds, None, holding_view)
+    return {**{k: v for k, v in ds.portfolio.items() if k != "holdings"}, "holding_view": hs.view,
+            "n_business_units": len(ds.portfolio_weights), "n_multi_segment": hs.n_multi_segment,
+            "company_structures": ds.companies_meta or None,
+            "holdings": [holding_meta(ds, h) for h in hs.holdings]}
+
+
+def _hash(model) -> str:
+    import hashlib
+    return hashlib.sha256(model.model_dump_json().encode()).hexdigest()
+
+
+@ana.post("/reverse-stress", response_model=FinderResult)
+def reverse_stress(req: FinderRequest) -> FinderResult:
+    """Hidden Exposure Finder: score a generated library of synthetic events against the portfolio and rank them."""
+    try:
+        return get_state().cache.get_or_set("finder:" + _hash(req), lambda: run_finder(get_state().dataset, req))
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+
+
+@ana.post("/reverse-stress/promote", response_model=ScenarioRecord, status_code=201)
+def promote_event(req: PromoteRequest) -> ScenarioRecord:
+    """Turn a finder event into an ordinary stored scenario (same intensity, duration and footprint)."""
+    spec = ScenarioSpec(name=f"Finder: {req.label}"[:120], hazards=[req.hazard], propagation_max_depth=req.max_depth,
+                        description="Created from the Hidden Exposure Finder (synthetic reference event: intensity index and "
+                                    "duration are analyst choices, not hazard statistics).")
+    return sc.save_scenario(spec, "sc_" + uuid.uuid4().hex[:10])
+
+
+@mit.post("/optimise")
+def optimise(req: OptimiseRequest) -> dict:
+    """Budget-constrained resilience optimiser over the finder's worst events (greedy + local search; optional exhaustive gap)."""
+    try:
+        return get_state().cache.get_or_set("opt:" + _hash(req), lambda: run_optimise(get_state().dataset, req))
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+
+
 # ------------------------------------------------------------------ mitigation
 @mit.post("/compare")
 def mitigation_compare(req: MitigationRequest) -> dict:
@@ -272,22 +350,23 @@ def mitigation_compare(req: MitigationRequest) -> dict:
         if bad:
             raise HTTPException(422, f"unknown entity ids in intervention: {bad}")
     ds = get_state().dataset
-    out = evaluate_interventions(ds.entities, ds.relations, spec, req.interventions, req.annual_event_probability, req.horizon_years)
+    out = evaluate_interventions(ds.entities, ds.relations, spec, req.interventions, req.annual_event_probability, req.horizon_years,
+                                 req.max_depth)
     return {"scenario_id": sid, **out}
 
 
 @mit.get("/recommendations")
 def mitigation_recommendations(scenario_id: str = sc.DEFAULT_SCENARIO_ID, top: int = Query(8, ge=1, le=30),
-                               annual_event_probability: float = Query(0.10, gt=0, le=1)) -> dict:
+                               annual_event_probability: float = Query(0.10, gt=0, le=1), max_depth: Optional[int] = Query(None, ge=1, le=10)) -> dict:
     sid, spec = sc.resolve(scenario_id, None)
     ds = get_state().dataset
 
     def compute():
-        res = sc.run(spec, sid)
+        res = sc.run(spec, sid, max_depth)
         cands = candidate_interventions(ds.entities, [r.model_dump() for r in res.entities])
-        return evaluate_interventions(ds.entities, ds.relations, spec, cands[:24], annual_event_probability, 10)
+        return evaluate_interventions(ds.entities, ds.relations, spec, cands[:24], annual_event_probability, 10, max_depth)
 
-    out = get_state().cache.get_or_set(f"rec:{sid}:{annual_event_probability}", compute)
+    out = get_state().cache.get_or_set(f"rec:{sid}:{annual_event_probability}:{max_depth}", compute)
     return {"scenario_id": sid, **{**out, "options": out["options"][:top]}, "candidates_evaluated": len(out["options"])}
 
 
@@ -332,3 +411,44 @@ def data_quality() -> dict:
         "notes": ["Every entity and relationship is synthetic; coordinates are approximate synthetic locations.",
                   "Unmodelled share = portion of each input assumed to come from suppliers outside the graph."],
     }
+
+
+# ------------------------------------------------------------------ AI Climate Risk Copilot
+# The language model only chooses and phrases cited facts; every value, name and path is rendered from the deterministic engine.
+@cop.get("/status", response_model=StatusResponse)
+def copilot_status() -> StatusResponse:
+    return copilot.status()
+
+
+@cop.post("/facts", response_model=FactsResponse)
+def copilot_facts(req: FactsRequest) -> FactsResponse:
+    """The deterministic fact sheet the copilot is allowed to talk about (inspectable evidence)."""
+    try:
+        return copilot.get_facts(get_state().dataset, req.focus)
+    except copilot.FocusNotFound as e:
+        raise HTTPException(404, str(e))
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+
+
+@cop.post("/ask", response_model=AskResponse)
+def copilot_ask(req: AskRequest) -> AskResponse:
+    """Grounded explanation. Falls back to deterministic templates if the model is unavailable or its reply fails validation."""
+    try:
+        return copilot.ask(get_state().dataset, req)
+    except copilot.FocusNotFound as e:
+        raise HTTPException(404, str(e))
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+
+
+@cop.post("/report", response_model=ReportResponse)
+def copilot_report(req: ReportRequest) -> ReportResponse:
+    """Executive summary as Markdown with an evidence table; deterministic unless use_model is set and the reply validates."""
+    try:
+        s = copilot.get_settings().model_copy(update={"llm_provider": req.provider or copilot.get_settings().llm_provider})
+        return copilot.report(get_state().dataset, req.focus, s, use_model=req.use_model)
+    except copilot.FocusNotFound as e:
+        raise HTTPException(404, str(e))
+    except ValueError as e:
+        raise HTTPException(422, str(e))

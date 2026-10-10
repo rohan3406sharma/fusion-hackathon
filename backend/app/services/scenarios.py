@@ -10,6 +10,7 @@ from pydantic import BaseModel, model_validator
 
 from ..config import get_settings
 from ..db import ScenarioRow, session
+from ..domain.holdings import build_holdings
 from ..models.montecarlo import run_monte_carlo
 from ..schemas.results import MonteCarloResult, RunResult
 from ..schemas.scenario import ScenarioRecord, ScenarioSpec
@@ -70,13 +71,15 @@ def save_scenario(spec: ScenarioSpec, sid: str) -> ScenarioRecord:
     return load_record(sid)
 
 
-def run(spec: ScenarioSpec, scenario_id: Optional[str], max_depth: Optional[int] = None, top_paths: int = 10) -> RunResult:
+def run(spec: ScenarioSpec, scenario_id: Optional[str], max_depth: Optional[int] = None, top_paths: int = 10,
+        holding_view: str = "company") -> RunResult:
     st = get_state()
 
     def compute() -> RunResult:
-        return build_run_result(st.dataset.entities, st.dataset.relations, spec, scenario_id, top_paths, max_depth)
+        return build_run_result(st.dataset.entities, st.dataset.relations, spec, scenario_id, top_paths, max_depth,
+                                st.dataset.portfolio_weights, build_holdings(st.dataset, None, holding_view))
 
-    return st.cache.get_or_set("run:" + spec_key(spec, max_depth, top_paths, scenario_id), compute)
+    return st.cache.get_or_set("run:" + spec_key(spec, max_depth, top_paths, scenario_id, holding_view), compute)
 
 
 def monte_carlo(spec: ScenarioSpec, n: int, seed: int, max_depth: Optional[int] = None) -> MonteCarloResult:

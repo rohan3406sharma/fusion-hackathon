@@ -26,3 +26,4 @@ class MitigationRequest(BaseModel):
     interventions: list[Intervention] = Field(min_length=1, max_length=12)
     annual_event_probability: float = Field(default=0.10, gt=0, le=1, description="Analyst-defined annual probability of the scenario (NOT an estimate)")
     horizon_years: int = Field(default=10, ge=1, le=50)
+    max_depth: Optional[int] = Field(default=None, ge=1, le=10, description="Propagation depth override (defaults to the scenario's)")

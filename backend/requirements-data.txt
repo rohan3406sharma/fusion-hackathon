@@ -1,0 +1,2 @@
+tifffile>=2025.1
+imagecodecs>=2025.1

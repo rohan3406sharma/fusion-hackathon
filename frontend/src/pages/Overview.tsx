@@ -1,13 +1,18 @@
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { api } from '../api/client'
+import type { FinderResult } from '../api/types'
 import { Bar as RBar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useApp } from '../state/AppState'
 import { Caveat, ErrorBox, Kpi, Loading, PageHeader, Panel } from '../components/ui'
-import { fmtM, title } from '../lib/format'
+import { fmtM, fmtPct, title } from '../lib/format'
 import { CHART } from '../lib/colors'
 
 export default function Overview() {
-  const { run, active, error, loading, reload, metadata } = useApp()
+  const { run, active, error, loading, reload, metadata, holdingView } = useApp()
   const nav = useNavigate()
+  const [finder, setFinder] = useState<FinderResult | null>(null)
+  useEffect(() => { api.finder({ stability_draws: 200, holding_view: holdingView }).then(setFinder).catch(() => setFinder(null)) }, [holdingView])
   if (error && !run) return <ErrorBox message={error} onRetry={reload} />
   if (!run || !active) return <Loading label="Running the model on the synthetic Food & Beverage network" />
   const s = run.summary
@@ -30,8 +35,28 @@ export default function Overview() {
         Values are modelled value-added at risk over a {s.effective_duration_days.toFixed(0)}-day disruption window on <strong>synthetic</strong> data. The indirect/direct ratio is an output of
         these assumptions, not a universal multiplier. Third-order and deeper results are model-based with low confidence. <Link className="underline" to="/methodology">Read the methodology</Link>.
       </Caveat>
+      {finder?.hidden_only_events[0] && (
+        <section className="border border-gold/60 bg-paper p-5 shadow-soft" aria-label="Hidden exposure finder summary" data-testid="finder-card">
+          <p className="eyebrow text-gold-dark">Hidden exposure finder · across {finder.n_events} synthetic events</p>
+          <p className="mt-2 font-serif text-xl leading-snug">
+            The largest hidden-only exposure is <span className="underline decoration-gold underline-offset-4">{finder.hidden_only_events[0].label}</span>: no holding is hit directly, yet the model has the portfolio losing {fmtPct(finder.hidden_only_events[0].portfolio_network_impact, 2)} of annual value added (synthetic data, uncalibrated).
+          </p>
+          <p className="mt-2 text-xs text-warm">
+            Reaches {finder.hidden_only_events[0].holdings_affected} holdings
+            {finder.hidden_only_events[0].p_top5 != null && ` · stays in the hidden-only top 5 in ${fmtPct(finder.hidden_only_events[0].p_top5)} of ${finder.stability?.n_draws} uncertainty draws`}
+            {' '}· a ranking under synthetic assumptions, not a forecast.
+          </p>
+          {finder.structure_comparison && (
+            <p className="mt-1 text-xs text-warm" data-testid="finder-card-companies">
+              Holdings are counted as companies: {finder.structure_comparison.n_multi_segment} of {finder.holdings.length} own several business units, so a shock to one unit is diluted by the others (synthetic structures; any share outside food &amp; beverage is not modelled).
+            </p>
+          )}
+          <Link className="btn mt-3" to="/finder">Open the finder</Link>
+        </section>
+      )}
       <nav aria-label="Guided journey" className="flex flex-wrap items-center gap-2 text-xs">
         <span className="eyebrow mr-1">Next</span>
+        <Link className="btn" to="/finder">0 · Find hidden exposures</Link>
         <Link className="btn" to="/network">1 · Inspect the affected network</Link>
         <Link className="btn" to="/results">2 · Trace propagation &amp; compare</Link>
         <Link className="btn" to="/mitigation">3 · Test a mitigation</Link>

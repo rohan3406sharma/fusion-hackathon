@@ -11,13 +11,15 @@ type Dict = Record<string, any>
 const ALGOS = [
   ['1 · Direct exposure', 'f = 1 − ∏c (1 − Dc · (1 − exp(−kh · Hc · E · Vh)))', 'Hazard intensity H (index), exposure E (asset share), vulnerability V (synthetic proxy) kept separate; duration factor D = 1 − exp(−d/τ). Configurable proxy, not a validated damage function.'],
   ['2 · Weighted graph', 'Edges supplier → customer with separate dependency, specificity, substitutability, confidence, provenance', 'Dependency = share of the customer\'s input of that product; not a monetary weight and not merged with confidence.'],
-  ['3 · Propagation', 'τe = dep · spec · (1 − alt)(1 − sub) · inv ;  d(t+1) = 1 − (1 − d0)(1 − d_in(d(t)))', 'Additive within one input, noisy-OR across inputs, bounded in [0,1], monotone so cycles converge. Iteration t = t hops. Inventory test: clip((T − (I + L))/T, 0, 1) for storable goods.'],
-  ['4 · Alternatives & substitution', 'Diversification limited by Σ spare capacity of unaffected same-product suppliers', 'Spare = revenue × spare fraction × (1 − 2·direct disruption); non-storable goods stay within the supplier\'s country; new edges are labelled “modelled”.'],
-  ['5 · Graph analytics', 'Degree, weighted degree, betweenness (−log dep·spec), PageRank on reversed graph, reach, components, single-source inputs', 'Systemic score = Σ w·normalised component (exposure, reach, dependency, lack of alternatives, inventory fragility, criticality). A ranking aid; never converted to money.'],
-  ['6 · Monte Carlo', 'Seeded sampling of intensity, vulnerability, dependency, substitutability, alternatives, inventory', 'Reports quantiles and Spearman sensitivities. A scenario distribution under analyst ranges, not a confidence interval.'],
-  ['7 · Network vs location', 'Δ = Σ VA·(d_final − d_direct) · period fraction', 'Reported for the whole network and an 18-holding synthetic portfolio with rank changes. Model comparison only; the end-to-end claim is an open research gap.'],
-  ['8 · Back-testing', 'POST /analysis/backtest with user-supplied observations', 'Interface only. The bundled demo uses pseudo-observations derived from the model itself and is explicitly circular. No validation has been performed.'],
-  ['9 · Mitigation prioritisation', 'score = 100 · Σ w·{benefit, BCR, feasibility, speed, confidence}', 'Benefit = loss reduction; BCR uses an analyst-set annual event probability (shown with ×0.5/×2 sensitivity). Costs are synthetic placeholders.'],
+  ['3 · Propagation', 'τe(d) = dep · spec · (1 − sub) · inv · damp · (1 − a_mkt) · (1 − a_graph(d)) ;  d(t+1) = 1 − (1 − d0)(1 − d_in(d(t)))', 'Additive within one input, noisy-OR across inputs, bounded in [0,1]. Inventory test: clip((T − (I + L))/T, 0, 1) for storable goods. Links inside feedback loops are damped (default ×0.5) so loops cannot run to saturation. Monotone, so iteration converges.'],
+  ['4 · Alternative suppliers', 'a_graph = min(0.95, Σw spare_w (1 − d_w) / (n_w · flow_e)) ;  a_mkt = alt_v · (1 − modelled share)', 'Modelled same-product producers relieve a shortfall from their spare capacity, shared across the n links they could serve and reduced by their own disruption (alternatives in the same drought give little relief). Non-storable goods only domestically. The entity assumption alt_v now covers only suppliers outside the graph.'],
+  ['5 · Hidden Exposure Finder', 'P_net(e) = Σh wh d*h(e) T(e)/365 ;  hidden share H(e) = 1 − P_loc(e)/P_net(e)', 'Portfolio reverse stress test: ~780 generated synthetic events (every node, footprints around every entity and region) scored in one batch; near-duplicates collapsed; shortlist re-ranked under uncertainty (P(top 5), Kendall τ). Ranked by consequence, not likelihood.'],
+  ['6 · Monte Carlo', 'Shared (global) × local factors per input group; damage steepness and recovery time sampled too', 'Sensitivity is measured on the shared factors, so assumptions that apply to many links no longer average out. A scenario distribution under analyst ranges, not a confidence interval.'],
+  ['7 · Network vs location', 'Portfolio impact = Σh wh · d_h · T/365 (position-weighted)', 'Reported for the whole network and the synthetic portfolio, with tie-aware rank changes and a hidden-exposure count at several cut-offs. Model comparison only; the end-to-end claim is an open research gap.'],
+  ['7b · Holdings as companies', 'd_h = Σs a_hs · d_s  (Σs a_hs = 1 − o_h) ;  upper_h = d_h / (1 − o_h) ;  one node_h = 1 − Πs (1 − d_s)', 'A listed holding is a company that can own several business units (segments), each an ordinary node; a = share of the company\'s value added. The share o outside food & beverage is not modelled (no nodes, links or hazard) and adds no loss; the upper end treats it as hit like the rest; one node is what a company-level supply graph implies. Portfolio maths is unchanged (w = Aᵀ W). Company structures are synthetic; the business-unit view reproduces v0.3 exactly.'],
+  ['8 · Resilience optimiser', 'min_x mean of the worst N P_net(e | x)  s.t.  Σ cj xj ≤ B,  xj ∈ {0,1}', 'Greedy by reduction per cost, then 1-swap local search; on ≤ 10 candidates an exhaustive search reports the optimality gap. Capacity limits enforced in simulation. Costs are synthetic placeholders.'],
+  ['9 · Back-testing', 'POST /analysis/backtest with user-supplied observations', 'Interface only. The bundled demo uses pseudo-observations derived from the model itself and is explicitly circular. No validation has been performed.'],
+  ['10 · Mitigation prioritisation (lab)', 'score = 100 · Σ w·{benefit, BCR, feasibility, speed, confidence}', 'Ranks a fixed candidate list (not an optimiser; see 8). BCR uses an analyst-set annual event probability shown with ×0.5/×2 sensitivity.'],
 ]
 const EVIDENCE = [
   ['Direct supplier → customer effect', 'High for direction, moderate for size', '5 independent firm-level studies'],
@@ -25,6 +27,7 @@ const EVIDENCE = [
   ['Third-order propagation', 'Low', 'Simulation models only; no firm-level climate estimate'],
   ['Network-aware vs location-only portfolio exposure', 'Low (open gap)', 'Each part supported; end-to-end untested'],
   ['Hazard → financial loss', 'Uncertainty large', 'Hazard models and risk scores disagree widely'],
+  ['Shocks spread between a firm\'s own units', 'Low to moderate', 'Two US studies: regional demand shocks travel through firms\' plant networks (Giroud & Mueller 2019); hurricanes, resource-constrained firms only (Seetharam 2018, working paper)'],
 ]
 
 export default function Methodology() {
@@ -56,7 +59,7 @@ export default function Methodology() {
       <Panel title="Dataset inventory" subtitle="Provenance, licence and limitations">
         <div className="overflow-x-auto"><table className="tbl"><thead><tr><th>Dataset</th><th>Kind</th><th>Status</th><th>Licence</th><th>Limitations</th></tr></thead>
           <tbody>{(src.datasets as Dict[]).map((d) => (
-            <tr key={d.id}><td className="whitespace-nowrap">{d.id}</td><td>{title(d.kind)}</td><td><Badge tone={d.synthetic ? 'gold' : 'neutral'}>{d.synthetic ? 'synthetic' : 'real, reference only'}</Badge></td><td>{d.licence}</td><td className="text-xs text-warm">{d.limitations}</td></tr>))}</tbody></table></div>
+            <tr key={d.id}><td className="whitespace-nowrap">{d.id}</td><td>{title(d.kind)}</td><td><Badge tone={d.synthetic ? 'gold' : 'neutral'}>{d.synthetic ? 'synthetic' : d.kind === 'real_hazard_context' ? 'real, plausibility layer' : 'real, reference only'}</Badge></td><td>{d.licence}</td><td className="text-xs text-warm">{d.limitations}</td></tr>))}</tbody></table></div>
         <h3 className="mt-6 text-base">External sources</h3>
         <ul className="mt-2 space-y-1 text-xs">{(src.external_sources as Dict[]).map((e) => <li key={e.name}><strong>{e.name}</strong> — <Badge>{e.status}</Badge> {e.licence}. {e.note}</li>)}</ul>
         <p className="mt-3 text-xs text-warm">Attribution: {src.required_attribution}</p>
@@ -113,8 +116,10 @@ export default function Methodology() {
           <li>All entities, links, coordinates and vulnerabilities are synthetic; no real company, contract or loss is represented.</li>
           <li>Hazard intensity is an index on a synthetic footprint; no flood depth, temperature, return period or probability is modelled.</li>
           <li>Losses are value-added at risk over the disruption window, not forecasts; no demand response, price effects or re-routing beyond stated parameters.</li>
-          <li>Edges are static within a run; the evidence suggests customers re-wire after shocks (not modelled except via the mitigation lab).</li>
+          <li>Edges are static within a run; the evidence suggests customers re-wire after shocks (not modelled except via the mitigation lab and optimiser).</li>
+          <li>The JRC river-flood layer is real data sampled at synthetic coordinates: a plausibility filter for flood events, never a loss input.</li>
           <li>Financial (lender/insurer) channels are displayed but not propagated.</li>
+          <li>Company structures (which business units a holding owns and its share outside food &amp; beverage) are synthetic. Units are treated as separate businesses; shocks travelling inside a firm through shared overheads or capital are not modelled, and the one-node view bounds them from above.</li>
           <li>Monte Carlo ranges reflect only the sampled parameter uncertainty, not structural model error.</li>
         </ul>
       </Panel>

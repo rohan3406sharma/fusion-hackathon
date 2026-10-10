@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s10 impact</title></head>
+  <body>
+    <template id="s10-impact-template">
+      <style>
+        #s10-impact { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s10-impact .stage, #s10-impact .phase { position: absolute; inset: 0; }
+        #s10-impact .q { position: absolute; left: 0; right: 0; top: 420px; text-align: center; font-size: 120px; }
+        #s10-impact .vs { position: absolute; left: 140px; right: 140px; top: 170px; display: flex; gap: 60px; }
+        #s10-impact .side { flex: 1; height: 420px; padding: 40px 44px; border-radius: 24px; background: rgba(19,25,34,0.9); border: 2px solid var(--line); position: relative; }
+        #s10-impact .side.gold { border-color: rgba(212,174,60,0.75); }
+        #s10-impact .side .fx-eyebrow { color: var(--text-dim); }
+        #s10-impact .side.gold .fx-eyebrow { color: var(--gold); }
+        #s10-impact .side h3 { margin: 14px 0 0; font-family: var(--serif); font-weight: 400; font-size: 47px; line-height: 1.1; color: var(--text); }
+        #s10-impact .flow { position: absolute; left: 44px; right: 44px; bottom: 40px; display: flex; align-items: center; gap: 18px; font-family: var(--label); font-size: 23px; color: var(--text); }
+        #s10-impact .flow .p { padding: 12px 18px; border-radius: 12px; border: 2px solid var(--line); background: var(--ink-2); white-space: nowrap; }
+        #s10-impact .flow .a { color: var(--muted); font-size: 30px; }
+        #s10-impact .side.gold .flow .p { border-color: rgba(212,174,60,0.5); }
+        #s10-impact .big { position: absolute; left: 140px; right: 140px; top: 660px; display: flex; gap: 60px; }
+        #s10-impact .big .n { flex: 1; padding: 26px 40px; border-radius: 22px; background: rgba(19,25,34,0.9); border: 2px solid var(--line); }
+        #s10-impact .big .n .k { font-family: var(--label); font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); }
+        #s10-impact .big .n .v { font-family: var(--serif); font-size: 120px; line-height: 1; margin-top: 6px; color: var(--text); }
+        #s10-impact .big .n.hz .v { color: #f08a72; }
+        #s10-impact .big .n.gd { border-color: rgba(212,174,60,0.75); }
+        #s10-impact .big .n.gd .v { color: var(--gold); }
+        #s10-impact .big .n .s { font-family: var(--body); font-size: 23px; color: var(--text-dim); margin-top: 8px; }
+        #s10-impact .head { position: absolute; left: 140px; top: 150px; width: 1640px; }
+        #s10-impact .head .fx-headline { font-size: 76px; margin-top: 14px; }
+        #s10-impact .list { position: absolute; left: 140px; right: 140px; top: 380px; }
+        #s10-impact .item { display: flex; align-items: center; gap: 34px; padding: 26px 34px; margin-bottom: 22px; border-radius: 20px; background: rgba(19,25,34,0.9); border: 2px solid var(--line); }
+        #s10-impact .item .rk { width: 70px; font-family: var(--serif); font-size: 72px; color: var(--gold); line-height: 1; }
+        #s10-impact .item .nm { flex: 1; font-family: var(--serif); font-size: 50px; color: var(--text); }
+        #s10-impact .item .nm small { display: block; font-family: var(--body); font-size: 23px; color: var(--text-dim); margin-top: 4px; }
+        #s10-impact .item .ty { padding: 10px 18px; border-radius: 999px; border: 2px solid rgba(212,174,60,0.55); font-family: var(--label); font-weight: 700; font-size: 21px;
+          letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+        #s10-impact .lim { position: absolute; left: 140px; right: 140px; top: 380px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px 40px; }
+        #s10-impact .lim .l { padding: 30px 34px; border-radius: 20px; background: rgba(19,25,34,0.9); border: 2px solid var(--line); display: flex; gap: 22px; align-items: flex-start; }
+        #s10-impact .lim .l i { flex: 0 0 46px; height: 46px; border-radius: 50%; border: 3px solid #e9a23b; color: #e9a23b; font-style: normal; font-family: var(--label);
+          font-weight: 700; font-size: 26px; line-height: 40px; text-align: center; }
+        #s10-impact .lim .l b { display: block; font-family: var(--serif); font-weight: 400; font-size: 46px; color: var(--text); }
+        #s10-impact .lim .l span { display: block; font-family: var(--body); font-size: 23px; color: var(--text-dim); margin-top: 6px; line-height: 1.35; }
+        #s10-impact .badge { position: absolute; left: 140px; bottom: 120px; font-family: var(--body); font-size: 25px; color: var(--text-dim); }
+        #s10-impact .badge b { color: var(--text); font-weight: 400; font-family: var(--serif); font-style: italic; font-size: 32px; }
+        #s10-impact .next { position: absolute; left: 140px; right: 140px; top: 420px; display: flex; gap: 50px; }
+        #s10-impact .next .x { flex: 1; padding: 40px 44px; border-radius: 22px; background: rgba(19,25,34,0.9); border: 2px solid rgba(98,184,141,0.5); }
+        #s10-impact .next .x b { display: block; font-family: var(--serif); font-weight: 400; font-size: 58px; color: var(--text); margin-top: 10px; }
+        #s10-impact .next .x span { display: block; font-family: var(--body); font-size: 25px; color: var(--text-dim); margin-top: 10px; line-height: 1.38; }
+        #s10-impact .next .x .fx-eyebrow { color: var(--safe); }
+      </style>
+      <div id="s10-impact" data-composition-id="s10-impact" data-width="1920" data-height="1080">
+        <div class="stage">
+          <div class="phase pA"><h2 class="fx-headline q">So what does this <em>change?</em></h2></div>
+          <div class="phase pB">
+            <div class="vs">
+              <div class="side s1"><div class="fx-eyebrow">A typical climate dashboard</div><h3>Tests the scenario you chose.</h3>
+                <div class="flow"><span class="p">1 scenario</span><span class="a">→</span><span class="p">1 answer</span></div></div>
+              <div class="side s2 gold"><div class="fx-eyebrow">The hidden exposure finder</div><h3>Searches for the ones you <em>didn't think of.</em></h3>
+                <div class="flow"><span class="p">780 events</span><span class="a">→</span><span class="p">ranked</span><span class="a">→</span><span class="p">hidden share</span></div></div>
+            </div>
+            <div class="big"><div class="n hz"><div class="k">Site check · location-only</div><div class="v">0.00%</div><div class="s">top event · no holding hit directly</div></div>
+              <div class="n gd"><div class="k">Network-aware · same event</div><div class="v">1.13%</div><div class="s">of annual value added · modelled, synthetic data</div></div></div>
+          </div>
+          <div class="phase pC"><div class="head"><div class="fx-eyebrow">For a risk team</div><h2 class="fx-headline">A starting list of <em>where to look first.</em></h2></div>
+            <div class="list">
+              <div class="item i1"><div class="rk">1</div><div class="nm">Dutch Regional Grid Operator<small>Top hidden-only event: a drought here takes 1.13% of the portfolio’s annual value added (modelled)</small></div><div class="ty">Grid</div></div>
+              <div class="item i2"><div class="rk">2</div><div class="nm">Rotterdam Terminal Operator<small>Top single point of failure · reaches 7 holdings in a flood</small></div><div class="ty">Port</div></div>
+              <div class="item i3"><div class="rk">3</div><div class="nm">Daloa Cocoa Smallholder Network<small>No. 2 hidden-only event · drought within 350 km: 0.87% (modelled)</small></div><div class="ty">Supplier</div></div>
+            </div>
+            <div class="fx-source">From this run of the app · synthetic network · ranked by consequence, not likelihood.</div></div>
+          <div class="phase pD"><div class="head"><div class="fx-eyebrow">Honest about its limits</div><h2 class="fx-headline">What this is — and <em>isn't.</em></h2></div>
+            <div class="lim">
+              <div class="l l1"><i>!</i><div><b>Synthetic data</b><span>Companies, links, coordinates, weights and costs are invented for the demo.</span></div></div>
+              <div class="l l2"><i>!</i><div><b>Not calibrated or validated</b><span>No observed losses were used. Stability under draws is internal consistency.</span></div></div>
+              <div class="l l3"><i>!</i><div><b>No event probabilities</b><span>The event library is a reference set, not a forecast of what will happen.</span></div></div>
+              <div class="l l4"><i>!</i><div><b>Consequence, not likelihood</b><span>Rankings say what would hurt most — not what is most likely.</span></div></div>
+            </div>
+            <div class="badge">On every page of the app: <b>“Model not calibrated or validated against observed events.”</b></div></div>
+          <div class="phase pE"><div class="head"><div class="fx-eyebrow">What it needs next</div><h2 class="fx-headline">Real data, <em>real tests.</em></h2></div>
+            <div class="next">
+              <div class="x x1"><div class="fx-eyebrow">Next · data</div><b>Real supplier links</b><span>Disclosed or licensed relationships to replace the synthetic network.</span></div>
+              <div class="x x2"><div class="fx-eyebrow">Next · validation</div><b>Observed losses</b><span>The back-test interface is built; no historical dataset is bundled yet.</span></div>
+            </div></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's10-impact', FX = window.FX
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const W = (l, w, n) => L(FX.word(l, w, n || 0))
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const ph = (c) => root.querySelector('.' + c)
+          const chap = FX.chapter(stage, '06', 'Why it matters')
+          tl.fromTo(chap, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.4)
+          const up = (el, t, d = 0.5) => tl.fromTo(el, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: d, ease: 'power3.out' }, t)
+          const out = (el, t) => tl.to(el, { opacity: 0, y: -24, duration: 0.4, ease: 'power2.in' }, t)
+
+          // A
+          const q = ph('pA').querySelector('.q')
+          tl.fromTo(q, { opacity: 0, scale: 0.94, filter: 'blur(8px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out' }, L(FX.line('L38').start) - 0.15)
+          out(ph('pA'), L(FX.line('L39').start) - 0.35)
+          // B
+          up(ph('pB').querySelector('.s1'), W('L39', 'typical') - 0.2)
+          tl.fromTo(ph('pB').querySelectorAll('.s1 .flow > *'), { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.3, stagger: 0.12 }, W('L39', 'scenario') - 0.2)
+          up(ph('pB').querySelector('.s2'), W('L39', 'this') - 0.25)
+          tl.fromTo(ph('pB').querySelectorAll('.s2 .flow > *'), { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.3, stagger: 0.12 }, W('L39', 'searches'))
+          tl.to(ph('pB').querySelector('.s1'), { opacity: 0.45, duration: 0.5 }, W('L39', 'this'))
+          const bigs = ph('pB').querySelectorAll('.big .n')
+          up(bigs[0], W('L39', 'shows') - 0.2)
+          up(bigs[1], W('L39', 'check') - 0.2)
+          out(ph('pB'), L(FX.line('L40').start) - 0.4)
+          // C
+          up(ph('pC').querySelector('.head'), L(FX.line('L40').start) - 0.15)
+          tl.fromTo(ph('pC').querySelector('.i1'), { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' }, W('L40', 'grids') - 0.2)
+          tl.fromTo(ph('pC').querySelector('.i2'), { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' }, W('L40', 'ports') - 0.2)
+          tl.fromTo(ph('pC').querySelector('.i3'), { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' }, W('L40', 'suppliers') - 0.2)
+          tl.fromTo(ph('pC').querySelector('.fx-source'), { opacity: 0 }, { opacity: 1, duration: 0.5 }, W('L40', 'check') - 0.2)
+          out(ph('pC'), L(FX.line('L41').start) - 0.4)
+          // D
+          up(ph('pD').querySelector('.head'), L(FX.line('L41').start) - 0.15)
+          ;[['.l1', 'lim_synth'], ['.l2', 'lim_valid'], ['.l3', 'lim_prob'], ['.l4', 'lim_conseq']].forEach(([sel, cue]) =>
+            tl.fromTo(ph('pD').querySelector(sel), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, L(FX.cue(cue)) - 0.15))
+          up(ph('pD').querySelector('.badge'), W('L41', 'ranks') - 0.1)
+          out(ph('pD'), L(FX.line('L42').start) - 0.4)
+          // E
+          up(ph('pE').querySelector('.head'), L(FX.line('L42').start) - 0.15)
+          up(ph('pE').querySelector('.x1'), W('L42', 'real', 0) - 0.2)
+          up(ph('pE').querySelector('.x2'), W('L42', 'real', 1) - 0.2)
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

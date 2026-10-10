@@ -76,6 +76,8 @@ class EntityDetail(Entity):
     supplier_concentration_hhi: Optional[float] = Field(description="Herfindahl index of incoming supply shares (null if no suppliers)")
     single_source_inputs: list[str]
     missing_fields: list[str]
+    jrc_flood_rp100: Optional[dict] = Field(default=None, description="REAL hazard context: modelled 100-year river flooding around the synthetic coordinate")
+    company: Optional[dict] = Field(default=None, description="SYNTHETIC company this business unit belongs to, with its share of that company's value added")
 
 
 class Page(BaseModel):

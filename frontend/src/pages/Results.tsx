@@ -7,7 +7,9 @@ import { Badge, Caveat, Empty, ErrorBox, Kpi, Loading, PageHeader, Panel } from 
 import { fmtM, fmtPct, fmtRank, plural, title } from '../lib/format'
 import { CHART } from '../lib/colors'
 import { downloadText, runToCsv, runToJson } from '../lib/export'
-import { useState } from 'react'
+import CopilotPanel from '../components/CopilotPanel'
+import { CompanyBreakdown, segmentSummary } from '../components/Holdings'
+import { useEffect, useState } from 'react'
 import type { Breakdown } from '../api/types'
 
 function BreakdownChart({ data, label }: { data: Breakdown[]; label: string }) {
@@ -28,20 +30,26 @@ function BreakdownChart({ data, label }: { data: Breakdown[]; label: string }) {
 }
 
 export default function Results() {
-  const { run, active, activeId, error, reload, mc, mcLoading, runMonteCarlo, loading } = useApp()
+  const { run, active, activeId, error, reload, mc, mcLoading, runMonteCarlo, loading, depthOverride, holdingView } = useApp()
   const nav = useNavigate()
-  const [n, setN] = useState(500)
-  const [seed, setSeed] = useState(42)
+  const [n, setN] = useState(active?.monte_carlo_runs || 500)
+  const [seed, setSeed] = useState(active?.monte_carlo_seed ?? 42)
+  // the builder's Monte Carlo settings are the defaults for this scenario
+  useEffect(() => { if (active) { setN(Math.max(20, active.monte_carlo_runs || 500)); setSeed(active.monte_carlo_seed ?? 42) } }, [active?.id]) // eslint-disable-line react-hooks/exhaustive-deps
   const [tab, setTab] = useState<'category' | 'type' | 'region'>('category')
+  const [sensOf, setSensOf] = useState<'total' | 'indirect'>('total')
   if (error && !run) return <ErrorBox message={error} onRetry={reload} />
   if (!run || !active) return <Loading label="Loading results" />
   const s = run.summary, c = run.comparison
   const affected = run.entities.filter((e) => e.status !== 'unaffected').sort((a, b) => b.total_loss_musd - a.total_loss_musd)
   const byOrder = [0, 1, 2, 3].map((o) => ({ o, items: affected.filter((e) => (o === 3 ? (e.hop_order ?? 0) >= 3 : e.hop_order === o)) }))
   const slug = active.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-  const exportMd = async () => { if (activeId) downloadText(`${slug}-report.md`, await api.report(activeId, 'md', mc ? { n: mc.n_simulations, seed: mc.seed } : undefined), 'text/markdown') }
+  const exportMd = async () => { if (activeId) downloadText(`${slug}-report.md`, await api.report(activeId, 'md', mc ? { n: mc.n_simulations, seed: mc.seed } : undefined, depthOverride, holdingView), 'text/markdown') }
   const exportJson = () => downloadText(`${slug}-run.json`, JSON.stringify({ exported_for: 'FIN-04 Climate Exposure Graph (synthetic Food & Beverage demonstration)', run, uncertainty: mc ?? null }, null, 2), 'application/json')
   const exportCmp = c.portfolio_rows
+  const companies = c.holding_view === 'company'
+  const multiHit = c.portfolio_rows.filter((r) => r.kind === 'multi_segment' && r.segments?.length && r.network_disruption > 0)
+  const sens = (sensOf === 'indirect' ? mc?.indirect_sensitivity : mc?.sensitivity) ?? mc?.sensitivity ?? []
   const mcHist = mc?.histogram.map((h) => ({ x: Math.round((h.lo + h.hi) / 2), count: h.count }))
 
   return (
@@ -56,7 +64,7 @@ export default function Results() {
         Direct, first-, second- and third-order effects are reported separately because their evidence differs. All amounts are modelled value-added at risk on synthetic data.
       </PageHeader>
       <nav aria-label="On this page" className="flex flex-wrap gap-x-5 gap-y-1 text-xs">
-        {[['orders', 'Orders'], ['affected', 'Affected entities'], ['where', 'Where the loss lands'], ['paths', 'Propagation paths'], ['compare', 'Location vs network'], ['uncertainty', 'Uncertainty'], ['assumptions', 'Assumptions']].map(([id, l]) => <a key={id} href={`#${id}`} className="underline decoration-taupe underline-offset-4 hover:decoration-gold">{l}</a>)}
+        {[['orders', 'Orders'], ['affected', 'Affected entities'], ['where', 'Where the loss lands'], ['paths', 'Propagation paths'], ['compare', 'Location vs network'], ['uncertainty', 'Uncertainty'], ['copilot', 'AI copilot'], ['assumptions', 'Assumptions']].map(([id, l]) => <a key={id} href={`#${id}`} className="underline decoration-taupe underline-offset-4 hover:decoration-gold">{l}</a>)}
       </nav>
       <div className={`grid grid-cols-2 gap-3 lg:grid-cols-4 ${loading ? 'opacity-60' : ''}`}>
         <Kpi label="Directly affected" value={s.n_exposed_facilities} sub={fmtM(s.direct_loss_musd)} accent />
@@ -114,15 +122,22 @@ export default function Results() {
         <div className="grid gap-4 md:grid-cols-3">
           <Kpi label="Location-only (whole network)" value={fmtM(c.location_only_loss_musd)} />
           <Kpi label="Network-aware (whole network)" value={fmtM(c.network_aware_loss_musd)} sub={`Δ ${fmtM(c.absolute_difference_musd)}${c.relative_difference != null ? ` (${fmtPct(c.relative_difference, 1)})` : ' (relative n/a: no direct loss)'}`} accent />
-          <Kpi label="Demo portfolio (18 synthetic holdings)" value={`${fmtM(c.portfolio_location_loss_musd)} → ${fmtM(c.portfolio_network_loss_musd)}`} sub={`${c.hidden_exposure_count} hidden exposure(s)`} />
+          <Kpi label={`Portfolio impact (${c.portfolio_rows.length} synthetic ${companies ? 'companies' : 'holdings'}, weighted)`} value={`${fmtPct(c.portfolio_location_impact, 2)} → ${fmtPct(c.portfolio_network_impact, 2)}`}
+            sub={<>of annual value added · hidden share {c.portfolio_hidden_share != null ? fmtPct(c.portfolio_hidden_share) : '—'} · USD sum {fmtM(c.portfolio_location_loss_musd)} → {fmtM(c.portfolio_network_loss_musd)}
+              {companies && c.portfolio_network_impact_one_node != null && <> · <span data-testid="one-node-impact">{fmtPct(c.portfolio_network_impact_one_node, 2)} if every company were one node</span></>}</>} />
         </div>
+        <p className="mt-3 text-xs text-warm" data-testid="hidden-curve">
+          Hidden exposures by cut-off (holdings with &lt;1% direct disruption and at least this much propagated):{' '}
+          {c.hidden_exposure_curve.map((x) => <span key={x.threshold} className="num mr-3"><strong className="text-charcoal">{x.count}</strong> at ≥{fmtPct(x.threshold)}</span>)}
+        </p>
         <div className="mt-5 overflow-x-auto">
           <table className="tbl">
-            <thead><tr><th>Holding</th><th>Direct disruption</th><th>Network disruption</th><th>Rank (location)</th><th>Rank (network)</th><th>Change</th><th></th></tr></thead>
+            <thead><tr><th>Holding</th><th>Weight</th><th>Direct disruption</th><th>Network disruption</th><th>Rank (location)</th><th>Rank (network)</th><th>Change</th><th></th></tr></thead>
             <tbody>
               {exportCmp.map((r) => (
-                <tr key={r.entity_id} className="row-click" onClick={() => nav(`/entity/${r.entity_id}`)}>
-                  <td>{r.name}</td><td className="num">{fmtPct(r.location_disruption, 1)}</td><td className="num">{fmtPct(r.network_disruption, 1)}</td>
+                <tr key={r.entity_id} className="row-click" onClick={() => nav(`/entity/${r.primary_entity_id ?? r.entity_id}`)}>
+                  <td>{r.name}{r.kind === 'multi_segment' && <> <Badge>Company</Badge></>}
+                    {r.kind === 'multi_segment' && r.segments && <p className="mt-0.5 text-[0.7rem] text-warm">{segmentSummary(r.segments, r.other_businesses_share)}</p>}</td><td className="num">{fmtPct(r.weight, 1)}</td><td className="num">{fmtPct(r.location_disruption, 1)}</td><td className="num">{fmtPct(r.network_disruption, 1)}</td>
                   <td className="num">{fmtRank(r.rank_location)}</td><td className="num">{fmtRank(r.rank_network)}</td>
                   <td className="num">{r.rank_change > 0 ? `▲ ${fmtRank(r.rank_change)}` : r.rank_change < 0 ? `▼ ${fmtRank(-r.rank_change)}` : '—'}</td>
                   <td>{r.hidden_exposure && <Badge tone="gold">Hidden exposure</Badge>}</td>
@@ -131,6 +146,12 @@ export default function Results() {
             </tbody>
           </table>
         </div>
+        {multiHit.length > 0 && (
+          <details className="mt-4 text-sm" open>
+            <summary className="cursor-pointer text-xs text-warm">Companies with several business units in this scenario ({multiHit.length})</summary>
+            <div className="mt-3 space-y-5">{multiHit.map((r) => <CompanyBreakdown key={r.entity_id} h={r} />)}</div>
+          </details>
+        )}
         <div className="mt-4"><Caveat title="Scope">{c.scope_note} Tied holdings share an average rank; holdings untouched in both views are shown with no rank change.</Caveat></div>
       </Panel>
 
@@ -154,19 +175,28 @@ export default function Results() {
                   <Tooltip labelFormatter={(v) => `~${fmtM(Number(v), 0)}`} /><ReferenceLine x={Math.round(mc.total_loss.median)} stroke={CHART.ink} strokeDasharray="4 3" />
                   <Bar isAnimationActive={false} dataKey="count" name="Simulations" fill={CHART.indirect} /></BarChart></ResponsiveContainer>
               </div>
-              <div className="h-64" aria-label="Parameter sensitivity">
-                <ResponsiveContainer><BarChart data={mc.sensitivity.map((x) => ({ name: title(x.parameter), rho: Number(x.spearman_with_total_loss.toFixed(2)) }))} layout="vertical" margin={{ left: 30 }}>
-                  <CartesianGrid stroke={CHART.grid} horizontal={false} /><XAxis type="number" domain={[-1, 1]} tick={{ fontSize: 11 }} stroke={CHART.neutral} /><YAxis type="category" dataKey="name" width={110} tick={{ fontSize: 11 }} stroke={CHART.neutral} />
-                  <Tooltip /><Bar isAnimationActive={false} dataKey="rho" name="Rank correlation with total loss">{mc.sensitivity.map((x, i) => <Cell key={i} fill={x.spearman_with_total_loss >= 0 ? CHART.ink : CHART.direct} />)}</Bar></BarChart></ResponsiveContainer>
+              <div>
+                <div className="mb-2 flex gap-1" role="group" aria-label="Sensitivity target">
+                  <button className={`btn !py-1 ${sensOf === 'total' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setSensOf('total')}>Total loss</button>
+                  <button className={`btn !py-1 ${sensOf === 'indirect' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setSensOf('indirect')}>Indirect loss</button>
+                </div>
+                <div className="h-64" aria-label="Parameter sensitivity">
+                  <ResponsiveContainer><BarChart data={sens.map((x) => ({ name: title(x.parameter), rho: Number(x.spearman_with_total_loss.toFixed(2)) }))} layout="vertical" margin={{ left: 30 }}>
+                    <CartesianGrid stroke={CHART.grid} horizontal={false} /><XAxis type="number" domain={[-1, 1]} tick={{ fontSize: 11 }} stroke={CHART.neutral} /><YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 11 }} stroke={CHART.neutral} />
+                    <Tooltip /><Bar isAnimationActive={false} dataKey="rho" name={`Rank correlation with ${sensOf} loss`}>{sens.map((x, i) => <Cell key={i} fill={x.spearman_with_total_loss >= 0 ? CHART.ink : CHART.direct} />)}</Bar></BarChart></ResponsiveContainer>
+                </div>
               </div>
             </div>
-            <Caveat title="Interpretation">{mc.interpretation} Sensitivity bars are Spearman rank correlations across simulations (association, not causation).</Caveat>
+            <Caveat title="Interpretation">{mc.interpretation} Sensitivity bars are Spearman rank correlations between each input group's shared factor and the loss across simulations (association, not causation). Network assumptions mostly drive the indirect loss; hazard and damage assumptions drive the total.</Caveat>
             <details className="text-xs text-warm"><summary className="cursor-pointer">Sampled assumptions</summary><ul className="mt-2 list-disc pl-4">{mc.assumptions.map((a) => <li key={a}>{a}</li>)}</ul></details>
             <div className="overflow-x-auto"><table className="tbl"><thead><tr><th>Entity</th><th>Median</th><th>5th pct</th><th>95th pct</th><th>P(affected)</th></tr></thead>
               <tbody>{mc.top_entities.map((t) => <tr key={t.entity_id}><td>{t.name}</td><td className="num">{fmtM(t.median_loss_musd)}</td><td className="num">{fmtM(t.p05_loss_musd)}</td><td className="num">{fmtM(t.p95_loss_musd)}</td><td className="num">{fmtPct(t.probability_affected)}</td></tr>)}</tbody></table></div>
           </div>
         )}
       </Panel>
+      <div id="copilot" className="scroll-mt-20">
+        <CopilotPanel focus={activeId ? { kind: 'scenario', scenario_id: activeId, max_depth: depthOverride, holding_view: holdingView } : null} subtitle={`Explains the results of ${active.name} above; it never calculates them`} />
+      </div>
       <Panel id="assumptions" title="Assumptions & limitations">
         <div className="grid gap-6 md:grid-cols-2 text-xs text-warm">
           <ul className="list-disc space-y-1 pl-4">{run.assumptions.map((a) => <li key={a}>{a}</li>)}</ul>

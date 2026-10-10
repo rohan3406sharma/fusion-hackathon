@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s01 hook</title></head>
+  <body>
+    <template id="s01-hook-template">
+      <style>
+        #s01-hook { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s01-hook .stage { position: absolute; inset: 0; }
+        #s01-hook .mapcam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+        #s01-hook svg.map { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #s01-hook .scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 430px;
+          background: linear-gradient(to top, rgba(12,16,22,0.94) 0%, rgba(12,16,22,0.72) 48%, rgba(12,16,22,0) 100%); }
+        #s01-hook .kin { position: absolute; left: 0; right: 0; bottom: 118px; display: flex; justify-content: center; gap: 46px; }
+        #s01-hook .kin span { display: block; font-family: var(--kinetic); font-size: 124px; line-height: 1; text-transform: uppercase; color: var(--text); letter-spacing: -0.01em; }
+        #s01-hook .kin .w3 { color: var(--gold); }
+        #s01-hook .clear { position: absolute; left: 0; right: 0; bottom: 136px; text-align: center; font-family: var(--label); font-weight: 700;
+          font-size: 66px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--safe); }
+        #s01-hook .clear b { display: inline-block; width: 78px; height: 78px; margin-right: 22px; vertical-align: -12px; border-radius: 50%;
+          border: 4px solid var(--safe); font-size: 48px; line-height: 70px; text-align: center; }
+        #s01-hook .q { position: absolute; left: 132px; bottom: 92px; width: 1640px; font-size: 82px; }
+        #s01-hook .q .hz { color: var(--hazard); font-style: italic; }
+        #s01-hook .tag { position: absolute; right: 72px; top: 56px; }
+        #s01-hook .scan { position: absolute; left: 0; top: 0; width: 140px; height: 1080px; margin-left: -120px;
+          background: linear-gradient(90deg, rgba(212,174,60,0) 0%, rgba(212,174,60,0.10) 70%, rgba(212,174,60,0.55) 99%, rgba(255,235,170,0.9) 100%); }
+      </style>
+      <div id="s01-hook" data-composition-id="s01-hook" data-width="1920" data-height="1080">
+        <div class="stage">
+          <div class="mapcam" data-layout-allow-overflow><svg class="map" id="s01-map" viewBox="0 0 1920 1080"></svg><div class="scan"></div></div>
+          <div class="scrim"></div>
+          <div class="kin"><span class="w1">Floods.</span><span class="w2">Heat.</span><span class="w3">Drought.</span></div>
+          <div class="clear"><b>✓</b>Every site: clear</div>
+          <h1 class="q fx-headline">What if the climate event that hurts your portfolio most <span class="hz">never touches</span> anything you own?</h1>
+          <div class="tag fx-tag"><span class="dot"></span>Synthetic supply network · FIN-04 dataset</div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's01-hook', FX = window.FX, GEO = window.GEO
+          const root = document.getElementById(ID), stage = root.querySelector('.stage')
+          const L = FX.clock(ID), svg = root.querySelector('#s01-map'), cam = root.querySelector('.mapcam')
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+
+          // ---- layers ----
+          const dots = FX.svg('path', { d: GEO.dotPath, fill: '#3a4659' }, svg)
+          const gEdges = FX.svg('g', {}, svg), gHot = FX.svg('g', {}, svg), gNodes = FX.svg('g', {}, svg)
+          const gHold = FX.svg('g', {}, svg), gFx = FX.svg('g', {}, svg)
+          const N = GEO.nodes
+          const edgeEls = []
+          GEO.edges.forEach(([s, t], i) => {
+            const c = FX.curve(N[s], N[t], 0.16)
+            const p = FX.svg('path', { d: c.d, fill: 'none', stroke: '#8b97a8', 'stroke-width': 0.9, 'stroke-opacity': 0.32,
+              'stroke-dasharray': c.len.toFixed(1), 'stroke-dashoffset': c.len.toFixed(1) }, gEdges)
+            edgeEls.push({ p, len: c.len, i })
+          })
+          const others = Object.entries(N).filter(([, n]) => !n.holding)
+          const otherEls = others.map(([id, n]) => FX.svg('circle', { cx: n.x, cy: n.y, r: 2.6, fill: '#7f8a9b', opacity: 0 }, gNodes))
+          const hold = {}
+          GEO.holdings.forEach((id) => {
+            const n = N[id]
+            const ring = FX.svg('circle', { cx: n.x, cy: n.y, r: 6, fill: 'none', stroke: '#d4ae3c', 'stroke-width': 1.6, opacity: 0 }, gHold)
+            const dot = FX.svg('circle', { cx: n.x, cy: n.y, r: 5.2, fill: '#f4f1ea', stroke: '#0c1016', 'stroke-width': 1.2, opacity: 0 }, gHold)
+            hold[id] = { ring, dot, n }
+          })
+
+          // ---- 0–6 s: the map materialises, holdings are scanned ----
+          tl.fromTo(dots, { opacity: 0 }, { opacity: 1, duration: 1.6, ease: 'power2.out' }, 0.05)
+          tl.fromTo(cam, { scale: 1.08, x: -80, y: -40 }, { scale: 1.0, x: 0, y: 0, duration: 9.5, ease: 'power2.out' }, 0)
+          const scan = root.querySelector('.scan'), sc0 = 0.55, scDur = 4.6
+          tl.fromTo(scan, { x: 0, opacity: 1 }, { x: 2040, duration: scDur, ease: 'none' }, sc0)
+          tl.to(scan, { opacity: 0, duration: 0.3 }, sc0 + scDur - 0.3)
+          GEO.holdings.forEach((id) => {
+            const h = hold[id], t0 = sc0 + (h.n.x / 2040) * scDur
+            tl.fromTo(h.dot, { opacity: 0, scale: 0.2, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(2.4)' }, t0)
+            FX.burst(tl, h.ring, t0, { opacity: 0.9, scale: 0.6, transformOrigin: '50% 50%' }, { opacity: 0, scale: 3.4, duration: 1.1, ease: 'power2.out' })
+          })
+
+          // ---- L02: Floods. Heat. Drought. — every site clear ----
+          const kin = root.querySelectorAll('.kin span')
+          tl.fromTo(kin[0], { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'power4.out' }, L(FX.cue('hook_floods')) - 0.04)
+          tl.fromTo(kin[1], { opacity: 0, x: 140 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power4.out' }, L(FX.cue('hook_heat')) - 0.04)
+          tl.fromTo(kin[2], { opacity: 0, scaleY: 0.2, transformOrigin: '50% 100%' }, { opacity: 1, scaleY: 1, duration: 0.32, ease: 'power4.out' }, L(FX.cue('hook_drought')) - 0.04)
+          tl.to(kin, { opacity: 0, y: -46, duration: 0.3, ease: 'power3.in', stagger: 0.05 }, L(FX.cue('hook_clear')) - 0.5)
+          const clear = root.querySelector('.clear'), tClear = L(FX.cue('hook_clear'))
+          tl.fromTo(clear, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, tClear - 0.12)
+          Object.values(hold).forEach((h, k) => {
+            tl.to(h.dot, { attr: { fill: '#62b88d' }, duration: 0.25 }, tClear - 0.1 + k * 0.012)
+            FX.burst(tl, h.ring, tClear - 0.1 + k * 0.012, { opacity: 0.85, scale: 0.8, attr: { stroke: '#62b88d' } }, { opacity: 0, scale: 3.0, duration: 1.0, ease: 'power2.out' })
+          })
+          tl.to(clear, { opacity: 0, y: -24, duration: 0.35, ease: 'power2.in' }, L(FX.line('L03').start) + 0.2)
+
+          // ---- L03: the hidden web draws in; camera moves toward Europe–Africa ----
+          const tWeb = L(FX.line('L03').start)
+          edgeEls.forEach(({ p, len, i }) => {
+            tl.to(p, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut' }, tWeb + (i % 40) * 0.035)
+          })
+          tl.to(otherEls, { opacity: 0.9, duration: 0.6, stagger: 0.008 }, tWeb + 0.2)
+          tl.fromTo(root.querySelector('.tag'), { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.6 }, tWeb + 0.8)
+          tl.to(cam, { scale: 1.55, x: 960 - 1.55 * 1010, y: 540 - 1.55 * 410, duration: 5.2, ease: 'power2.inOut' }, tWeb + 0.3)
+          tl.to(dots, { attr: { fill: '#2a3443' }, duration: 2.0 }, tWeb + 0.3)
+
+          // ---- L04: the question, word by word ----
+          const q = root.querySelector('.q')
+          const qWords = FX.words(q)
+          const spoken = FX.line('L04').words
+          qWords.forEach((w, k) => {
+            const sw = spoken[Math.min(k, spoken.length - 1)]
+            tl.fromTo(w, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.38, ease: 'power3.out' }, L(sw.s) - 0.06)
+          })
+
+          // ---- the shock: a drought at a node the portfolio does not own (real links in the synthetic dataset) ----
+          const tIg = L(FX.cue('hook_ignite'))
+          const src = N.farm_cocoa_ci
+          const ign = FX.svg('circle', { cx: src.x, cy: src.y, r: 5, fill: '#e0553b', opacity: 0 }, gFx)
+          const ignRings = [0, 1, 2].map(() => FX.svg('circle', { cx: src.x, cy: src.y, r: 6, fill: 'none', stroke: '#e0553b', 'stroke-width': 1.6, opacity: 0 }, gFx))
+          tl.fromTo(ign, { opacity: 0, scale: 0.3, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1.4, duration: 0.35, ease: 'back.out(3)' }, tIg - 0.25)
+          ignRings.forEach((r, k) => FX.burst(tl, r, tIg - 0.2 + k * 0.5, { opacity: 0.9, scale: 0.6, transformOrigin: '50% 50%' }, { opacity: 0, scale: 6, duration: 1.6, ease: 'power2.out' }))
+          const hops = [
+            ['farm_cocoa_ci', 'cocoa_grind_ci', 0.0, 0.25], ['cocoa_grind_ci', 'choc_be', 0.22, 0.95],
+            ['cocoa_grind_ci', 'biscuit_in', 0.22, 1.15], ['choc_be', 'retail_eu', 1.2, 0.35],
+          ]
+          hops.forEach(([a, b, d0, dur]) => {
+            const c = FX.curve(N[a], N[b], 0.16)
+            const path = FX.svg('path', { d: c.d, fill: 'none', stroke: '#e0553b', 'stroke-width': 2.2, 'stroke-linecap': 'round',
+              'stroke-dasharray': c.len.toFixed(1), 'stroke-dashoffset': c.len.toFixed(1) }, gHot)
+            tl.to(path, { strokeDashoffset: 0, duration: dur, ease: 'power1.inOut' }, tIg + d0)
+            const pulse = FX.svg('circle', { cx: N[a].x, cy: N[a].y, r: 4.2, fill: '#ffd2c6', opacity: 0 }, gFx)
+            const st = { t: 0 }
+            tl.set(pulse, { opacity: 1 }, tIg + d0)
+            tl.to(st, { t: 1, duration: dur, ease: 'power1.inOut', onUpdate: () => { const p = c.at(st.t); pulse.setAttribute('cx', p.x.toFixed(1)); pulse.setAttribute('cy', p.y.toFixed(1)) } }, tIg + d0)
+            tl.to(pulse, { opacity: 0, duration: 0.2 }, tIg + d0 + dur)
+          })
+          const hitAt = { choc_be: 1.17, biscuit_in: 1.37, retail_eu: 1.55 }
+          Object.entries(hitAt).forEach(([id, d]) => {
+            const h = hold[id]
+            tl.to(h.dot, { attr: { fill: '#e0553b' }, scale: 1.5, transformOrigin: '50% 50%', duration: 0.25, ease: 'power2.out' }, tIg + d)
+            FX.burst(tl, h.ring, tIg + d, { opacity: 1, scale: 0.8, attr: { stroke: '#e0553b' } }, { opacity: 0, scale: 4.2, duration: 1.2, ease: 'power2.out' })
+          })
+          tl.to(ign, { scale: 1.1, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: 1 }, tIg + 0.4)
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

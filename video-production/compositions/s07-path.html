@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s07 path</title></head>
+  <body>
+    <template id="s07-path-template">
+      <style>
+        #s07-path { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s07-path .stage { position: absolute; inset: 0; }
+        #s07-path .vwrap { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+        #s07-path .vwrap video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border-radius: 0 0 14px 14px; }
+        #s07-path .fx-callout.hz .v { color: #f08a72; }
+        #s07-path .fx-callout.gd .v { color: var(--gold); }
+      </style>
+      <div id="s07-path" data-composition-id="s07-path" data-width="1920" data-height="1080">
+        <div class="stage"><div class="shot"></div>
+          <div class="vwrap" id="s07-vw03"><video id="s07-rec03" data-rec="rec-03-promote" data-hf-media-start-basis="local" src="captures/rec/rec-03-promote.mp4" muted playsinline data-start="0.0" data-duration="4.886" data-media-start="0.632" data-track-index="3"></video></div>
+          <div class="vwrap" id="s07-vw04"><video id="s07-rec04" data-rec="rec-04-graph" data-hf-media-start-basis="local" src="captures/rec/rec-04-graph.mp4" muted playsinline data-start="4.616" data-duration="3.5" data-media-start="1.644" data-track-index="4"></video></div></div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's07-path', FX = window.FX, CAP = window.CAP
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const W = (l, w, n) => L(FX.word(l, w, n || 0))
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const { cam, frame } = FX.browser(root.querySelector('.shot'), 'localhost · FIN-04 · Scenario results', '● Live app')
+          FX.h('img', { src: CAP.stills['finder-table'].file }, frame)
+          const imgG = FX.h('img', { src: CAP.stills['graph-path'].file, style: { opacity: 0 } }, frame)
+          const imgC = FX.h('img', { src: CAP.stills['results-compare'].file, style: { opacity: 0 } }, frame)
+          const R3 = FX.rec('rec-03-promote'), R4 = FX.rec('rec-04-graph')
+          const v3 = root.querySelector('#s07-vw03'), v4 = root.querySelector('#s07-vw04')
+          frame.appendChild(v3); frame.appendChild(v4)   // static video tags moved into the browser frame
+          FX.demoChrome(stage, tl)
+          FX.camSet(tl, cam, FX.camRest, 0)
+          // soft cut between the two takes; then hold the graph as a still (same view, no cursor)
+          tl.fromTo(v4, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'none' }, R4.local)
+          tl.set(imgG, { opacity: 1 }, L(R4.end) - 0.2)
+          tl.to(v4, { opacity: 0, duration: 0.2 }, L(R4.end) - 0.2)
+
+          // ---- the path on the real graph ----
+          const nodes = CAP.stills['graph-path'].extra.nodes, canvas = FX.rect('graph-path', 'canvas')
+          const camG = FX.camFocus({ x: canvas.x, y: canvas.y + 40, w: canvas.w + 340, h: canvas.h - 80 }, { pad: 40, max: 1.3 })
+          const tGraph = L(R4.events['graph-visible'])
+          FX.camTo(tl, cam, camG, tGraph + 0.15, 1.1)
+          const svg = FX.svg('svg', { viewBox: '0 0 1920 1080', style: 'position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible' }, frame)
+          const pulse = (a, b, t, dur) => {
+            const A = nodes[a], B = nodes[b]
+            const glow = FX.svg('line', { x1: A.x, y1: A.y, x2: A.x, y2: A.y, stroke: '#ffb39c', 'stroke-width': 9, 'stroke-linecap': 'round', opacity: 0 }, svg)
+            const dot = FX.svg('circle', { cx: A.x, cy: A.y, r: 11, fill: '#fff1ec', opacity: 0 }, svg)
+            tl.set([glow, dot], { opacity: 0.9 }, t)
+            tl.fromTo(glow, { attr: { x2: A.x, y2: A.y } }, { attr: { x2: B.x, y2: B.y }, duration: dur, ease: 'power1.inOut', immediateRender: false }, t)
+            tl.fromTo(dot, { attr: { cx: A.x, cy: A.y } }, { attr: { cx: B.x, cy: B.y }, duration: dur, ease: 'power1.inOut', immediateRender: false }, t)
+            tl.to(dot, { opacity: 0, duration: 0.2 }, t + dur)
+            tl.to(glow, { opacity: 0.35, duration: 0.6 }, t + dur)
+            const ring = FX.svg('circle', { cx: B.x, cy: B.y, r: 22, fill: 'none', stroke: '#e0553b', 'stroke-width': 5, opacity: 0 }, svg)
+            ;[0, 0.4].forEach((d) => FX.burst(tl, ring, t + dur + d, { opacity: 1, scale: 1, transformOrigin: '50% 50%' }, { opacity: 0, scale: 2.8, duration: 0.9, ease: 'power2.out' }))
+          }
+          const g = nodes.grid_nl
+          const gRing = FX.svg('circle', { cx: g.x, cy: g.y, r: 34, fill: 'none', stroke: '#e0553b', 'stroke-width': 5, opacity: 0 }, svg)
+          ;[0, 0.45].forEach((d) => FX.burst(tl, gRing, W('L28', 'grid') - 0.05 + d, { opacity: 1, scale: 0.8, transformOrigin: '50% 50%' }, { opacity: 0, scale: 2.4, duration: 0.9, ease: 'power2.out' }))
+          pulse('grid_nl', 'dairy_pack_nl', L(FX.cue('path_dairy')) - 0.5, 0.85)
+          pulse('dairy_pack_nl', 'retail_eu', L(FX.cue('path_retail')) - 0.8, 0.75)
+          const sc = (n) => FX.toScreen(camG, n)
+          const sG = sc(nodes.grid_nl), sD = sc(nodes.dairy_pack_nl), sR = sc(nodes.retail_eu)
+          const cG = FX.callout(stage, { k: 'Drought at', v: 'Dutch grid operator', s: 'Not a holding · directly disrupted 30%', cls: 'hz' }, sG.x - 60, sG.y + 70, 430)
+          cG.querySelector('.v').style.fontSize = '46px'
+          tl.fromTo(cG, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, W('L28', 'grid') + 0.1)
+          const cD = FX.callout(stage, { k: 'Holding · Utrecht Cheese & Yogurt', v: '−25.7%', s: 'of normal output, via its electricity supply (modelled)', cls: 'gd' }, sD.x - 250, sD.y + 64, 470)
+          tl.fromTo(cD, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, L(FX.cue('path_quarter')) - 0.25)
+          const cR = FX.callout(stage, { k: 'Holding · Rhineland Grocery', v: '−6.7%', s: 'second hop, via packaged dairy', cls: 'gd' }, sR.x - 520, sR.y - 250, 420)
+          tl.fromTo(cR, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, L(FX.cue('path_retail')) + 0.05)
+
+          // ---- L29: three holdings hit, none directly (the app's comparison table) ----
+          const tC = L(FX.line('L29').start) - 0.45
+          tl.to([cG, cD, cR], { opacity: 0, duration: 0.3 }, tC - 0.1)
+          tl.to(svg, { opacity: 0, duration: 0.3 }, tC - 0.1)
+          tl.to(imgC, { opacity: 1, duration: 0.45 }, tC)
+          const RC = (k) => FX.rect('results-compare', k)
+          const rU = RC('rowUtrecht'), rM = RC('rowManch'), kP = RC('kPort'), cD0 = RC('colDirect'), cN = RC('colNet')
+          const camC = FX.camFocus({ x: rU.x, y: kP.y, w: rU.w, h: rM.y + rM.h - kP.y }, { pad: 70, max: 1.3, dy: -20 })
+          FX.camTo(tl, cam, camC, tC, 0.9)
+          const rows = { x: rU.x, y: rU.y, w: rU.w, h: rM.y + rM.h - rU.y }
+          const hlRows = FX.hl(frame, rows, { pad: 3 })
+          tl.to(hlRows, { opacity: 1, duration: 0.3 }, W('L29', 'three') - 0.1)
+          const dCells = { x: cD0.x, y: rU.y, w: cD0.w, h: rows.h }, nCells = { x: cN.x, y: rU.y, w: cN.w, h: rows.h }
+          const hlD = FX.hl(frame, dCells, { pad: 3, cls: 'hz' }), hlN = FX.hl(frame, nCells, { pad: 3 })
+          const hlP = FX.hl(frame, kP, { pad: 4 })
+          tl.to(hlN, { opacity: 1, duration: 0.3 }, W('L29', 'hit') - 0.1)
+          tl.to(hlD, { opacity: 1, duration: 0.3 }, L(FX.cue('none_directly')) - 0.1)
+          tl.to(hlP, { opacity: 1, duration: 0.3 }, W('L29', 'directly') - 0.1)
+          const sD0 = FX.screenRect(camC, dCells)
+          const cNone = FX.callout(stage, { k: 'Direct disruption', v: '0.0% · 0.0% · 0.0%', s: 'Utrecht · Rhineland · Manchester — every loss arrives through the network.', cls: 'hz' }, sD0.x - 40, sD0.y + sD0.h + 50, 760)
+          cNone.querySelector('.v').style.fontSize = '54px'
+          tl.fromTo(cNone, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, L(FX.cue('none_directly')))
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

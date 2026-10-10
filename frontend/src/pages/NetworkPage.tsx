@@ -30,7 +30,7 @@ export default function NetworkPage() {
     if (!selected) { setDetail(null); setImpact(null); return }
     let dead = false
     api.entity(selected).then((d) => !dead && setDetail(d)).catch(() => undefined)
-    if (run?.scenario_id) api.entityImpact(selected, run.scenario_id).then((i) => !dead && setImpact(i)).catch(() => !dead && setImpact(null))
+    if (run?.scenario_id) api.entityImpact(selected, run.scenario_id, depthOverride).then((i) => !dead && setImpact(i)).catch(() => !dead && setImpact(null))
     return () => { dead = true }
   }, [selected, run?.scenario_id, run?.summary.total_loss_musd])
 

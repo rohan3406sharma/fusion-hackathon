@@ -1,0 +1,79 @@
+{
+ "name": "Synthetic F&B demo portfolio",
+ "synthetic": true,
+ "weighting": "proportional to sqrt(revenue proxy); synthetic, not market capitalisation or real holdings",
+ "holdings": [
+  {
+   "entity_id": "bakery_uk",
+   "weight": 0.044758
+  },
+  {
+   "entity_id": "biscuit_in",
+   "weight": 0.032654
+  },
+  {
+   "entity_id": "cereal_us",
+   "weight": 0.047558
+  },
+  {
+   "entity_id": "softdrink_br",
+   "weight": 0.050203
+  },
+  {
+   "entity_id": "softdrink_us",
+   "weight": 0.053926
+  },
+  {
+   "entity_id": "juice_us",
+   "weight": 0.039382
+  },
+  {
+   "entity_id": "brewery_de",
+   "weight": 0.044031
+  },
+  {
+   "entity_id": "roaster_de",
+   "weight": 0.04099
+  },
+  {
+   "entity_id": "roaster_us",
+   "weight": 0.035951
+  },
+  {
+   "entity_id": "choc_be",
+   "weight": 0.045475
+  },
+  {
+   "entity_id": "dairy_pack_nl",
+   "weight": 0.043662
+  },
+  {
+   "entity_id": "dairy_pack_us",
+   "weight": 0.044396
+  },
+  {
+   "entity_id": "readymeal_uk",
+   "weight": 0.04099
+  },
+  {
+   "entity_id": "snack_us",
+   "weight": 0.041771
+  },
+  {
+   "entity_id": "retail_uk",
+   "weight": 0.101684
+  },
+  {
+   "entity_id": "retail_us",
+   "weight": 0.115099
+  },
+  {
+   "entity_id": "retail_in",
+   "weight": 0.069618
+  },
+  {
+   "entity_id": "retail_eu",
+   "weight": 0.107852
+  }
+ ]
+}

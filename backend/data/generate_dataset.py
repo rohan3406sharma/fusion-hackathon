@@ -289,6 +289,26 @@ PORTFOLIO = ["bakery_uk", "readymeal_uk", "softdrink_br", "softdrink_us", "brewe
              "dairy_pack_us", "cereal_us", "snack_us", "roaster_de", "roaster_us", "retail_uk", "retail_us", "retail_eu",
              "retail_in", "biscuit_in", "juice_us"]
 
+# Company structures (SYNTHETIC). A listed holding is a company. Most here own one business unit; these own several
+# (segments), each an ordinary entity of the network. other_businesses_share = share of the company's value added in
+# businesses OUTSIDE the Food & Beverage scope: a single number, never modelled (no nodes, no links, no hazard), so it can
+# only dilute the F&B loss at company level. Shares of the modelled segments come from entity value added at load time.
+# Patterns are stylised; names and numbers are invented and describe no real company.
+COMPANIES = [
+    ("co_five_rivers", "Five Rivers Consumer Group",
+     [("biscuit_in", "Biscuits and snacks"), ("mill_pb", "Flour milling"), ("cookoil_in", "Packaged cooking oil")], 0.55,
+     "Diversified consumer group: packaged foods and an own flour mill, plus large businesses outside food and beverage (not modelled)"),
+    ("co_lone_star", "Lone Star Snacks and Beverages",
+     [("snack_us", "Snacks"), ("softdrink_us", "Soft drinks"), ("juice_us", "Juices")], 0.0,
+     "Multi-category food and beverage group: three product lines in three US regions"),
+    ("co_great_plains", "Great Plains Foods",
+     [("cereal_us", "Breakfast cereal"), ("mill_ks", "Flour milling")], 0.0,
+     "Vertically integrated: owns the flour mill that supplies its cereal plant"),
+    ("co_lowlands_dairy", "Lowlands Dairy Group",
+     [("dairy_pack_nl", "Cheese and yogurt"), ("dairy_proc_fr", "Milk processing")], 0.0,
+     "Vertically integrated: owns the milk plant that supplies its packing plant"),
+]
+
 
 def haversine(lat1, lon1, lat2, lon2) -> float:
     r = 6371.0
@@ -445,10 +465,33 @@ def reference_audit() -> dict:
     }
 
 
+def portfolio(ents: list[dict]) -> dict:
+    """Synthetic position weights proportional to sqrt(revenue proxy): a stand-in for size weighting, NOT market caps."""
+    raw = {e["id"]: math.sqrt(e["revenue_musd"]) for e in ents if e["in_demo_portfolio"]}
+    tot = sum(raw.values())
+    return {"name": "Synthetic F&B demo portfolio", "synthetic": True,
+            "weighting": "proportional to sqrt(revenue proxy); synthetic, not market capitalisation or real holdings",
+            "holdings": [{"entity_id": k, "weight": round(v / tot, 6)} for k, v in raw.items()]}
+
+
+def companies() -> dict:
+    """Synthetic company structures: which business units (entities) a listed holding owns, and the share of its value
+    added outside the F&B scope. A company's position weight is the sum of its held units' weights in portfolio.json."""
+    return {"name": "Synthetic company structures for the demo portfolio", "synthetic": True,
+            "share_basis": "value_added",
+            "note": ("Holdings not listed here are single-business companies. Segment shares are computed at load time from "
+                     "entity value added; other_businesses_share is outside the Food & Beverage scope and never modelled."),
+            "companies": [{"id": cid, "name": name, "synthetic": True, "pattern": pattern,
+                           "segments": [{"entity_id": eid, "segment": seg} for eid, seg in segs],
+                           "other_businesses_share": other} for cid, name, segs, other, pattern in COMPANIES]}
+
+
 if __name__ == "__main__":
     ents, edges, meta = build()
     (HERE / "fnb_entities.json").write_text(json.dumps(ents, indent=1))
     (HERE / "fnb_relations.json").write_text(json.dumps(edges, indent=1))
     (HERE / "scenarios.json").write_text(json.dumps(scenarios(), indent=1))
+    (HERE / "portfolio.json").write_text(json.dumps(portfolio(ents), indent=1))
+    (HERE / "companies.json").write_text(json.dumps(companies(), indent=1))
     (HERE / "reference_audit.json").write_text(json.dumps(reference_audit(), indent=1))
-    print(meta, "portfolio:", len(PORTFOLIO))
+    print(meta, "portfolio:", len(PORTFOLIO), "multi-segment companies:", len(COMPANIES))

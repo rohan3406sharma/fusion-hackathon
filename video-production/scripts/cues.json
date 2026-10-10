@@ -1,0 +1,554 @@
+{
+  "note": "Anchors resolve to absolute seconds in build_timeline.py. Forms: {line, word?, n?, edge?} | {scene, edge} | {rec, event} | {cue}; plus optional offset. Recordings: the recorded `event` lands exactly on `align`; the clip is visible from `from` to `to`.",
+  "rec": {
+    "rec-01-finder": {
+      "scene": "s05-search",
+      "event": "nav-finder",
+      "align": {
+        "line": "L20",
+        "word": "open",
+        "offset": 0.05
+      },
+      "from": {
+        "scene": "s05-search",
+        "edge": "start"
+      },
+      "to": {
+        "line": "L21",
+        "edge": "start",
+        "offset": -0.25
+      }
+    },
+    "rec-02-optimise": {
+      "scene": "s08-optimise",
+      "event": "optimise",
+      "align": {
+        "line": "L30",
+        "edge": "end",
+        "offset": 0.42
+      },
+      "from": {
+        "scene": "s08-optimise",
+        "edge": "slot"
+      },
+      "to": {
+        "line": "L31",
+        "word": "picks",
+        "offset": -0.2
+      }
+    },
+    "rec-03-promote": {
+      "scene": "s07-path",
+      "event": "promote",
+      "align": {
+        "line": "L27",
+        "word": "scenario",
+        "offset": 0.0
+      },
+      "from": {
+        "scene": "s07-path",
+        "edge": "slot"
+      },
+      "to": {
+        "line": "L28",
+        "edge": "start",
+        "offset": -0.15
+      }
+    },
+    "rec-04-graph": {
+      "scene": "s07-path",
+      "event": "graph-visible",
+      "align": {
+        "line": "L28",
+        "word": "grid",
+        "offset": -0.12
+      },
+      "from": {
+        "line": "L28",
+        "edge": "start",
+        "offset": -0.42
+      },
+      "to": {
+        "line": "L28",
+        "word": "loses",
+        "offset": 0.0
+      }
+    }
+  },
+  "cues": {
+    "hook_floods": {
+      "line": "L02",
+      "word": "floods"
+    },
+    "hook_heat": {
+      "line": "L02",
+      "word": "heat"
+    },
+    "hook_drought": {
+      "line": "L02",
+      "word": "drought"
+    },
+    "hook_clear": {
+      "line": "L02",
+      "word": "clear"
+    },
+    "hook_ignite": {
+      "line": "L04",
+      "word": "never",
+      "offset": -0.15
+    },
+    "canal_step": {
+      "line": "L07",
+      "word": "step"
+    },
+    "idea_title": {
+      "line": "L12",
+      "edge": "s",
+      "offset": 0.15
+    },
+    "idea_flip": {
+      "line": "L14",
+      "word": "flips"
+    },
+    "honest_count": {
+      "line": "L17",
+      "word": "hundred",
+      "offset": -0.35
+    },
+    "count_780": {
+      "line": "L21",
+      "word": "780",
+      "offset": -0.1
+    },
+    "count_165": {
+      "line": "L22",
+      "word": "165",
+      "offset": -0.1
+    },
+    "zero": {
+      "line": "L24",
+      "word": "zero"
+    },
+    "one13": {
+      "line": "L24",
+      "word": "1.13%"
+    },
+    "every_time": {
+      "line": "L25",
+      "word": "every"
+    },
+    "fragile": {
+      "line": "L25",
+      "word": "fragile"
+    },
+    "matrix": {
+      "line": "L26",
+      "word": "matrix"
+    },
+    "path_dairy": {
+      "line": "L28",
+      "word": "cheese"
+    },
+    "path_quarter": {
+      "line": "L28",
+      "word": "quarter"
+    },
+    "path_retail": {
+      "line": "L28",
+      "word": "grocery"
+    },
+    "none_directly": {
+      "line": "L29",
+      "word": "none"
+    },
+    "tail_cut": {
+      "line": "L31",
+      "word": "cut"
+    },
+    "brute": {
+      "line": "L32",
+      "word": "nothing"
+    },
+    "eng_python": {
+      "line": "L33",
+      "word": "python"
+    },
+    "eng_react": {
+      "line": "L33",
+      "word": "react"
+    },
+    "eng_db": {
+      "line": "L33",
+      "word": "database"
+    },
+    "eng_hazard": {
+      "line": "L34",
+      "word": "hazard"
+    },
+    "eng_exposure": {
+      "line": "L34",
+      "word": "exposure"
+    },
+    "eng_vuln": {
+      "line": "L34",
+      "word": "vulnerability"
+    },
+    "eng_finder": {
+      "line": "L36",
+      "word": "finder"
+    },
+    "eng_scenario": {
+      "line": "L36",
+      "word": "scenario"
+    },
+    "eng_draws": {
+      "line": "L36",
+      "word": "uncertainty"
+    },
+    "eng_optim": {
+      "line": "L36",
+      "word": "optimi"
+    },
+    "lim_synth": {
+      "line": "L41",
+      "word": "synthetic"
+    },
+    "lim_valid": {
+      "line": "L41",
+      "word": "uncalibrated"
+    },
+    "lim_prob": {
+      "line": "L41",
+      "word": "probabilities"
+    },
+    "lim_conseq": {
+      "line": "L41",
+      "word": "consequence"
+    },
+    "pay_grid": {
+      "line": "L44",
+      "word": "drought",
+      "offset": -0.1
+    },
+    "pay_title": {
+      "line": "L46",
+      "edge": "s",
+      "offset": 0.1
+    }
+  },
+  "sfx": [
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "hook_floods"
+      },
+      "db": -15
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "hook_heat"
+      },
+      "db": -15
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "hook_drought"
+      },
+      "db": -15
+    },
+    {
+      "file": "star.wav",
+      "at": {
+        "cue": "hook_clear"
+      },
+      "db": -11
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "canal_step",
+        "offset": 0.0
+      },
+      "db": -18
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "canal_step",
+        "offset": 0.34
+      },
+      "db": -18
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "canal_step",
+        "offset": 0.68
+      },
+      "db": -18
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "canal_step",
+        "offset": 1.02
+      },
+      "db": -18
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "canal_step",
+        "offset": 1.36
+      },
+      "db": -16
+    },
+    {
+      "file": "chime.wav",
+      "at": {
+        "cue": "idea_title"
+      },
+      "db": -20
+    },
+    {
+      "file": "switch.wav",
+      "at": {
+        "cue": "idea_flip"
+      },
+      "db": -19
+    },
+    {
+      "file": "counter.wav",
+      "at": {
+        "cue": "honest_count"
+      },
+      "db": -22
+    },
+    {
+      "file": "switch.wav",
+      "at": {
+        "rec": "rec-01-finder",
+        "event": "nav-finder"
+      },
+      "db": -21
+    },
+    {
+      "file": "switch.wav",
+      "at": {
+        "rec": "rec-01-finder",
+        "event": "search"
+      },
+      "db": -21
+    },
+    {
+      "file": "counter.wav",
+      "at": {
+        "cue": "count_780"
+      },
+      "db": -21
+    },
+    {
+      "file": "counter.wav",
+      "at": {
+        "cue": "count_165"
+      },
+      "db": -21
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "zero"
+      },
+      "db": -16
+    },
+    {
+      "file": "pop.wav",
+      "at": {
+        "cue": "one13"
+      },
+      "db": -17
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "every_time"
+      },
+      "db": -17
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "fragile"
+      },
+      "db": -18
+    },
+    {
+      "file": "switch.wav",
+      "at": {
+        "rec": "rec-03-promote",
+        "event": "promote"
+      },
+      "db": -21
+    },
+    {
+      "file": "switch.wav",
+      "at": {
+        "rec": "rec-04-graph",
+        "event": "view-in-graph"
+      },
+      "db": -21
+    },
+    {
+      "file": "pop.wav",
+      "at": {
+        "cue": "path_quarter"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "none_directly"
+      },
+      "db": -17
+    },
+    {
+      "file": "switch.wav",
+      "at": {
+        "rec": "rec-02-optimise",
+        "event": "budget"
+      },
+      "db": -22
+    },
+    {
+      "file": "switch.wav",
+      "at": {
+        "rec": "rec-02-optimise",
+        "event": "optimise"
+      },
+      "db": -21
+    },
+    {
+      "file": "fill.wav",
+      "at": {
+        "cue": "tail_cut",
+        "offset": -0.1
+      },
+      "db": -14
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "brute"
+      },
+      "db": -17
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_python"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_react"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_db"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_hazard"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_exposure"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_vuln"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_finder"
+      },
+      "db": -20
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_scenario"
+      },
+      "db": -20
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_draws"
+      },
+      "db": -20
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "eng_optim"
+      },
+      "db": -20
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "lim_synth"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "lim_valid"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "lim_prob"
+      },
+      "db": -19
+    },
+    {
+      "file": "tick.wav",
+      "at": {
+        "cue": "lim_conseq"
+      },
+      "db": -19
+    },
+    {
+      "file": "chime.wav",
+      "at": {
+        "cue": "pay_title"
+      },
+      "db": -17
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s04 idea</title></head>
+  <body>
+    <template id="s04-idea-template">
+      <style>
+        #s04-idea { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s04-idea .stage, #s04-idea .phase { position: absolute; inset: 0; }
+        #s04-idea .title { position: absolute; left: 0; right: 0; top: 330px; text-align: center; }
+        #s04-idea .title .fx-eyebrow { font-size: 28px; letter-spacing: 0.4em; }
+        #s04-idea .title h1 { font-size: 168px; margin-top: 18px; }
+        #s04-idea .title p { font-family: var(--body); font-size: 32px; color: var(--text-dim); margin: 26px 0 0; }
+        #s04-idea .shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+        #s04-idea .hop { position: absolute; padding: 6px 14px; border-radius: 999px; background: #e0553b; color: #fff; font-family: var(--label);
+          font-weight: 700; font-size: 20px; letter-spacing: 0.12em; text-transform: uppercase; }
+        #s04-idea .flip { position: absolute; left: 0; right: 0; top: 380px; height: 260px; perspective: 1400px; }
+        #s04-idea .flip .face { position: absolute; left: 0; right: 0; text-align: center; font-size: 104px; backface-visibility: hidden; }
+        #s04-idea .flip .lab { position: absolute; left: 0; right: 0; top: -70px; text-align: center; }
+        #s04-idea .cols { position: absolute; left: 140px; right: 140px; top: 230px; display: flex; gap: 60px; }
+        #s04-idea .col { flex: 1; height: 560px; border-radius: 24px; padding: 44px 48px; background: rgba(19,25,34,0.88); border: 2px solid var(--line); position: relative; }
+        #s04-idea .col.gold { border-color: rgba(212,174,60,0.7); }
+        #s04-idea .col h3 { margin: 12px 0 0; font-family: var(--serif); font-weight: 400; font-size: 54px; color: var(--text); line-height: 1.08; }
+        #s04-idea .col .fx-eyebrow { color: var(--text-dim); }
+        #s04-idea .col.gold .fx-eyebrow { color: var(--gold); }
+        #s04-idea .mini { position: absolute; left: 48px; right: 48px; bottom: 40px; height: 240px; }
+        #s04-idea .chip { position: absolute; padding: 12px 20px; border-radius: 14px; border: 2px solid var(--line); font-family: var(--label); font-size: 24px; color: var(--text); background: var(--ink-2); }
+        #s04-idea .ev { position: absolute; left: 0; height: 26px; border-radius: 6px; background: #5a6578; transform-origin: 0 50%; }
+        #s04-idea .ev i { position: absolute; right: 0; top: 0; bottom: 0; border-radius: 0 6px 6px 0; background: var(--gold); }
+        #s04-idea .hs { position: absolute; right: 0; top: -46px; font-family: var(--label); font-weight: 700; font-size: 22px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+        #s04-idea .rst { position: absolute; left: 0; right: 0; top: 150px; text-align: center; }
+        #s04-idea .rst h2 { font-size: 112px; margin-top: 14px; }
+        #s04-idea .quote { position: absolute; left: 260px; right: 260px; bottom: 120px; text-align: center; font-family: var(--serif); font-style: italic; font-size: 36px; line-height: 1.32; color: var(--text); }
+        #s04-idea .quote b { display: block; margin-top: 14px; font-family: var(--label); font-style: normal; font-weight: 500; font-size: 20px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+        #s04-idea svg.rsvg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #s04-idea .honest { position: absolute; left: 140px; top: 190px; width: 1640px; }
+        #s04-idea .honest h2 { font-size: 84px; margin-top: 16px; }
+        #s04-idea .stamp { position: absolute; left: 140px; top: 470px; padding: 10px 26px; border: 4px solid var(--gold); border-radius: 12px; font-family: var(--kinetic);
+          font-size: 70px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); transform: rotate(-3deg); }
+        #s04-idea .stats { position: absolute; left: 140px; right: 140px; top: 640px; display: flex; gap: 40px; }
+        #s04-idea .stat { flex: 1; padding: 26px 32px; border-radius: 18px; background: rgba(19,25,34,0.88); border: 2px solid var(--line); }
+        #s04-idea .stat .n { font-family: var(--serif); font-size: 104px; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
+        #s04-idea .stat .l { font-family: var(--label); font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-top: 10px; }
+        #s04-idea .shotG { width: 1080px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent 100%); mask-image: linear-gradient(90deg, #000 88%, transparent 100%); }
+        #s04-idea .realcap { position: absolute; left: 1150px; top: 300px; width: 660px; }
+        #s04-idea .realcap h2 { font-size: 64px; margin-top: 14px; }
+        #s04-idea .realcap p { font-family: var(--body); font-size: 27px; line-height: 1.42; color: var(--text-dim); margin: 22px 0 0; }
+        #s04-idea .realcap p b { color: var(--text); }
+      </style>
+      <div id="s04-idea" data-composition-id="s04-idea" data-width="1920" data-height="1080">
+        <div class="stage">
+          <div class="phase pA"><div class="title"><div class="fx-eyebrow">FIN-04</div><h1 class="fx-headline">Climate Exposure <em>Graph</em></h1>
+            <p>Network-aware climate stress testing for a food &amp; beverage portfolio</p></div></div>
+          <div class="phase pB"><div class="shot"></div></div>
+          <div class="phase pC"><div class="flip"><div class="lab fx-eyebrow">The usual question</div>
+            <h2 class="fx-headline face f1">What happens if <em>this</em> event hits?</h2>
+            <h2 class="fx-headline face f2">Which events would hurt <em>most?</em></h2></div></div>
+          <div class="phase pD"><div class="cols">
+            <div class="col c1"><div class="fx-eyebrow">Scenario test</div><h3>You pick one event. The model reports its impact.</h3><div class="mini m1"></div></div>
+            <div class="col c2 gold"><div class="fx-eyebrow">Reverse stress test · the finder</div><h3>Score every event. Rank by impact. Show the <em>hidden share</em>.</h3><div class="mini m2"></div></div>
+          </div></div>
+          <div class="phase pE"><div class="rst"><div class="fx-eyebrow">What bank supervisors call it</div><h2 class="fx-headline">Reverse <em>stress test</em></h2></div>
+            <svg class="rsvg" viewBox="0 0 1920 1080"></svg>
+            <div class="quote">“…starts from the identification of the pre-defined outcome … and then explores scenarios and circumstances that might cause this to occur.”<b>EBA Guidelines on institutions’ stress testing · EBA/GL/2018/04</b></div></div>
+          <div class="phase pF"><div class="honest"><div class="fx-eyebrow">One honest note</div><h2 class="fx-headline">Real supplier links are <em>rarely published.</em></h2></div>
+            <div class="stamp">Synthetic network</div>
+            <div class="stats"><div class="stat"><div class="n s1">0</div><div class="l">Companies</div></div><div class="stat"><div class="n s2">0</div><div class="l">Supply &amp; finance links</div></div><div class="stat"><div class="n s3">0</div><div class="l">Portfolio holdings</div></div></div>
+            <div class="fx-source">Why synthetic: U.S. rules require a company to report revenue from any customer above 10% of sales — without naming it (<b>FASB ASC 280-10-50-42</b>). Most links never surface.</div></div>
+          <div class="phase pG"><div class="shot shotG"></div>
+            <div class="realcap"><div class="fx-eyebrow">The one real dataset</div><h2 class="fx-headline">River-flood hazard, <em>from the EU</em></h2>
+              <p><b>JRC / Copernicus global river-flood hazard map</b>, 100-year return period (CC BY 4.0), sampled within 5 km of each site.</p>
+              <p>Used as context and a plausibility filter — <b>never as a loss input.</b></p></div></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's04-idea', FX = window.FX, CAP = window.CAP
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const W = (l, w, n) => L(FX.word(l, w, n || 0))
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const ph = (c) => root.querySelector('.' + c)
+          const chap = FX.chapter(stage, '03', 'The idea')
+          tl.fromTo(chap, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.4)
+
+          // ---- A: title ----
+          const tT = L(FX.cue('idea_title'))
+          const title = ph('pA').querySelector('.title')
+          tl.fromTo(title.children[0], { opacity: 0, y: -14, scale: 1.08 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'power3.out' }, tT - 0.1)
+          tl.fromTo(title.children[1], { opacity: 0, y: 40, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' }, tT + 0.05)
+          tl.fromTo(title.children[2], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 }, tT + 0.7)
+
+          // ---- B: the real app — overview, then the graph with a shock travelling hop by hop ----
+          const { cam, frame } = FX.browser(ph('pB').querySelector('.shot'), 'localhost · FIN-04 Climate Exposure Graph', '● Live app')
+          const imgO = FX.h('img', { src: CAP.stills['overview'].file }, frame)
+          const imgN = FX.h('img', { src: CAP.stills['network'].file, style: { opacity: 0 } }, frame)
+          const tB = L(FX.line('L13').start) - 0.9
+          FX.camSet(tl, cam, { s: 0.8, x: 192, y: 1180 }, 0)
+          tl.to(title, { y: -260, opacity: 0, duration: 0.8, ease: 'power3.in' }, tB)
+          FX.camTo(tl, cam, FX.camRest, tB + 0.1, 1.1, 'power3.out')
+          const canvas = FX.rect('network', 'canvas')
+          const tNet = W('L13', 'network') - 0.5
+          tl.to(imgN, { opacity: 1, duration: 0.6 }, tNet)
+          const camG = FX.camFocus(canvas, { pad: 70, max: 1.25 })
+          FX.camTo(tl, cam, camG, tNet + 0.1, 1.2)
+          const nodes = CAP.stills['network'].extra.nodes
+          const svgN = FX.svg('svg', { viewBox: '0 0 1920 1080', style: 'position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:visible' }, frame)
+          const hopPulse = (a, b, t, dur = 0.7) => {
+            const A = nodes[a], B = nodes[b]
+            const line = FX.svg('line', { x1: A.x, y1: A.y, x2: A.x, y2: A.y, stroke: '#e0553b', 'stroke-width': 5, 'stroke-linecap': 'round', opacity: 0 }, svgN)
+            const dot = FX.svg('circle', { cx: A.x, cy: A.y, r: 10, fill: '#ffd2c6', opacity: 0 }, svgN)
+            tl.set([line, dot], { opacity: 1 }, t)
+            tl.fromTo(line, { attr: { x2: A.x, y2: A.y } }, { attr: { x2: B.x, y2: B.y }, duration: dur, ease: 'power1.inOut', immediateRender: false }, t)
+            tl.fromTo(dot, { attr: { cx: A.x, cy: A.y } }, { attr: { cx: B.x, cy: B.y }, duration: dur, ease: 'power1.inOut', immediateRender: false }, t)
+            tl.to(dot, { opacity: 0, duration: 0.2 }, t + dur)
+            const ring = FX.svg('circle', { cx: B.x, cy: B.y, r: 16, fill: 'none', stroke: '#e0553b', 'stroke-width': 4, opacity: 0 }, svgN)
+            FX.burst(tl, ring, t + dur, { opacity: 1, scale: 1, transformOrigin: '50% 50%' }, { opacity: 0, scale: 3, duration: 0.8, ease: 'power2.out' })
+          }
+          const src = nodes.grid_nl
+          const srcRing = FX.svg('circle', { cx: src.x, cy: src.y, r: 30, fill: 'none', stroke: '#e0553b', 'stroke-width': 5, opacity: 0 }, svgN)
+          const tShock = W('L13', 'shock') - 0.35
+          ;[0, 0.45].forEach((d) => FX.burst(tl, srcRing, tShock + d, { opacity: 1, scale: 0.8, transformOrigin: '50% 50%' }, { opacity: 0, scale: 2.6, duration: 0.9, ease: 'power2.out' }))
+          const t1 = W('L13', 'travel') - 0.15, t2 = W('L13', 'hop', 0) - 0.15, t3 = W('L13', 'hop', 1) + 0.05
+          ;['dairy_pack_nl', 'cold_nl', 'dairy_proc_fr', 'oilblend_nl'].forEach((b, k) => hopPulse('grid_nl', b, t1 + k * 0.05))
+          ;[['dairy_pack_nl', 'retail_eu'], ['oilblend_nl', 'readymeal_uk'], ['oilblend_nl', 'bakery_uk']].forEach(([a, b], k) => hopPulse(a, b, t2 + k * 0.05, 0.6))
+          hopPulse('bakery_uk', 'retail_uk', t3, 0.5)
+          const hopTag = (txt, node, t, dx = 26, dy = -64) => {
+            const n = nodes[node]
+            const el = FX.h('div', { class: 'hop', style: { left: n.x + dx + 'px', top: n.y + dy + 'px', opacity: 0 } }, frame, txt)
+            tl.fromTo(el, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: 'back.out(2)' }, t)
+          }
+          hopTag('Shock', 'grid_nl', tShock, -40, -78)
+          hopTag('Hop 1', 'dairy_pack_nl', t1 + 0.7)
+          hopTag('Hop 2', 'retail_eu', t2 + 0.65, -30, -88)
+          hopTag('Hop 3', 'retail_uk', t3 + 0.55, -30, 44)
+
+          // ---- C: flip the question ----
+          const tC = L(FX.line('L14').start) - 0.45
+          tl.to(cam, { scale: 0.6, x: 384, y: 330, duration: 0.6, ease: 'power3.in' }, tC)
+          tl.to(ph('pB'), { opacity: 0, duration: 0.45 }, tC + 0.2)
+          const f1 = ph('pC').querySelector('.f1'), f2 = ph('pC').querySelector('.f2'), flab = ph('pC').querySelector('.lab')
+          tl.fromTo([flab, f1], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power3.out' }, tC + 0.55)
+          const tF = L(FX.cue('idea_flip'))
+          tl.to(f1, { rotationX: 90, opacity: 0, duration: 0.32, ease: 'power2.in', transformOrigin: '50% 50% -60px' }, tF - 0.05)
+          tl.fromTo(f2, { rotationX: -90, opacity: 0, transformOrigin: '50% 50% -60px' }, { rotationX: 0, opacity: 1, duration: 0.42, ease: 'back.out(1.6)' }, tF + 0.25)
+          tl.to(flab, { opacity: 0, duration: 0.2 }, tF - 0.05)
+
+          // ---- D: scenario test vs reverse stress test ----
+          const tD = L(FX.line('L15').start) - 0.2
+          tl.to(ph('pC'), { opacity: 0, y: -30, duration: 0.4, ease: 'power2.in' }, tD - 0.25)
+          const c1 = ph('pD').querySelector('.c1'), c2 = ph('pD').querySelector('.c2')
+          tl.fromTo(c1, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, tD)
+          tl.fromTo(c2, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, W('L15', 'which') - 0.3)
+          const m1 = ph('pD').querySelector('.m1')
+          const e1 = FX.h('div', { class: 'chip', style: { left: '0px', top: '96px' } }, m1, '1 event you chose')
+          const arr = FX.h('div', { class: 'chip', style: { left: '330px', top: '96px', border: 'none', background: 'transparent', color: '#9aa3b1' } }, m1, '→')
+          const r1 = FX.h('div', { class: 'chip', style: { left: '420px', top: '96px' } }, m1, 'its impact')
+          tl.fromTo([e1, arr, r1], { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, stagger: 0.18 }, W('L15', 'event') - 0.1)
+          const m2 = ph('pD').querySelector('.m2')
+          const evs = [[1.0, 1.0], [0.82, 0.38], [0.66, 0.52], [0.52, 1.0], [0.4, 0.2], [0.3, 0.86], [0.22, 0.14]]
+          evs.forEach(([w, h], k) => {
+            const e = FX.h('div', { class: 'ev', style: { top: k * 34 + 'px', width: (w * 100).toFixed(0) + '%' } }, m2, `<i style="width:${(h * 100).toFixed(0)}%"></i>`)
+            tl.fromTo(e, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'power3.out' }, W('L15', 'hurt') - 0.2 + k * 0.06)
+          })
+          const hs = FX.h('div', { class: 'hs' }, m2, 'Hidden share ↑')
+          tl.fromTo(hs, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.4 }, W('L15', 'site') - 0.2)
+          tl.to(m2.querySelectorAll('.ev i'), { boxShadow: '0 0 18px rgba(212,174,60,0.9)', duration: 0.4, stagger: 0.03 }, W('L15', 'miss') - 0.3)
+
+          // ---- E: reverse stress test ----
+          const tE = L(FX.line('L16').start) - 0.25
+          tl.to(ph('pD'), { opacity: 0, y: -30, duration: 0.4, ease: 'power2.in' }, tE - 0.3)
+          const rst = ph('pE').querySelector('.rst')
+          tl.fromTo(rst, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, W('L16', 'reverse') - 0.35)
+          const rs = ph('pE').querySelector('svg.rsvg')
+          const dmg = { x: 520, y: 600 }
+          const dmgG = FX.svg('g', {}, rs)
+          FX.svg('circle', { cx: dmg.x, cy: dmg.y, r: 78, fill: '#3a1712', stroke: '#e0553b', 'stroke-width': 4 }, dmgG)
+          const dt = FX.svg('text', { x: dmg.x, y: dmg.y + 10, 'text-anchor': 'middle', fill: '#ffd2c6', 'font-family': 'Space Grotesk', 'font-weight': 700, 'font-size': 26, 'letter-spacing': 3 }, dmgG); dt.textContent = 'DAMAGE'
+          tl.fromTo(dmgG, { opacity: 0, scale: 0.6, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' }, W('L16', 'start') - 0.1)
+          const evPos = [480, 540, 600, 660, 720].map((y) => ({ x: 1380, y }))
+          evPos.forEach((p, k) => {
+            const g = FX.svg('g', {}, rs)
+            FX.svg('rect', { x: p.x, y: p.y - 22, width: 230, height: 44, rx: 10, fill: '#131922', stroke: k === 2 ? '#d4ae3c' : '#2a3442', 'stroke-width': 2.5 }, g)
+            const t = FX.svg('text', { x: p.x + 20, y: p.y + 8, fill: '#9aa3b1', 'font-family': 'Space Grotesk', 'font-size': 21, 'letter-spacing': 1.5 }, g); t.textContent = ['FLOOD · PORT', 'HEAT · FARMS', 'DROUGHT · GRID', 'FLOOD · MILL', 'DROUGHT · COCOA'][k]
+            const c = FX.curve({ x: dmg.x + 80, y: dmg.y }, { x: p.x - 14, y: p.y }, k < 2 ? -0.08 : 0.08)
+            const path = FX.svg('path', { d: c.d, fill: 'none', stroke: k === 2 ? '#d4ae3c' : '#5a6578', 'stroke-width': 3, 'stroke-dasharray': c.len.toFixed(1), 'stroke-dashoffset': c.len.toFixed(1) }, rs)
+            const tS = W('L16', 'search') - 0.2 + k * 0.08
+            tl.to(path, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out' }, tS)
+            tl.fromTo(g, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.35 }, tS + 0.3)
+            if (k === 2) tl.to(t, { attr: { fill: '#d4ae3c' }, duration: 0.3 }, tS + 0.8)
+          })
+          const quote = ph('pE').querySelector('.quote')
+          tl.fromTo(quote, { opacity: 0 }, { opacity: 1, duration: 0.7 }, W('L16', 'reverse'))
+
+          // ---- F: honest note ----
+          const tFh = L(FX.line('L17').start) - 0.3
+          tl.to(ph('pE'), { opacity: 0, y: -30, duration: 0.45, ease: 'power2.in' }, tFh - 0.3)
+          const honest = ph('pF').querySelector('.honest')
+          tl.fromTo(honest.children[0], { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5 }, tFh)
+          tl.fromTo(honest.children[1], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, W('L17', 'real') - 0.25)
+          tl.fromTo(ph('pF').querySelector('.fx-source'), { opacity: 0 }, { opacity: 1, duration: 0.6 }, W('L17', 'published') - 0.2)
+          const stamp = ph('pF').querySelector('.stamp')
+          tl.fromTo(stamp, { opacity: 0, scale: 1.6, rotation: -8 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.35, ease: 'power4.out' }, W('L17', 'synthetic') - 0.1)
+          const stats = ph('pF').querySelectorAll('.stat'), tN = L(FX.cue('honest_count'))
+          tl.fromTo(stats, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.12, ease: 'power3.out' }, tN - 0.2)
+          FX.countTo(tl, ph('pF').querySelector('.s1'), 0, 102, tN, 1.1, (v) => Math.round(v))
+          FX.countTo(tl, ph('pF').querySelector('.s2'), 0, 240, tN + 0.12, 1.1, (v) => Math.round(v))
+          FX.countTo(tl, ph('pF').querySelector('.s3'), 0, 18, W('L17', 'eighteen') - 0.3, 0.7, (v) => Math.round(v))
+
+          // ---- G: the one real dataset (the app's own entity page) ----
+          const tG = L(FX.line('L18').start) - 0.3
+          tl.to(ph('pF'), { opacity: 0, y: -30, duration: 0.45, ease: 'power2.in' }, tG - 0.3)
+          const g2 = FX.browser(ph('pG').querySelector('.shotG'), 'localhost · Entity intelligence · Dutch Regional Grid Operator', '● Live app')
+          FX.h('img', { src: CAP.stills['entity-grid'].file }, g2.frame)
+          const jrc = FX.rect('entity-grid', 'jrc')
+          const hlJ = FX.hl(g2.frame, jrc, { pad: 10 })
+          const jcx = jrc.x + jrc.w / 2, jcy = jrc.y + jrc.h / 2
+          const camJ = { s: 1.6, x: 520 - 1.6 * jcx, y: 540 - 1.6 * jcy }
+          FX.camSet(tl, g2.cam, { s: 1.05, x: 520 - 1.05 * jcx, y: 540 - 1.05 * 520 }, 0)
+          tl.fromTo(ph('pG').querySelector('.shotG'), { opacity: 0 }, { opacity: 1, duration: 0.5 }, tG)
+          FX.camTo(tl, g2.cam, camJ, tG + 0.1, 1.6, 'power2.inOut')
+          tl.to(hlJ, { opacity: 1, duration: 0.4 }, W('L18', 'river') - 0.2)
+          const cap = ph('pG').querySelector('.realcap')
+          tl.fromTo(cap.children, { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.15, ease: 'power3.out' }, tG + 0.4)
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

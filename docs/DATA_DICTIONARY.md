@@ -42,8 +42,27 @@ Missing values are explicit (`null`) and counted at `/api/v1/data/quality`.
 | confidence | 0–1 plausibility of the stylised pattern (not a measurement) |
 | provenance | Text |
 
+## Portfolio (`portfolio.json`)
+`holdings[]`: `entity_id`, `weight` (normalised in the app). The weights are synthetic, proportional to √(revenue proxy); they are not market capitalisation or real holdings. These are the 18 held business units; in the default company view they are grouped into 16 companies (`companies.json`) with the same money.
+
+## Company structures (`companies.json`): SYNTHETIC
+A listed holding is a company. Holdings not listed here are single-business companies (the entity itself).
+
+| Field | Meaning |
+|---|---|
+| `companies[].id`, `name` | Company id (never an entity id) and invented name |
+| `pattern` | Stylised pattern the structure illustrates (for example vertical integration) |
+| `segments[].entity_id`, `segment` | Business units the company owns (ordinary F&B entities) and a short label. Each entity belongs to at most one company; financial entities cannot be units |
+| `other_businesses_share` | Share (0–0.95) of the company's value added OUTSIDE Food & Beverage. A single number: never modelled (no nodes, links, hazard or named industry), so it can only dilute the company's F&B loss |
+| `share_basis` | `value_added`: a unit's share = its value added / the company's modelled value added × (1 − other share), computed at load time |
+
+A company's position weight is the sum of its held units' weights in `portfolio.json`. Invalid structures are reported as dataset validation errors and ignored (every holding then falls back to a single business). API: `GET /api/v1/portfolio?holding_view=company|business_unit`; `GET /api/v1/entities/{id}` returns `company` for a business unit.
+
+## JRC flood layer (`hazard_layers/jrc_flood_rp100.json`): REAL data
+Per entity: `flooded_share` (share of ~90 m cells within 5 km flooded in the modelled 100-year river flood), `deep_share` (deeper than 1 m), `cells` (cells sampled; fewer at tile edges), `tile`. Header: source, dataset version, citation, licence, retrieval date, method. Sampled around SYNTHETIC coordinates.
+
 ## Scenario (`scenarios.json`, DB `scenarios`)
-`hazards[]` (hazard_type, intensity index 0–1, duration_days, footprint centre/radius **or** regions **or** affected_entity_ids), `time_horizon_year` (label), `propagation_max_depth`, `inventory_scale`, `substitution_scale`, `dependency_scale`, `compound_amplification`, `monte_carlo_runs`, `monte_carlo_seed`.
+`hazards[]` (hazard_type, intensity index 0–1, duration_days, footprint centre/radius **or** regions **or** affected_entity_ids), `time_horizon_year` (label), `propagation_max_depth`, `inventory_scale`, `substitution_scale`, `dependency_scale`, `compound_amplification`, `use_graph_alternatives` (default true), `cycle_damping` (default 0.5), `monte_carlo_runs`, `monte_carlo_seed`.
 
 ## Validation rules (`domain/dataset.py`)
 Duplicate ids; unknown/self-referencing edges; duplicate edges; Σdependency > 1 per input; value added > revenue; half-set coordinates (errors) · isolated nodes; missing coordinates; cycles (warnings, kept and explained).

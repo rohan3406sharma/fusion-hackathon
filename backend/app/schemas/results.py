@@ -91,6 +91,13 @@ class ComparisonRow(BaseModel):
     rank_network: float
     rank_change: float = Field(description="rank_location - rank_network; positive = moves up when network is considered; 0 for holdings unaffected in both views")
     hidden_exposure: bool
+    weight: float = Field(description="Synthetic position weight of the holding")
+    kind: Literal["single_business", "multi_segment"] = "single_business"
+    primary_entity_id: Optional[str] = Field(default=None, description="Largest business unit (for links to an entity page)")
+    other_businesses_share: Optional[float] = Field(default=None, description="Share of value added outside Food & Beverage; not modelled")
+    network_disruption_if_other_hit: Optional[float] = Field(default=None, description="Upper end: non-F&B share hit like the modelled part")
+    network_disruption_one_node: Optional[float] = Field(default=None, description="As one node: any segment's shortfall stops the whole company")
+    segments: Optional[list[dict]] = Field(default=None, description="Business units: entity_id, name, segment, share, location/network disruption")
 
 
 class Comparison(BaseModel):
@@ -104,7 +111,14 @@ class Comparison(BaseModel):
     portfolio_relative_difference: Optional[float]
     portfolio_rows: list[ComparisonRow]
     hidden_exposure_count: int
+    portfolio_location_impact: float = Field(description="Position-weighted share of annual value added lost, location-only")
+    portfolio_network_impact: float = Field(description="Position-weighted share of annual value added lost, network-aware")
+    portfolio_hidden_share: Optional[float] = Field(description="1 - location/network (weighted); null when no network impact")
+    hidden_exposure_curve: list[dict] = Field(description="Hidden-exposure count at several propagated-disruption cut-offs")
     scope_note: str
+    holding_view: Literal["company", "business_unit"] = "business_unit"
+    portfolio_network_impact_if_other_hit: Optional[float] = Field(default=None, description="Company view: upper end, non-F&B businesses hit like the modelled part")
+    portfolio_network_impact_one_node: Optional[float] = Field(default=None, description="Company view: every company treated as one node")
 
 
 class RunResult(BaseModel):
@@ -138,6 +152,7 @@ class Quantiles(BaseModel):
 class SensitivityItem(BaseModel):
     parameter: str
     spearman_with_total_loss: float
+    approx_variance_share: float = Field(default=0.0, description="rho^2 normalised over factors; approximate")
     description: str
 
 
@@ -150,6 +165,7 @@ class MonteCarloResult(BaseModel):
     network_minus_location: Quantiles
     histogram: list[dict]
     sensitivity: list[SensitivityItem]
+    indirect_sensitivity: list[SensitivityItem] = Field(default_factory=list, description="Sensitivity of the indirect (network) loss")
     top_entities: list[dict]
     assumptions: list[str]
     interpretation: str

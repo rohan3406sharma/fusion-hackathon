@@ -89,6 +89,31 @@ class FnbDataset:
         self.reference_audit = reference_audit
         self.by_id = {e.id: e for e in entities}
         self.validation = validate_graph_data(entities, relations)
+        self.hazard_layers: dict[str, dict] = {}
+        self.portfolio: dict = {"name": "Demo portfolio", "synthetic": True, "weighting": "equal",
+                                "holdings": [{"entity_id": e.id, "weight": 1.0} for e in entities if e.in_demo_portfolio]}
+        self.companies_meta: dict = {}
+        self.company_by_id: dict[str, dict] = {}
+        self.company_of: dict[str, str] = {}        # segment entity id -> company id
+
+    def set_companies(self, payload: dict) -> None:
+        """Synthetic company structures (companies.json). Invalid structures are reported as validation errors and ignored,
+        so every holding falls back to a single business."""
+        from .holdings import validate_companies
+        companies = payload.get("companies", [])
+        errors = validate_companies(companies, self.by_id)
+        self.companies_meta = {k: v for k, v in payload.items() if k != "companies"}
+        if errors:
+            self.validation.errors.extend(errors)
+            return
+        self.company_by_id = {c["id"]: c for c in companies}
+        self.company_of = {s["entity_id"]: c["id"] for c in companies for s in c["segments"]}
+
+    @property
+    def portfolio_weights(self) -> dict[str, float]:
+        hs = [h for h in self.portfolio["holdings"] if h["entity_id"] in self.by_id]
+        tot = sum(h["weight"] for h in hs) or 1.0
+        return {h["entity_id"]: h["weight"] / tot for h in hs}
 
     @classmethod
     def load(cls, data_dir: Path) -> "FnbDataset":
@@ -99,6 +124,15 @@ class FnbDataset:
         audit_p = data_dir / "reference_audit.json"
         audit = json.loads(audit_p.read_text()) if audit_p.exists() else {"present": False}
         ds = cls(ents, rels, scs, manifest, audit)
+        pf = data_dir / "portfolio.json"
+        if pf.exists():
+            ds.portfolio = json.loads(pf.read_text())
+        cp = data_dir / "companies.json"
+        if cp.exists():
+            ds.set_companies(json.loads(cp.read_text()))
+        jrc = data_dir / "hazard_layers" / "jrc_flood_rp100.json"
+        if jrc.exists():
+            ds.hazard_layers["jrc_flood_rp100"] = json.loads(jrc.read_text())
         log.info("dataset loaded: %d entities, %d relations, valid=%s", len(ents), len(rels), ds.validation.ok)
         return ds
 

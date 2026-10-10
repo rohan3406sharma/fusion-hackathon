@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s09 engine</title></head>
+  <body>
+    <template id="s09-engine-template">
+      <style>
+        #s09-engine { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s09-engine .stage, #s09-engine .phase { position: absolute; inset: 0; }
+        #s09-engine .head { position: absolute; left: 140px; top: 150px; width: 1640px; }
+        #s09-engine .head .fx-headline { font-size: 76px; margin-top: 14px; }
+        #s09-engine .blocks { position: absolute; left: 140px; right: 140px; top: 400px; display: flex; gap: 70px; align-items: stretch; }
+        #s09-engine .blk { flex: 1; padding: 34px 36px; border-radius: 22px; background: rgba(19,25,34,0.9); border: 2px solid var(--line); position: relative; }
+        #s09-engine .blk.core { border-color: rgba(212,174,60,0.75); }
+        #s09-engine .blk .fx-eyebrow { color: var(--text-dim); }
+        #s09-engine .blk.core .fx-eyebrow { color: var(--gold); }
+        #s09-engine .blk h3 { margin: 12px 0 0; font-family: var(--serif); font-weight: 400; font-size: 54px; color: var(--text); }
+        #s09-engine .blk p { margin: 16px 0 0; font-family: var(--mono); font-size: 22px; line-height: 1.5; color: var(--text-dim); }
+        #s09-engine .data { position: absolute; left: 140px; right: 140px; top: 760px; display: flex; gap: 30px; justify-content: center; }
+        #s09-engine .data .fx-tag { font-size: 20px; }
+        #s09-engine svg.ov { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #s09-engine .formula { position: absolute; left: 0; right: 0; top: 400px; text-align: center; font-family: var(--mono); font-size: 76px; color: var(--text); letter-spacing: -0.01em; }
+        #s09-engine .formula span { display: inline-block; padding: 0 6px; border-radius: 10px; }
+        #s09-engine .chips { position: absolute; left: 0; right: 0; top: 590px; display: flex; justify-content: center; gap: 36px; }
+        #s09-engine .chips .c { padding: 16px 26px; border-radius: 16px; border: 2px solid var(--line); background: rgba(19,25,34,0.9); text-align: center; min-width: 300px; }
+        #s09-engine .chips .c b { display: block; font-family: var(--mono); font-size: 40px; color: var(--gold); font-weight: 400; }
+        #s09-engine .chips .c span { display: block; margin-top: 6px; font-family: var(--label); font-size: 22px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); }
+        #s09-engine .note { position: absolute; left: 0; right: 0; top: 780px; text-align: center; font-family: var(--body); font-size: 27px; color: var(--text-dim); }
+        #s09-engine .tau { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-family: var(--mono); font-size: 40px; color: var(--text); }
+        #s09-engine .tau span { display: inline-block; padding: 2px 10px; border-radius: 8px; }
+        #s09-engine .shrink { position: absolute; left: 0; right: 0; top: 860px; text-align: center; font-family: var(--serif); font-size: 60px; color: var(--text); }
+        #s09-engine .card { position: absolute; width: 470px; padding: 24px 28px; border-radius: 18px; background: rgba(19,25,34,0.92); border: 2px solid var(--line); }
+        #s09-engine .card .fx-eyebrow { font-size: 20px; }
+        #s09-engine .card div.t { font-family: var(--serif); font-size: 46px; color: var(--text); margin-top: 6px; }
+        #s09-engine .card div.d { font-family: var(--body); font-size: 23px; color: var(--text-dim); margin-top: 6px; line-height: 1.35; }
+        #s09-engine .hub { position: absolute; left: 760px; top: 440px; width: 400px; height: 200px; border-radius: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+          background: #2a2210; border: 3px solid var(--gold); }
+        #s09-engine .hub b { font-family: var(--mono); font-weight: 400; font-size: 40px; color: var(--gold); }
+        #s09-engine .hub span { font-family: var(--label); font-size: 21px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); margin-top: 6px; }
+        #s09-engine .copcap { position: absolute; left: 1110px; top: 600px; width: 760px; padding: 30px 36px 34px; border-radius: 22px;
+          background: rgba(12,16,22,0.94); border: 2px solid rgba(212,174,60,0.6); box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
+        #s09-engine .copcap h2 { font-size: 60px; margin-top: 10px; }
+        #s09-engine .copcap p { font-family: var(--body); font-size: 25px; line-height: 1.42; color: var(--text-dim); margin: 14px 0 0; }
+        #s09-engine .copcap p b { color: var(--text); }
+        #s09-engine .shotC { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      </style>
+      <div id="s09-engine" data-composition-id="s09-engine" data-width="1920" data-height="1080">
+        <div class="stage">
+          <div class="phase pA"><div class="head"><div class="fx-eyebrow">Architecture</div><h2 class="fx-headline">Deliberately <em>simple.</em></h2></div>
+            <div class="blocks">
+              <div class="blk b2"><div class="fx-eyebrow">Interface</div><h3>One React app</h3><p>React 19 · Vite · Tailwind<br />Cytoscape graph · Recharts</p></div>
+              <div class="blk b1 core"><div class="fx-eyebrow">Engine</div><h3>One Python service</h3><p>FastAPI · NetworkX<br />NumPy · SciPy</p></div>
+              <div class="blk b3"><div class="fx-eyebrow">Storage</div><h3>One database file</h3><p>SQLite<br />saved scenarios</p></div>
+            </div>
+            <div class="data"><div class="fx-tag"><span class="dot"></span>Synthetic dataset · 102 entities · 240 links</div><div class="fx-tag ok"><span class="dot"></span>Real: JRC river-flood layer · context only</div></div>
+          </div>
+          <div class="phase pB"><div class="head"><div class="fx-eyebrow">Step 1 · the direct hit</div><h2 class="fx-headline">Three inputs, kept <em>separate.</em></h2></div>
+            <div class="formula">s = 1 − e<sup style="font-size:48px">−k · <span class="H">H</span> · <span class="E">E</span> · <span class="V">V</span></sup></div>
+            <div class="chips"><div class="c cH"><b>H</b><span>Hazard intensity</span></div><div class="c cE"><b>E</b><span>Exposure</span></div><div class="c cV"><b>V</b><span>Vulnerability</span></div></div>
+            <div class="note">A saturating damage proxy — configurable, not a validated damage function.</div>
+          </div>
+          <div class="phase pC"><div class="head"><div class="fx-eyebrow">Step 2 · propagation</div><h2 class="fx-headline">Every link passes on <em>part</em> of the shock.</h2></div>
+            <div class="tau">τ = <span class="t1">dependency</span> × specificity × (1 − <span class="t2">substitutability</span>) × <span class="t3">inventory</span> × …</div>
+            <svg class="ov" viewBox="0 0 1920 1080"></svg>
+            <div class="shrink">The shock <em>shrinks</em> with every hop.</div>
+          </div>
+          <div class="phase pD"><div class="head"><div class="fx-eyebrow">One engine, four jobs</div><h2 class="fx-headline">The same simulation, <em>everywhere.</em></h2></div>
+            <svg class="ov hubsvg" viewBox="0 0 1920 1080"></svg>
+            <div class="hub"><b>propagate()</b><span>vectorised · NumPy</span></div>
+            <div class="card k1" style="left:150px;top:330px"><div class="fx-eyebrow">Finder</div><div class="t">780 events</div><div class="d">scored as rows of one array</div></div>
+            <div class="card k2" style="left:150px;top:690px"><div class="fx-eyebrow">Scenarios</div><div class="t">any event</div><div class="d">one click from finder to results</div></div>
+            <div class="card k3" style="left:1300px;top:330px"><div class="fx-eyebrow">Uncertainty</div><div class="t">200 draws</div><div class="d">seeded, reproducible re-ranking</div></div>
+            <div class="card k4" style="left:1300px;top:690px"><div class="fx-eyebrow">Optimiser</div><div class="t">brute-force checked</div><div class="d">plans simulated, then verified</div></div>
+          </div>
+          <div class="phase pE"><div class="shotC"></div>
+            <div class="copcap"><div class="fx-eyebrow">AI copilot · local qwen3:8b</div><h2 class="fx-headline">Explains. <em>Never calculates.</em></h2>
+              <p>The model only chooses and phrases cited facts. <b>Every number, name and path is filled in by the engine.</b></p>
+              <p>Replies that fail validation are replaced by templates. Each sentence carries its provenance.</p></div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's09-engine', FX = window.FX, CAP = window.CAP
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const W = (l, w, n) => L(FX.word(l, w, n || 0))
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const ph = (c) => root.querySelector('.' + c)
+          const chap = FX.chapter(stage, '05', 'Under the hood')
+          tl.fromTo(chap, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.4)
+          const up = (el, t, d = 0.55) => tl.fromTo(el, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: d, ease: 'power3.out' }, t)
+          const out = (el, t) => tl.to(el, { opacity: 0, y: -24, duration: 0.4, ease: 'power2.in' }, t)
+
+          // ---- A: one service, one app, one file ----
+          up(ph('pA').querySelector('.head'), L(FX.line('L33').start) - 0.2)
+          tl.fromTo(ph('pA').querySelector('.b1'), { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, L(FX.cue('eng_python')) - 0.1)
+          tl.fromTo(ph('pA').querySelector('.b2'), { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' }, L(FX.cue('eng_react')) - 0.1)
+          tl.fromTo(ph('pA').querySelector('.b3'), { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' }, L(FX.cue('eng_db')) - 0.1)
+          tl.fromTo(ph('pA').querySelectorAll('.data .fx-tag'), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.15 }, W('L33', 'file') - 0.1)
+          out(ph('pA'), L(FX.line('L34').start) - 0.45)
+
+          // ---- B: s = 1 − e^(−k·H·E·V) ----
+          const tB = L(FX.line('L34').start) - 0.1
+          up(ph('pB').querySelector('.head'), tB)
+          up(ph('pB').querySelector('.formula'), W('L34', 'combines') - 0.2, 0.6)
+          const lit = (sel, chip, t) => {
+            tl.to(ph('pB').querySelector(sel), { backgroundColor: 'rgba(212,174,60,0.28)', color: '#f3dc8a', duration: 0.25 }, t)
+            tl.fromTo(ph('pB').querySelector(chip), { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.8)' }, t)
+          }
+          lit('.H', '.cH', L(FX.cue('eng_hazard')) - 0.08); lit('.E', '.cE', L(FX.cue('eng_exposure')) - 0.08); lit('.V', '.cV', L(FX.cue('eng_vuln')) - 0.08)
+          up(ph('pB').querySelector('.note'), L(FX.cue('eng_vuln')) + 0.5)
+          out(ph('pB'), L(FX.line('L35').start) - 0.4)
+
+          // ---- C: the shock shrinks hop by hop (values reported by the app for the grid drought) ----
+          const tC = L(FX.line('L35').start) - 0.05
+          up(ph('pC').querySelector('.head'), tC)
+          const sv = ph('pC').querySelector('svg.ov')
+          const pts = [{ x: 420, y: 640, d: 30.2, n: 'Grid operator', s: 'directly hit' }, { x: 960, y: 640, d: 25.7, n: 'Cheese & yogurt maker', s: 'hop 1 · holding' }, { x: 1500, y: 640, d: 6.7, n: 'Grocery chain', s: 'hop 2 · holding' }]
+          const edges = []
+          for (let i = 0; i < 2; i++) {
+            const a = pts[i], b = pts[i + 1]
+            const p = FX.svg('path', { d: `M${a.x + 100} ${a.y} L${b.x - 100} ${b.y}`, stroke: '#8b97a8', 'stroke-width': 3, fill: 'none', 'stroke-dasharray': 340, 'stroke-dashoffset': 340 }, sv)
+            edges.push(p)
+          }
+          const blobs = pts.map((p, i) => {
+            const g = FX.svg('g', {}, sv)
+            const r = 18 + p.d * 2.6
+            const c = FX.svg('circle', { cx: p.x, cy: p.y, r, fill: i === 0 ? '#e0553b' : '#e9a23b', 'fill-opacity': 0.85 }, g)
+            const v = FX.svg('text', { x: p.x, y: p.y + 14, 'text-anchor': 'middle', fill: '#0c1016', 'font-family': 'JetBrains Mono', 'font-size': i === 2 ? 26 : 38 }, g); v.textContent = p.d.toFixed(1) + '%'
+            if (i === 2) { v.setAttribute('fill', '#ece6da'); v.setAttribute('y', p.y + r + 40) }
+            const n = FX.svg('text', { x: p.x, y: p.y + 150, 'text-anchor': 'middle', fill: '#ece6da', 'font-family': 'Space Grotesk', 'font-size': 26, 'letter-spacing': 1 }, g); n.textContent = p.n
+            const s = FX.svg('text', { x: p.x, y: p.y + 184, 'text-anchor': 'middle', fill: '#9aa3b1', 'font-family': 'Space Grotesk', 'font-size': 21, 'letter-spacing': 2 }, g); s.textContent = p.s.toUpperCase()
+            return g
+          })
+          const tPush = W('L35', 'pushes') - 0.2
+          tl.fromTo(blobs[0], { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' }, tPush - 0.6)
+          tl.to(edges[0], { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, tPush)
+          tl.fromTo(blobs[1], { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' }, tPush + 0.55)
+          tl.to(edges[1], { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, W('L35', 'link', 1) - 0.1)
+          tl.fromTo(blobs[2], { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' }, W('L35', 'link', 1) + 0.45)
+          up(ph('pC').querySelector('.tau'), W('L35', 'passes') - 0.2)
+          ;[['.t1', 'dependency'], ['.t2', 'substitutes'], ['.t3', 'stock']].forEach(([sel, w]) => tl.to(ph('pC').querySelector(sel), { backgroundColor: 'rgba(212,174,60,0.28)', color: '#f3dc8a', duration: 0.25 }, W('L35', w) - 0.1))
+          up(ph('pC').querySelector('.shrink'), W('L35', 'shocks') - 0.25)
+          blobs.forEach((b, i) => FX.burst(tl, b, W('L35', 'shrink') + i * 0.18, { scale: 1.12, transformOrigin: '50% 50%' }, { scale: 1, duration: 0.5, ease: 'power2.out' }))
+          out(ph('pC'), L(FX.line('L36').start) - 0.4)
+
+          // ---- D: one engine, four jobs ----
+          const tD = L(FX.line('L36').start) - 0.1
+          up(ph('pD').querySelector('.head'), tD)
+          const hub = ph('pD').querySelector('.hub')
+          tl.fromTo(hub, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' }, W('L36', 'engine') - 0.2)
+          const hs = ph('pD').querySelector('svg.hubsvg')
+          const spokes = [[620, 400], [620, 760], [1300, 400], [1300, 760]].map(([x, y]) => {
+            const c = FX.curve({ x: 960, y: 540 }, { x, y }, 0.05)
+            return FX.svg('path', { d: c.d, stroke: '#d4ae3c', 'stroke-width': 3, fill: 'none', 'stroke-dasharray': c.len.toFixed(1), 'stroke-dashoffset': c.len.toFixed(1), opacity: 0.8 }, hs)
+          })
+          ;[['eng_finder', 'k1', 0], ['eng_scenario', 'k2', 1], ['eng_draws', 'k3', 2], ['eng_optim', 'k4', 3]].forEach(([cue, k, i]) => {
+            const t = L(FX.cue(cue)) - 0.15
+            tl.to(spokes[i], { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out' }, t)
+            tl.fromTo(ph('pD').querySelector('.' + k), { opacity: 0, x: i < 2 ? -24 : 24 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, t + 0.1)
+          })
+          out(ph('pD'), L(FX.line('L37').start) - 0.45)
+
+          // ---- E: the copilot, boxed in (real answer from the local model) ----
+          const tE = L(FX.line('L37').start) - 0.2
+          const g2 = FX.browser(ph('pE').querySelector('.shotC'), 'localhost · FIN-04 · AI Climate Risk Copilot', '● Live app')
+          FX.h('img', { src: CAP.stills['copilot'].file }, g2.frame)
+          const ans = FX.rect('copilot', 'answer'), mode = FX.rect('copilot', 'mode'), s1 = FX.rect('copilot', 's1')
+          const fcx = ans.x + ans.w / 2, fy0 = mode.y - 20
+          const camA = { s: 1.2, x: 960 - 1.2 * fcx, y: Math.max(150 - 1.2 * fy0, 1080 - 1.2 * 1080) }
+          FX.camSet(tl, g2.cam, { s: 1.08, x: 960 - 1.08 * fcx, y: 230 - 1.08 * fy0 }, 0)
+          tl.fromTo(ph('pE').querySelector('.shotC'), { opacity: 0 }, { opacity: 1, duration: 0.5 }, tE)
+          FX.camTo(tl, g2.cam, camA, tE + 0.1, 2.2, 'power2.out')
+          const hlMode = FX.hl(g2.frame, mode, { pad: 6 }), hlS1 = FX.hl(g2.frame, { x: s1.x, y: s1.y, w: 1210, h: s1.h }, { pad: 6 })
+          tl.to(hlMode, { opacity: 1, duration: 0.3 }, W('L37', 'boxed') - 0.1)
+          tl.to(hlS1, { opacity: 1, duration: 0.3 }, W('L37', 'explain') - 0.1)
+          const cap = ph('pE').querySelector('.copcap')
+          tl.fromTo(cap, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, W('L37', 'boxed') - 0.2)
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

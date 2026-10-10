@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>bg</title></head>
+  <body>
+    <template id="bg-template">
+      <style>
+        #bg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #0c1016; }
+        #bg .glow { position: absolute; width: 1500px; height: 1500px; border-radius: 50%; }
+        #bg .g1 { left: -420px; top: -620px; background: radial-gradient(circle, rgba(212,174,60,0.12) 0%, rgba(212,174,60,0) 62%); }
+        #bg .g2 { right: -560px; bottom: -760px; background: radial-gradient(circle, rgba(70,110,160,0.15) 0%, rgba(70,110,160,0) 60%); }
+        #bg .grid { position: absolute; left: -120px; top: -120px; width: 2160px; height: 1320px; opacity: 0.6;
+          background-image: linear-gradient(rgba(154,163,177,0.05) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(154,163,177,0.05) 1.5px, transparent 1.5px);
+          background-size: 120px 120px; }
+        #bg .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%); }
+      </style>
+      <div id="bg" data-composition-id="bg" data-width="1920" data-height="1080">
+        <div class="grid" data-layout-allow-overflow></div><div class="glow g1" data-layout-allow-overflow></div><div class="glow g2" data-layout-allow-overflow></div><div class="vignette"></div>
+      </div>
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true }), T = window.TL.total
+          tl.fromTo('#bg .g1', { x: 0, y: 0 }, { x: 520, y: 260, duration: T, ease: 'sine.inOut' }, 0)
+          tl.fromTo('#bg .g2', { x: 0, y: 0 }, { x: -380, y: -220, duration: T, ease: 'sine.inOut' }, 0)
+          tl.fromTo('#bg .grid', { x: 0, y: 0 }, { x: -118, y: -60, duration: T, ease: 'none' }, 0)
+          window.__timelines['bg'] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,318 @@
+{
+  "voice": "af_heart",
+  "speed": 0.92,
+  "lang": "en-us",
+  "note": "Source of truth for the voiceover. 'say' is what the voice speaks (numbers spelled out for TTS); 'show' is the on-screen form where it differs. 'gap' is the silence after the line in seconds. Scene ids map to compositions/<scene>.html.",
+  "scenes": [
+    {
+      "id": "s01-hook",
+      "lead_in": 1.6,
+      "lines": [
+        {
+          "id": "L01",
+          "say": "Imagine checking every factory you invest in against the climate map.",
+          "gap": 0.5
+        },
+        {
+          "id": "L02",
+          "say": "Floods. Heat. Drought. Every site comes back clear.",
+          "gap": 0.9
+        },
+        {
+          "id": "L03",
+          "say": "Now ask a harder question.",
+          "gap": 0.6
+        },
+        {
+          "id": "L04",
+          "say": "What if the climate event that hurts your portfolio most... never touches anything you own?",
+          "gap": 2.2
+        }
+      ]
+    },
+    {
+      "id": "s02-canal",
+      "lead_in": 0.4,
+      "lines": [
+        {
+          "id": "L05",
+          "say": "It's not hypothetical.",
+          "gap": 0.4
+        },
+        {
+          "id": "L06",
+          "say": "In twenty twenty-three, drought drove the lake that feeds the Panama Canal to record lows for the season.",
+          "show": "In 2023, drought drove the lake that feeds the Panama Canal to record lows for the season.",
+          "gap": 0.35
+        },
+        {
+          "id": "L07",
+          "say": "The canal cut its daily bookings, step by step, down to eighteen ships.",
+          "show": "Daily booking slots cut step by step to 18 (ACP Advisory A-48-2023).",
+          "gap": 0.6
+        },
+        {
+          "id": "L08",
+          "say": "The hazard wasn't at anyone's factory. It was in a shared link of the chain.",
+          "gap": 1.2
+        }
+      ]
+    },
+    {
+      "id": "s03-evidence",
+      "lead_in": 0.3,
+      "lines": [
+        {
+          "id": "L09",
+          "say": "Research confirms the pattern: when a natural disaster hits a supplier, its customers lose output too, and their market value falls.",
+          "gap": 0.45
+        },
+        {
+          "id": "L10",
+          "say": "After Japan's twenty eleven earthquake, the disruption travelled further: to suppliers' suppliers, and customers' customers.",
+          "show": "After Japan's 2011 earthquake, the disruption reached suppliers' suppliers and customers' customers.",
+          "gap": 0.6
+        },
+        {
+          "id": "L11",
+          "say": "A screen that only checks your own sites... sees none of it.",
+          "gap": 1.6
+        }
+      ]
+    },
+    {
+      "id": "s04-idea",
+      "lead_in": 0.6,
+      "lines": [
+        {
+          "id": "L12",
+          "say": "This is the Fin zero four Climate Exposure Graph.",
+          "show": "FIN-04 Climate Exposure Graph",
+          "gap": 0.5
+        },
+        {
+          "id": "L13",
+          "say": "It maps a food supply chain as a network, and lets a climate shock travel through it, hop by hop.",
+          "gap": 0.6
+        },
+        {
+          "id": "L14",
+          "say": "Then it flips the usual question.",
+          "gap": 0.35
+        },
+        {
+          "id": "L15",
+          "say": "Not, what if this event hits? But: which events would hurt most, and how much of that would a site check miss?",
+          "gap": 0.6
+        },
+        {
+          "id": "L16",
+          "say": "Bank supervisors call this a reverse stress test: start from the damage, then search for its causes.",
+          "gap": 0.8
+        },
+        {
+          "id": "L17",
+          "say": "One honest note: real supplier links are rarely published, so this network is synthetic. A hundred and two companies, eighteen holdings.",
+          "show": "102 companies · 240 links · 18 holdings — all synthetic",
+          "gap": 0.35
+        },
+        {
+          "id": "L18",
+          "say": "The one real dataset is the E U's river-flood map, used as context.",
+          "show": "Real data: JRC / Copernicus global river-flood hazard map (100-year)",
+          "gap": 1.4
+        }
+      ]
+    },
+    {
+      "id": "s05-search",
+      "lead_in": 0.6,
+      "lines": [
+        {
+          "id": "L19",
+          "say": "Here it is, running.",
+          "gap": 0.4
+        },
+        {
+          "id": "L20",
+          "say": "Open the Hidden Exposure Finder, and search.",
+          "gap": 1.8
+        },
+        {
+          "id": "L21",
+          "say": "Seven hundred and eighty synthetic events, scored against the portfolio in under a second.",
+          "show": "780 events scored in under a second (0.69 s in this capture)",
+          "gap": 0.5
+        },
+        {
+          "id": "L22",
+          "say": "A hundred and sixty-five distinct events are hidden-only: no holding is hit directly, yet the portfolio still loses value.",
+          "show": "165 hidden-only events",
+          "gap": 1.0
+        }
+      ]
+    },
+    {
+      "id": "s06-top-event",
+      "lead_in": 0.2,
+      "lines": [
+        {
+          "id": "L23",
+          "say": "The worst: a drought at a Dutch power-grid operator the portfolio doesn't own.",
+          "gap": 0.5
+        },
+        {
+          "id": "L24",
+          "say": "A location-only screen scores it at zero. The network model: one point one three percent of the portfolio's annual value added.",
+          "show": "Location-only 0.00% · Network-aware 1.13%",
+          "gap": 0.6
+        },
+        {
+          "id": "L25",
+          "say": "And it holds up: across two hundred uncertainty draws, it stays in the top five every time. Rankings that don't are flagged as fragile.",
+          "show": "P(top 5) = 100% across 200 draws",
+          "gap": 0.5
+        },
+        {
+          "id": "L26",
+          "say": "A matrix shows who can hurt whom: upstream nodes that several holdings quietly share.",
+          "gap": 1.2
+        }
+      ]
+    },
+    {
+      "id": "s07-path",
+      "lead_in": 0.2,
+      "lines": [
+        {
+          "id": "L27",
+          "say": "Open it as a scenario, and the path appears.",
+          "gap": 1.6
+        },
+        {
+          "id": "L28",
+          "say": "The grid powers a cheese and yogurt maker, which loses about a quarter of its output. That shortfall flows on to a grocery chain.",
+          "show": "Grid → Utrecht Cheese and Yogurt Maker (25.7%) → Rhineland Grocery Group",
+          "gap": 0.4
+        },
+        {
+          "id": "L29",
+          "say": "Three holdings are hit. None of them directly.",
+          "gap": 1.4
+        }
+      ]
+    },
+    {
+      "id": "s08-optimise",
+      "lead_in": 0.2,
+      "lines": [
+        {
+          "id": "L30",
+          "say": "So, can you protect against it?",
+          "gap": 1.0
+        },
+        {
+          "id": "L31",
+          "say": "Give the optimiser three million dollars a year. It picks five interventions that cut the average impact of the ten worst events by about five percent.",
+          "show": "Tail impact 3.25% → 3.09% (4.98% lower) · plan $2.46M / yr",
+          "gap": 0.45
+        },
+        {
+          "id": "L32",
+          "say": "A brute-force check of a hundred and ninety-seven plans finds nothing better.",
+          "show": "Optimality gap 0.0% over 197 feasible plans",
+          "gap": 1.6
+        }
+      ]
+    },
+    {
+      "id": "s09-engine",
+      "lead_in": 0.6,
+      "lines": [
+        {
+          "id": "L33",
+          "say": "Under the hood, it's deliberately simple: one Python service, one React app, one database file.",
+          "gap": 0.5
+        },
+        {
+          "id": "L34",
+          "say": "Each event's direct hit combines three separate inputs: hazard, exposure, and vulnerability.",
+          "gap": 0.45
+        },
+        {
+          "id": "L35",
+          "say": "Then a vectorised engine pushes it along every supply link. Each link passes on only part of the shock, depending on dependency, substitutes and stock on hand, so shocks shrink with every hop.",
+          "gap": 0.5
+        },
+        {
+          "id": "L36",
+          "say": "The same engine powers the finder, every scenario, the uncertainty draws, and the optimiser.",
+          "gap": 0.5
+        },
+        {
+          "id": "L37",
+          "say": "Even the AI copilot is boxed in: it can explain the results, but it's never allowed to calculate them.",
+          "gap": 1.4
+        }
+      ]
+    },
+    {
+      "id": "s10-impact",
+      "lead_in": 0.4,
+      "lines": [
+        {
+          "id": "L38",
+          "say": "So what does this change?",
+          "gap": 0.45
+        },
+        {
+          "id": "L39",
+          "say": "A typical climate dashboard tests the scenario you chose. This one searches for the ones you didn't think of, and shows how much a site check can't see.",
+          "gap": 0.5
+        },
+        {
+          "id": "L40",
+          "say": "For a risk team, that's a starting list: which grids, ports and suppliers to check first.",
+          "gap": 0.6
+        },
+        {
+          "id": "L41",
+          "say": "And it's honest about its limits: synthetic data, an uncalibrated, unvalidated model, and no event probabilities. It ranks consequence, not likelihood.",
+          "gap": 0.5
+        },
+        {
+          "id": "L42",
+          "say": "The next step is real supplier data, and real losses to test against.",
+          "gap": 1.6
+        }
+      ]
+    },
+    {
+      "id": "s11-payoff",
+      "lead_in": 0.6,
+      "lines": [
+        {
+          "id": "L43",
+          "say": "So, back to that clean climate map.",
+          "gap": 0.5
+        },
+        {
+          "id": "L44",
+          "say": "In this model, the biggest hidden threat wasn't at any factory the portfolio owns. It was a drought at a power grid.",
+          "gap": 0.9
+        },
+        {
+          "id": "L45",
+          "say": "Climate risk doesn't stop at the factory fence.",
+          "gap": 1.0
+        },
+        {
+          "id": "L46",
+          "say": "The Fin zero four Climate Exposure Graph. Find the exposure your site checks can't see.",
+          "show": "FIN-04 Climate Exposure Graph — find the exposure your site checks can't see.",
+          "gap": 3.5
+        }
+      ]
+    }
+  ]
+}

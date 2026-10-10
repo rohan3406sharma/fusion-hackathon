@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { BookOpen, FlaskConical, Gauge, LayoutDashboard, Menu, Network, SlidersHorizontal, UserSearch, X } from 'lucide-react'
+import { BookOpen, FlaskConical, Gauge, LayoutDashboard, Menu, Network, ScanSearch, SlidersHorizontal, UserSearch, X } from 'lucide-react'
 import { useApp } from '../state/AppState'
 import { Badge } from './ui'
+import { HoldingViewToggle } from './Holdings'
 
 const NAV = [
   { to: '/', label: 'Overview', icon: LayoutDashboard, end: true },
+  { to: '/finder', label: 'Hidden exposure finder', icon: ScanSearch },
   { to: '/network', label: 'Supply-chain graph', icon: Network },
   { to: '/scenario', label: 'Scenario builder', icon: SlidersHorizontal },
   { to: '/results', label: 'Scenario results', icon: Gauge },
@@ -50,6 +52,7 @@ export default function Shell() {
               {scenarios.map((s) => <option key={s.id} value={s.id}>{s.name}{s.builtin ? '' : ' (custom)'}</option>)}
             </select>
             <div className="ml-auto flex flex-wrap items-center gap-2 text-[0.7rem] text-warm">
+              <HoldingViewToggle />
               {active && <span className="num">{active.hazards.map((h) => h.hazard_type).join(' + ')} · {run?.summary.max_depth_used ?? active.propagation_max_depth}-hop{depthOverride ? ' (override)' : ''} · {run ? `${run.summary.effective_duration_days.toFixed(0)} d` : ''}</span>}
               <Badge tone={loading ? 'gold' : 'neutral'}>{loading ? 'Running model' : 'Model idle'}</Badge>
               <Badge>Synthetic</Badge>

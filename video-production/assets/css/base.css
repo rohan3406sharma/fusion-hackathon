@@ -1,0 +1,91 @@
+/* FIN-04 explainer — shared design system.
+   Concept: "midnight cartography" — an ink-dark canvas where the app's own alabaster pages float as
+   lit documents; gold marks insight (the app's accent), vermilion marks a climate shock. */
+
+
+:root {
+  --ink: #0c1016;
+  --ink-2: #131922;
+  --ink-3: #1c2430;
+  --line: #2a3442;
+  --paper: #f4f1ea;
+  --text: #ece6da;
+  --text-dim: #9aa3b1;
+  --muted: #6d7686;
+  --gold: #d4ae3c;
+  --gold-deep: #9a7b17;
+  --hazard: #e0553b;
+  --hazard-deep: #8e2b21;
+  --safe: #62b88d;
+  --serif: "Instrument Serif", Georgia, serif;
+  --kinetic: "Archivo Black", "Space Grotesk", sans-serif;
+  --label: "Space Grotesk", "Inter", sans-serif;
+  --body: "Inter", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--ink); }
+* { box-sizing: border-box; }
+
+/* ---------- shared building blocks (used inside scene roots) ---------- */
+.fx-full { position: absolute; inset: 0; }
+.fx-abs { position: absolute; }
+.fx-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+.fx-eyebrow { font-family: var(--label); font-weight: 500; font-size: 22px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+.fx-headline { font-family: var(--serif); font-weight: 400; color: var(--text); line-height: 1.04; letter-spacing: -0.01em; margin: 0; }
+.fx-headline em { font-style: italic; color: var(--gold); }
+.fx-headline .hz { color: var(--hazard); font-style: italic; }
+.fx-body { font-family: var(--body); font-size: 30px; line-height: 1.35; color: var(--text-dim); }
+.fx-mono { font-family: var(--mono); }
+.fx-kinetic { font-family: var(--kinetic); text-transform: uppercase; color: var(--text); letter-spacing: -0.02em; line-height: 0.92; }
+
+/* chapter mark, top-left */
+.fx-chapter { position: absolute; left: 56px; top: 44px; display: flex; align-items: center; gap: 16px; font-family: var(--label); font-size: 20px;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-dim); padding: 10px 18px 10px 16px; border-radius: 999px;
+  background: rgba(12,16,22,0.78); z-index: 20; }
+.fx-chapter b { color: var(--gold); font-weight: 700; }
+.fx-chapter i { display: block; width: 44px; height: 2px; background: var(--gold); transform-origin: 0 50%; }
+
+/* source footnote, bottom-left */
+.fx-source { position: absolute; left: 72px; bottom: 44px; max-width: 1500px; font-family: var(--body); font-size: 19px; line-height: 1.4; color: var(--muted); }
+.fx-source b { color: var(--text-dim); font-weight: 700; }
+
+/* tags / chips */
+.fx-tag { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1.5px solid var(--line); border-radius: 999px;
+  font-family: var(--label); font-weight: 500; font-size: 19px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); background: rgba(12,16,22,0.72); }
+.fx-tag .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--gold); }
+.fx-tag.hz { border-color: rgba(224,85,59,0.6); color: #f2b2a3; }
+.fx-tag.hz .dot { background: var(--hazard); }
+.fx-tag.ok { border-color: rgba(98,184,141,0.55); color: #a9dcc2; }
+.fx-tag.ok .dot { background: var(--safe); }
+
+/* browser frame that holds a real capture at its native 1920x1080 CSS size; a camera scales it */
+.fx-cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; will-change: transform; }
+.fx-browser { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border-radius: 0 0 14px 14px; background: var(--paper);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.55), 0 0 0 1.5px rgba(255,255,255,0.06); }
+.fx-browser::before { content: ""; position: absolute; left: 0; right: 0; top: -54px; height: 54px; border-radius: 14px 14px 0 0;
+  background: #e7e2d8; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.06); }
+.fx-browser .bar { position: absolute; left: 0; right: 0; top: -54px; height: 54px; display: flex; align-items: center; gap: 12px; padding: 0 22px; }
+.fx-browser .bar i { width: 15px; height: 15px; border-radius: 50%; background: #cfc8ba; }
+.fx-browser .bar .url { margin-left: 26px; flex: 0 0 640px; height: 32px; border-radius: 8px; background: #f6f3ed; font-family: var(--body);
+  font-size: 18px; color: #6f6a60; display: flex; align-items: center; padding-left: 16px; }
+.fx-browser .bar .live { margin-left: auto; font-family: var(--label); font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase; color: #5e4a0c; }
+.fx-browser img, .fx-browser video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; border-radius: 0 0 14px 14px; object-fit: fill; }
+
+/* annotation primitives drawn in capture coordinates (inside .fx-browser) */
+.fx-hl { position: absolute; border: 3px solid var(--gold); border-radius: 8px; box-shadow: 0 0 0 9999px rgba(12,16,22,0); pointer-events: none; }
+.fx-hl.hz { border-color: var(--hazard); }
+.fx-dim { position: absolute; inset: 0; background: rgba(12,16,22,0.0); pointer-events: none; }
+
+/* screen-space callout */
+.fx-callout { position: absolute; padding: 18px 24px 20px; border-radius: 14px; background: rgba(12,16,22,0.92); border: 1.5px solid rgba(212,174,60,0.55);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45); color: var(--text); font-family: var(--body); }
+.fx-callout .k { font-family: var(--label); font-size: 20px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+.fx-callout .v { font-family: var(--serif); font-size: 74px; line-height: 1.0; margin-top: 6px; }
+.fx-callout .s { font-size: 23px; color: var(--text-dim); margin-top: 8px; line-height: 1.36; }
+.fx-callout.hz { border-color: rgba(224,85,59,0.6); }
+.fx-callout.hz .k { color: #f08a72; }
+
+/* persistent honesty tag used during the live demo */
+.fx-live { position: absolute; right: 72px; top: 52px; }

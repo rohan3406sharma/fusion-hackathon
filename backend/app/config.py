@@ -4,6 +4,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
@@ -20,6 +21,13 @@ class Settings(BaseSettings):
     max_page_size: int = 200
     run_cache_size: int = 64
     data_dir: Path = DATA_DIR
+    # AI copilot: local Ollama by default; deterministic templates are always the fallback; Anthropic only if a key is set
+    llm_provider: str = "ollama"                # ollama | anthropic | deterministic
+    ollama_url: str = "http://127.0.0.1:11434"
+    ollama_model: str = "qwen3:8b"
+    anthropic_api_key: SecretStr | None = None  # FIN04_ANTHROPIC_API_KEY; never exposed to the frontend
+    anthropic_model: str = "claude-haiku-5-5"
+    llm_timeout_s: float = 90.0
 
     @property
     def cors_list(self) -> list[str]:

@@ -1,0 +1,714 @@
+{
+ "layer": "JRC/CEMS global river flood hazard, 100-year return period, sampled within 5 km",
+ "source": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/CEMS-GLOFAS/flood_hazard/",
+ "dataset_version": "2.1.2",
+ "citation": "Baugh, C., Colonese, J., D'Angelo, C., Dottori, F., Neal, J., Prudhomme, C., Salamon, P. (2024). Modelled flood inundation for different return period scenarios at the global scale. European Commission, Joint Research Centre.",
+ "licence": "CC BY 4.0, (c) European Union 1995-2026; changes: windowed sampling and aggregation to shares per coordinate",
+ "retrieved": "2026-10-09",
+ "radius_km": 5.0,
+ "return_period_years": 100,
+ "meaning": "Share of the ~90 m cells within the radius that the model floods (class >= 1), and floods deeper than 1 m (class >= 2), in a 1-in-100-year river flood, around each entity's SYNTHETIC approximate coordinate. The denominator is ALL cells in the window, including sea, permanent water and dry land (the raster marks them all 255), so coastal shares are diluted. River flooding only. Windows at tile edges are truncated, not stitched from neighbouring tiles: see window_coverage.",
+ "entities": {
+  "bakery_uk": {
+   "cells": 14652,
+   "window_coverage": 0.999,
+   "flooded_share": 0.2196,
+   "deep_share": 0.2001,
+   "tile": "ID106_N60_W10_RP100_depth_reclass.tif"
+  },
+  "readymeal_uk": {
+   "cells": 15353,
+   "window_coverage": 1.0,
+   "flooded_share": 0.083,
+   "deep_share": 0.0714,
+   "tile": "ID106_N60_W10_RP100_depth_reclass.tif"
+  },
+  "cold_uk": {
+   "cells": 14920,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0479,
+   "deep_share": 0.034,
+   "tile": "ID106_N60_W10_RP100_depth_reclass.tif"
+  },
+  "truck_uk": {
+   "cells": 14996,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0021,
+   "deep_share": 0.0021,
+   "tile": "ID106_N60_W10_RP100_depth_reclass.tif"
+  },
+  "dc_uk": {
+   "cells": 14920,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0036,
+   "deep_share": 0.0036,
+   "tile": "ID106_N60_W10_RP100_depth_reclass.tif"
+  },
+  "whl_uk": {
+   "cells": 14982,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0035,
+   "deep_share": 0.0035,
+   "tile": "ID106_N60_W10_RP100_depth_reclass.tif"
+  },
+  "retail_uk": {
+   "cells": 14830,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID106_N60_W10_RP100_depth_reclass.tif"
+  },
+  "farm_olive_an": {
+   "cells": 11494,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID108_N40_W10_RP100_depth_reclass.tif"
+  },
+  "oilmill_an": {
+   "cells": 11548,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0096,
+   "deep_share": 0.0042,
+   "tile": "ID108_N40_W10_RP100_depth_reclass.tif"
+  },
+  "farm_cocoa_ci": {
+   "cells": 9196,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0015,
+   "deep_share": 0.0015,
+   "tile": "ID111_N10_W10_RP100_depth_reclass.tif"
+  },
+  "cocoa_grind_ci": {
+   "cells": 9170,
+   "window_coverage": 1.0,
+   "flooded_share": 0.3956,
+   "deep_share": 0.3621,
+   "tile": "ID111_N10_W10_RP100_depth_reclass.tif"
+  },
+  "port_abj": {
+   "cells": 9178,
+   "window_coverage": 1.0,
+   "flooded_share": 0.151,
+   "deep_share": 0.0874,
+   "tile": "ID111_N10_W10_RP100_depth_reclass.tif"
+  },
+  "farm_dairy_fr": {
+   "cells": 15198,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0314,
+   "deep_share": 0.0314,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "fert_eu": {
+   "cells": 14610,
+   "window_coverage": 1.0,
+   "flooded_share": 0.6709,
+   "deep_share": 0.2086,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "grid_nl": {
+   "cells": 14830,
+   "window_coverage": 1.0,
+   "flooded_share": 0.7504,
+   "deep_share": 0.5843,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "dairy_proc_fr": {
+   "cells": 15241,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0243,
+   "deep_share": 0.0243,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "oilblend_nl": {
+   "cells": 14808,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1816,
+   "deep_share": 0.1526,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "choc_be": {
+   "cells": 14576,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0858,
+   "deep_share": 0.0534,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "dairy_pack_nl": {
+   "cells": 14856,
+   "window_coverage": 1.0,
+   "flooded_share": 0.3592,
+   "deep_share": 0.1364,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "cold_nl": {
+   "cells": 14618,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1954,
+   "deep_share": 0.1491,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "reefer_eu": {
+   "cells": 14796,
+   "window_coverage": 1.0,
+   "flooded_share": 0.9659,
+   "deep_share": 0.871,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "port_rtm": {
+   "cells": 14808,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0833,
+   "deep_share": 0.0618,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "retail_eu": {
+   "cells": 14576,
+   "window_coverage": 1.0,
+   "flooded_share": 0.3539,
+   "deep_share": 0.3028,
+   "tile": "ID113_N60_W0_RP100_depth_reclass.tif"
+  },
+  "glass_eu": {
+   "cells": 13830,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1019,
+   "deep_share": 0.0881,
+   "tile": "ID114_N50_W0_RP100_depth_reclass.tif"
+  },
+  "roaster_de": {
+   "cells": 9834,
+   "window_coverage": 0.64,
+   "flooded_share": 0.4399,
+   "deep_share": 0.3681,
+   "tile": "ID121_N60_E10_RP100_depth_reclass.tif"
+  },
+  "carton_eu": {
+   "cells": 17892,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0684,
+   "deep_share": 0.0622,
+   "tile": "ID121_N60_E10_RP100_depth_reclass.tif"
+  },
+  "farm_barley_de": {
+   "cells": 13772,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID122_N50_E10_RP100_depth_reclass.tif"
+  },
+  "malt_de": {
+   "cells": 13756,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1326,
+   "deep_share": 0.0673,
+   "tile": "ID122_N50_E10_RP100_depth_reclass.tif"
+  },
+  "brewery_de": {
+   "cells": 13691,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0778,
+   "deep_share": 0.0621,
+   "tile": "ID122_N50_E10_RP100_depth_reclass.tif"
+  },
+  "roaster_us": {
+   "cells": 13548,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1146,
+   "deep_share": 0.0882,
+   "tile": "ID17_N50_W130_RP100_depth_reclass.tif"
+  },
+  "farm_wheat_pb": {
+   "cells": 10642,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0822,
+   "deep_share": 0.0264,
+   "tile": "ID183_N40_E70_RP100_depth_reclass.tif"
+  },
+  "irrig_pb": {
+   "cells": 10652,
+   "window_coverage": 1.0,
+   "flooded_share": 0.2679,
+   "deep_share": 0.075,
+   "tile": "ID183_N40_E70_RP100_depth_reclass.tif"
+  },
+  "grid_pb": {
+   "cells": 10616,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0002,
+   "deep_share": 0.0002,
+   "tile": "ID183_N40_E70_RP100_depth_reclass.tif"
+  },
+  "mill_pb": {
+   "cells": 10642,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0712,
+   "deep_share": 0.0252,
+   "tile": "ID183_N40_E70_RP100_depth_reclass.tif"
+  },
+  "biscuit_in": {
+   "cells": 10640,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0291,
+   "deep_share": 0.0114,
+   "tile": "ID183_N40_E70_RP100_depth_reclass.tif"
+  },
+  "cold_in": {
+   "cells": 10642,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0712,
+   "deep_share": 0.0252,
+   "tile": "ID183_N40_E70_RP100_depth_reclass.tif"
+  },
+  "truck_in": {
+   "cells": 10633,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0033,
+   "deep_share": 0.0033,
+   "tile": "ID183_N40_E70_RP100_depth_reclass.tif"
+  },
+  "farm_rice_hr": {
+   "cells": 10508,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0011,
+   "deep_share": 0.0011,
+   "tile": "ID184_N30_E70_RP100_depth_reclass.tif"
+  },
+  "fert_in": {
+   "cells": 9854,
+   "window_coverage": 0.999,
+   "flooded_share": 0.4472,
+   "deep_share": 0.1576,
+   "tile": "ID184_N30_E70_RP100_depth_reclass.tif"
+  },
+  "rmill_hr": {
+   "cells": 10511,
+   "window_coverage": 1.0,
+   "flooded_share": 0.017,
+   "deep_share": 0.0072,
+   "tile": "ID184_N30_E70_RP100_depth_reclass.tif"
+  },
+  "dc_in": {
+   "cells": 10386,
+   "window_coverage": 1.0,
+   "flooded_share": 0.084,
+   "deep_share": 0.0411,
+   "tile": "ID184_N30_E70_RP100_depth_reclass.tif"
+  },
+  "retail_in": {
+   "cells": 10390,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID184_N30_E70_RP100_depth_reclass.tif"
+  },
+  "cookoil_in": {
+   "cells": 9670,
+   "window_coverage": 1.0,
+   "flooded_share": 0.2035,
+   "deep_share": 0.1759,
+   "tile": "ID185_N20_E70_RP100_depth_reclass.tif"
+  },
+  "port_nsw": {
+   "cells": 9667,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1982,
+   "deep_share": 0.15,
+   "tile": "ID185_N20_E70_RP100_depth_reclass.tif"
+  },
+  "farm_veg_cv": {
+   "cells": 11374,
+   "window_coverage": 1.0,
+   "flooded_share": 0.2725,
+   "deep_share": 0.1954,
+   "tile": "ID18_N40_W130_RP100_depth_reclass.tif"
+  },
+  "veg_proc_cv": {
+   "cells": 11390,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1504,
+   "deep_share": 0.061,
+   "tile": "ID18_N40_W130_RP100_depth_reclass.tif"
+  },
+  "juice_us": {
+   "cells": 11686,
+   "window_coverage": 1.0,
+   "flooded_share": 0.8514,
+   "deep_share": 0.7154,
+   "tile": "ID18_N40_W130_RP100_depth_reclass.tif"
+  },
+  "farm_cane_up": {
+   "cells": 10234,
+   "window_coverage": 0.999,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID192_N30_E80_RP100_depth_reclass.tif"
+  },
+  "refinery_up": {
+   "cells": 10222,
+   "window_coverage": 0.999,
+   "flooded_share": 0.1603,
+   "deep_share": 0.1443,
+   "tile": "ID192_N30_E80_RP100_depth_reclass.tif"
+  },
+  "farm_coffee_dl": {
+   "cells": 9365,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0014,
+   "deep_share": 0.0014,
+   "tile": "ID210_N20_E100_RP100_depth_reclass.tif"
+  },
+  "rmill_mk": {
+   "cells": 9198,
+   "window_coverage": 0.992,
+   "flooded_share": 0.9876,
+   "deep_share": 0.9805,
+   "tile": "ID210_N20_E100_RP100_depth_reclass.tif"
+  },
+  "coffee_proc_dl": {
+   "cells": 9363,
+   "window_coverage": 1.0,
+   "flooded_share": 0.001,
+   "deep_share": 0.001,
+   "tile": "ID210_N20_E100_RP100_depth_reclass.tif"
+  },
+  "noodle_vn": {
+   "cells": 9292,
+   "window_coverage": 1.0,
+   "flooded_share": 0.3544,
+   "deep_share": 0.2779,
+   "tile": "ID210_N20_E100_RP100_depth_reclass.tif"
+  },
+  "port_hcm": {
+   "cells": 9292,
+   "window_coverage": 1.0,
+   "flooded_share": 0.9476,
+   "deep_share": 0.9098,
+   "tile": "ID210_N20_E100_RP100_depth_reclass.tif"
+  },
+  "farm_rice_mk": {
+   "cells": 5614,
+   "window_coverage": 0.606,
+   "flooded_share": 1.0,
+   "deep_share": 1.0,
+   "tile": "ID211_N10_E100_RP100_depth_reclass.tif"
+  },
+  "farm_palm_sm": {
+   "cells": 9136,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0637,
+   "deep_share": 0.054,
+   "tile": "ID211_N10_E100_RP100_depth_reclass.tif"
+  },
+  "oilrefine_sm": {
+   "cells": 9136,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1399,
+   "deep_share": 0.0395,
+   "tile": "ID211_N10_E100_RP100_depth_reclass.tif"
+  },
+  "flex_asia": {
+   "cells": 9178,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID211_N10_E100_RP100_depth_reclass.tif"
+  },
+  "farm_fruit_cv": {
+   "cells": 11392,
+   "window_coverage": 1.0,
+   "flooded_share": 0.003,
+   "deep_share": 0.003,
+   "tile": "ID23_N40_W120_RP100_depth_reclass.tif"
+  },
+  "irrig_cv": {
+   "cells": 11400,
+   "window_coverage": 1.0,
+   "flooded_share": 0.2098,
+   "deep_share": 0.0362,
+   "tile": "ID23_N40_W120_RP100_depth_reclass.tif"
+  },
+  "grid_ca": {
+   "cells": 6464,
+   "window_coverage": 0.566,
+   "flooded_share": 0.0032,
+   "deep_share": 0.0032,
+   "tile": "ID23_N40_W120_RP100_depth_reclass.tif"
+  },
+  "fruit_proc_cv": {
+   "cells": 11396,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0039,
+   "deep_share": 0.0039,
+   "tile": "ID23_N40_W120_RP100_depth_reclass.tif"
+  },
+  "cold_ca": {
+   "cells": 11396,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0036,
+   "deep_share": 0.0036,
+   "tile": "ID23_N40_W120_RP100_depth_reclass.tif"
+  },
+  "bevdist_us": {
+   "cells": 11033,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1413,
+   "deep_share": 0.0467,
+   "tile": "ID23_N40_W120_RP100_depth_reclass.tif"
+  },
+  "seed_us": {
+   "cells": 12268,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0207,
+   "deep_share": 0.0136,
+   "tile": "ID36_N50_W100_RP100_depth_reclass.tif"
+  },
+  "farm_wheat_ks": {
+   "cells": 11675,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0029,
+   "deep_share": 0.0029,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "mill_ks": {
+   "cells": 11526,
+   "window_coverage": 0.999,
+   "flooded_share": 0.3616,
+   "deep_share": 0.1986,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "cereal_us": {
+   "cells": 11752,
+   "window_coverage": 0.999,
+   "flooded_share": 0.3512,
+   "deep_share": 0.3273,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "snack_us": {
+   "cells": 10850,
+   "window_coverage": 0.999,
+   "flooded_share": 0.2172,
+   "deep_share": 0.1982,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "cold_us": {
+   "cells": 10399,
+   "window_coverage": 0.932,
+   "flooded_share": 0.4292,
+   "deep_share": 0.4179,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "rail_us": {
+   "cells": 11752,
+   "window_coverage": 0.999,
+   "flooded_share": 0.3656,
+   "deep_share": 0.2567,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "dc_us": {
+   "cells": 10846,
+   "window_coverage": 0.999,
+   "flooded_share": 0.2392,
+   "deep_share": 0.1688,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "whl_us": {
+   "cells": 10859,
+   "window_coverage": 0.999,
+   "flooded_share": 0.0103,
+   "deep_share": 0.009,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "retail_us": {
+   "cells": 11738,
+   "window_coverage": 1.0,
+   "flooded_share": 0.2858,
+   "deep_share": 0.235,
+   "tile": "ID37_N40_W100_RP100_depth_reclass.tif"
+  },
+  "farm_dairy_wi": {
+   "cells": 12791,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0052,
+   "deep_share": 0.0051,
+   "tile": "ID44_N50_W90_RP100_depth_reclass.tif"
+  },
+  "dairy_proc_wi": {
+   "cells": 12791,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1175,
+   "deep_share": 0.0801,
+   "tile": "ID44_N50_W90_RP100_depth_reclass.tif"
+  },
+  "dairy_pack_us": {
+   "cells": 12254,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1067,
+   "deep_share": 0.0077,
+   "tile": "ID44_N50_W90_RP100_depth_reclass.tif"
+  },
+  "softdrink_us": {
+   "cells": 10988,
+   "window_coverage": 1.0,
+   "flooded_share": 0.002,
+   "deep_share": 0.002,
+   "tile": "ID45_N40_W90_RP100_depth_reclass.tif"
+  },
+  "can_us": {
+   "cells": 6800,
+   "window_coverage": 0.571,
+   "flooded_share": 0.0504,
+   "deep_share": 0.0426,
+   "tile": "ID45_N40_W90_RP100_depth_reclass.tif"
+  },
+  "pet_us": {
+   "cells": 11173,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0001,
+   "deep_share": 0.0001,
+   "tile": "ID45_N40_W90_RP100_depth_reclass.tif"
+  },
+  "farm_maize_mt": {
+   "cells": 9360,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID84_S10_W60_RP100_depth_reclass.tif"
+  },
+  "farm_soy_mt": {
+   "cells": 9374,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0275,
+   "deep_share": 0.0223,
+   "tile": "ID84_S10_W60_RP100_depth_reclass.tif"
+  },
+  "starch_mt": {
+   "cells": 9479,
+   "window_coverage": 1.0,
+   "flooded_share": 0.183,
+   "deep_share": 0.1567,
+   "tile": "ID84_S10_W60_RP100_depth_reclass.tif"
+  },
+  "oilpress_mt": {
+   "cells": 9526,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1823,
+   "deep_share": 0.1662,
+   "tile": "ID84_S10_W60_RP100_depth_reclass.tif"
+  },
+  "fert_br": {
+   "cells": 9528,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0003,
+   "deep_share": 0.0003,
+   "tile": "ID92_S10_W50_RP100_depth_reclass.tif"
+  },
+  "farm_cane_sp": {
+   "cells": 9792,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0103,
+   "deep_share": 0.0097,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "farm_coffee_mg": {
+   "cells": 9814,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0001,
+   "deep_share": 0.0001,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "farm_citrus_sp": {
+   "cells": 9834,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0013,
+   "deep_share": 0.0013,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "agfuel_br": {
+   "cells": 9734,
+   "window_coverage": 0.999,
+   "flooded_share": 0.0,
+   "deep_share": 0.0,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "grid_sp": {
+   "cells": 9918,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0038,
+   "deep_share": 0.0038,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "refinery_sp": {
+   "cells": 9784,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0013,
+   "deep_share": 0.0013,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "coffee_proc_mg": {
+   "cells": 9820,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0088,
+   "deep_share": 0.0082,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "juice_proc_sp": {
+   "cells": 9834,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0005,
+   "deep_share": 0.0005,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "softdrink_br": {
+   "cells": 9898,
+   "window_coverage": 1.0,
+   "flooded_share": 0.092,
+   "deep_share": 0.0875,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "can_br": {
+   "cells": 9912,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0038,
+   "deep_share": 0.0038,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "cold_br": {
+   "cells": 9912,
+   "window_coverage": 1.0,
+   "flooded_share": 0.0052,
+   "deep_share": 0.0052,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "port_santos": {
+   "cells": 9988,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1728,
+   "deep_share": 0.1112,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "dc_br": {
+   "cells": 9954,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1347,
+   "deep_share": 0.1119,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "bevdist_br": {
+   "cells": 9954,
+   "window_coverage": 1.0,
+   "flooded_share": 0.2501,
+   "deep_share": 0.2122,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  },
+  "retail_br": {
+   "cells": 9954,
+   "window_coverage": 1.0,
+   "flooded_share": 0.1632,
+   "deep_share": 0.141,
+   "tile": "ID93_S20_W50_RP100_depth_reclass.tif"
+  }
+ },
+ "not_covered": []
+}

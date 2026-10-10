@@ -1,0 +1,278 @@
+{
+ "L01": {
+  "file": "assets/voice/L01.wav",
+  "duration": 4.059,
+  "sample_rate": 24000,
+  "say": "Imagine checking every factory you invest in against the climate map."
+ },
+ "L02": {
+  "file": "assets/voice/L02.wav",
+  "duration": 3.272,
+  "sample_rate": 24000,
+  "say": "Floods. Heat. Drought. Every site comes back clear."
+ },
+ "L03": {
+  "file": "assets/voice/L03.wav",
+  "duration": 1.556,
+  "sample_rate": 24000,
+  "say": "Now ask a harder question."
+ },
+ "L04": {
+  "file": "assets/voice/L04.wav",
+  "duration": 5.074,
+  "sample_rate": 24000,
+  "say": "What if the climate event that hurts your portfolio most... never touches anything you own?"
+ },
+ "L05": {
+  "file": "assets/voice/L05.wav",
+  "duration": 1.333,
+  "sample_rate": 24000,
+  "say": "It's not hypothetical."
+ },
+ "L06": {
+  "file": "assets/voice/L06.wav",
+  "duration": 6.299,
+  "sample_rate": 24000,
+  "say": "In twenty twenty-three, drought drove the lake that feeds the Panama Canal to record lows for the season."
+ },
+ "L07": {
+  "file": "assets/voice/L07.wav",
+  "duration": 4.465,
+  "sample_rate": 24000,
+  "say": "The canal cut its daily bookings, step by step, down to eighteen ships."
+ },
+ "L08": {
+  "file": "assets/voice/L08.wav",
+  "duration": 4.485,
+  "sample_rate": 24000,
+  "say": "The hazard wasn't at anyone's factory. It was in a shared link of the chain."
+ },
+ "L09": {
+  "file": "assets/voice/L09.wav",
+  "duration": 8.651,
+  "sample_rate": 24000,
+  "say": "Research confirms the pattern: when a natural disaster hits a supplier, its customers lose output too, and their market value falls."
+ },
+ "L10": {
+  "file": "assets/voice/L10.wav",
+  "duration": 7.84,
+  "sample_rate": 24000,
+  "say": "After Japan's twenty eleven earthquake, the disruption travelled further: to suppliers' suppliers, and customers' customers."
+ },
+ "L11": {
+  "file": "assets/voice/L11.wav",
+  "duration": 3.247,
+  "sample_rate": 24000,
+  "say": "A screen that only checks your own sites... sees none of it."
+ },
+ "L12": {
+  "file": "assets/voice/L12.wav",
+  "duration": 3.124,
+  "sample_rate": 24000,
+  "say": "This is the Fin zero four Climate Exposure Graph."
+ },
+ "L13": {
+  "file": "assets/voice/L13.wav",
+  "duration": 6.07,
+  "sample_rate": 24000,
+  "say": "It maps a food supply chain as a network, and lets a climate shock travel through it, hop by hop."
+ },
+ "L14": {
+  "file": "assets/voice/L14.wav",
+  "duration": 1.789,
+  "sample_rate": 24000,
+  "say": "Then it flips the usual question."
+ },
+ "L15": {
+  "file": "assets/voice/L15.wav",
+  "duration": 6.548,
+  "sample_rate": 24000,
+  "say": "Not, what if this event hits? But: which events would hurt most, and how much of that would a site check miss?"
+ },
+ "L16": {
+  "file": "assets/voice/L16.wav",
+  "duration": 6.351,
+  "sample_rate": 24000,
+  "say": "Bank supervisors call this a reverse stress test: start from the damage, then search for its causes."
+ },
+ "L17": {
+  "file": "assets/voice/L17.wav",
+  "duration": 8.676,
+  "sample_rate": 24000,
+  "say": "One honest note: real supplier links are rarely published, so this network is synthetic. A hundred and two companies, eighteen holdings."
+ },
+ "L18": {
+  "file": "assets/voice/L18.wav",
+  "duration": 4.597,
+  "sample_rate": 24000,
+  "say": "The one real dataset is the E U's river-flood map, used as context."
+ },
+ "L19": {
+  "file": "assets/voice/L19.wav",
+  "duration": 1.158,
+  "sample_rate": 24000,
+  "say": "Here it is, running."
+ },
+ "L20": {
+  "file": "assets/voice/L20.wav",
+  "duration": 2.466,
+  "sample_rate": 24000,
+  "say": "Open the Hidden Exposure Finder, and search."
+ },
+ "L21": {
+  "file": "assets/voice/L21.wav",
+  "duration": 5.521,
+  "sample_rate": 24000,
+  "say": "Seven hundred and eighty synthetic events, scored against the portfolio in under a second."
+ },
+ "L22": {
+  "file": "assets/voice/L22.wav",
+  "duration": 8.134,
+  "sample_rate": 24000,
+  "say": "A hundred and sixty-five distinct events are hidden-only: no holding is hit directly, yet the portfolio still loses value."
+ },
+ "L23": {
+  "file": "assets/voice/L23.wav",
+  "duration": 4.836,
+  "sample_rate": 24000,
+  "say": "The worst: a drought at a Dutch power-grid operator the portfolio doesn't own."
+ },
+ "L24": {
+  "file": "assets/voice/L24.wav",
+  "duration": 8.553,
+  "sample_rate": 24000,
+  "say": "A location-only screen scores it at zero. The network model: one point one three percent of the portfolio's annual value added."
+ },
+ "L25": {
+  "file": "assets/voice/L25.wav",
+  "duration": 8.611,
+  "sample_rate": 24000,
+  "say": "And it holds up: across two hundred uncertainty draws, it stays in the top five every time. Rankings that don't are flagged as fragile."
+ },
+ "L26": {
+  "file": "assets/voice/L26.wav",
+  "duration": 5.084,
+  "sample_rate": 24000,
+  "say": "A matrix shows who can hurt whom: upstream nodes that several holdings quietly share."
+ },
+ "L27": {
+  "file": "assets/voice/L27.wav",
+  "duration": 2.736,
+  "sample_rate": 24000,
+  "say": "Open it as a scenario, and the path appears."
+ },
+ "L28": {
+  "file": "assets/voice/L28.wav",
+  "duration": 8.113,
+  "sample_rate": 24000,
+  "say": "The grid powers a cheese and yogurt maker, which loses about a quarter of its output. That shortfall flows on to a grocery chain."
+ },
+ "L29": {
+  "file": "assets/voice/L29.wav",
+  "duration": 2.827,
+  "sample_rate": 24000,
+  "say": "Three holdings are hit. None of them directly."
+ },
+ "L30": {
+  "file": "assets/voice/L30.wav",
+  "duration": 1.852,
+  "sample_rate": 24000,
+  "say": "So, can you protect against it?"
+ },
+ "L31": {
+  "file": "assets/voice/L31.wav",
+  "duration": 9.66,
+  "sample_rate": 24000,
+  "say": "Give the optimiser three million dollars a year. It picks five interventions that cut the average impact of the ten worst events by about five percent."
+ },
+ "L32": {
+  "file": "assets/voice/L32.wav",
+  "duration": 4.472,
+  "sample_rate": 24000,
+  "say": "A brute-force check of a hundred and ninety-seven plans finds nothing better."
+ },
+ "L33": {
+  "file": "assets/voice/L33.wav",
+  "duration": 6.287,
+  "sample_rate": 24000,
+  "say": "Under the hood, it's deliberately simple: one Python service, one React app, one database file."
+ },
+ "L34": {
+  "file": "assets/voice/L34.wav",
+  "duration": 6.178,
+  "sample_rate": 24000,
+  "say": "Each event's direct hit combines three separate inputs: hazard, exposure, and vulnerability."
+ },
+ "L35": {
+  "file": "assets/voice/L35.wav",
+  "duration": 12.818,
+  "sample_rate": 24000,
+  "say": "Then a vectorised engine pushes it along every supply link. Each link passes on only part of the shock, depending on dependency, substitutes and stock on hand, so shocks shrink with every hop."
+ },
+ "L36": {
+  "file": "assets/voice/L36.wav",
+  "duration": 5.997,
+  "sample_rate": 24000,
+  "say": "The same engine powers the finder, every scenario, the uncertainty draws, and the optimiser."
+ },
+ "L37": {
+  "file": "assets/voice/L37.wav",
+  "duration": 6.642,
+  "sample_rate": 24000,
+  "say": "Even the AI copilot is boxed in: it can explain the results, but it's never allowed to calculate them."
+ },
+ "L38": {
+  "file": "assets/voice/L38.wav",
+  "duration": 1.347,
+  "sample_rate": 24000,
+  "say": "So what does this change?"
+ },
+ "L39": {
+  "file": "assets/voice/L39.wav",
+  "duration": 9.174,
+  "sample_rate": 24000,
+  "say": "A typical climate dashboard tests the scenario you chose. This one searches for the ones you didn't think of, and shows how much a site check can't see."
+ },
+ "L40": {
+  "file": "assets/voice/L40.wav",
+  "duration": 5.37,
+  "sample_rate": 24000,
+  "say": "For a risk team, that's a starting list: which grids, ports and suppliers to check first."
+ },
+ "L41": {
+  "file": "assets/voice/L41.wav",
+  "duration": 10.348,
+  "sample_rate": 24000,
+  "say": "And it's honest about its limits: synthetic data, an uncalibrated, unvalidated model, and no event probabilities. It ranks consequence, not likelihood."
+ },
+ "L42": {
+  "file": "assets/voice/L42.wav",
+  "duration": 4.533,
+  "sample_rate": 24000,
+  "say": "The next step is real supplier data, and real losses to test against."
+ },
+ "L43": {
+  "file": "assets/voice/L43.wav",
+  "duration": 2.024,
+  "sample_rate": 24000,
+  "say": "So, back to that clean climate map."
+ },
+ "L44": {
+  "file": "assets/voice/L44.wav",
+  "duration": 7.1,
+  "sample_rate": 24000,
+  "say": "In this model, the biggest hidden threat wasn't at any factory the portfolio owns. It was a drought at a power grid."
+ },
+ "L45": {
+  "file": "assets/voice/L45.wav",
+  "duration": 2.611,
+  "sample_rate": 24000,
+  "say": "Climate risk doesn't stop at the factory fence."
+ },
+ "L46": {
+  "file": "assets/voice/L46.wav",
+  "duration": 5.614,
+  "sample_rate": 24000,
+  "say": "The Fin zero four Climate Exposure Graph. Find the exposure your site checks can't see."
+ }
+}

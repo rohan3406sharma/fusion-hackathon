@@ -7,9 +7,10 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
+from ..domain.holdings import Holdings, units_holdings
 from ..models import analytics
 from ..models.climate import DirectExposureInputs, build_direct_inputs, direct_disruption, hazard_intensity_at_entities
-from ..models.propagation import Network, compile_network, propagate, transmission
+from ..models.propagation import Network, compile_network, simulate
 from ..schemas.domain import Entity, Relation
 from ..schemas.results import RunResult
 from ..schemas.scenario import ScenarioSpec
@@ -62,11 +63,11 @@ def execute(entities: list[Entity], relations: list[Relation], spec: ScenarioSpe
     direct = build_direct_inputs(entities, spec)
     d0 = direct_disruption(direct)                      # (1,N)
     T = direct.effective_duration_days
-    trans = transmission(net, T, inventory_scale=spec.inventory_scale, substitution_scale=spec.substitution_scale,
-                         dependency_scale=spec.dependency_scale)
     depth = max_depth or spec.propagation_max_depth
-    hist, conv = propagate(net, d0, trans, max_depth=depth)
-    return Execution(net, direct, d0[0], trans[0], [h for h in hist], conv, T, min(1.0, T / 365.0))
+    hist, conv, eff = simulate(net, d0, T, inventory_scale=spec.inventory_scale, substitution_scale=spec.substitution_scale,
+                               dependency_scale=spec.dependency_scale, use_graph_alternatives=spec.use_graph_alternatives,
+                               cycle_damping=spec.cycle_damping, max_depth=depth)
+    return Execution(net, direct, d0[0], eff[0], [h for h in hist], conv, T, min(1.0, T / 365.0))
 
 
 def _breakdown(rows: list[dict], key: str) -> list[dict]:
@@ -91,7 +92,8 @@ def order_losses(ex: Execution) -> dict[str, np.ndarray]:
 
 
 def build_run_result(entities: list[Entity], relations: list[Relation], spec: ScenarioSpec, scenario_id: str | None,
-                     top_paths: int = 10, max_depth: int | None = None) -> RunResult:
+                     top_paths: int = 10, max_depth: int | None = None, weights: dict[str, float] | None = None,
+                     holdings: Holdings | None = None) -> RunResult:
     ex = execute(entities, relations, spec, max_depth)
     net = ex.net
     ol = order_losses(ex)
@@ -127,7 +129,7 @@ def build_run_result(entities: list[Entity], relations: list[Relation], spec: Sc
     bott = [dict(entity_id=s["entity_id"], name=s["name"], score=s["score"], downstream_reach=s["downstream_reach"],
                  betweenness=s["betweenness"], out_degree=s["out_degree"],
                  weighted_out_dependency=s["weighted_out_dependency"], note="ranking score, not a loss estimate") for s in scores if s["out_degree"] > 0][:8]
-    cmp_ = build_comparison(entities, rows, dloss, tloss)
+    cmp_ = build_comparison(entities, rows, dloss, tloss, weights, ex.period_fraction, holdings)
     summary = dict(
         n_entities=net.n, n_exposed_facilities=int((ex.d0 > DIRECT_THR).sum()),
         n_affected_downstream=int(sum(r["status"] == "propagated" for r in rows)),
@@ -152,33 +154,76 @@ def build_run_result(entities: list[Entity], relations: list[Relation], spec: Sc
         assumptions=assumptions, limitations=LIMITATIONS, units=units))
 
 
-def build_comparison(entities: list[Entity], rows: list[dict], dloss: np.ndarray, tloss: np.ndarray) -> dict:
+HIDDEN_THRESHOLDS = (0.01, 0.02, 0.05, 0.10)
+
+
+def default_weights(entities: list[Entity]) -> dict[str, float]:
+    ids = [e.id for e in entities if e.in_demo_portfolio]
+    return {i: 1.0 / len(ids) for i in ids} if ids else {}
+
+
+def build_comparison(entities: list[Entity], rows: list[dict], dloss: np.ndarray, tloss: np.ndarray,
+                     weights: dict[str, float] | None = None, period_fraction: float = 1.0, holdings: Holdings | None = None) -> dict:
+    """Location-only vs network-aware, for the whole network and per holding. A holding is a business unit (weights) or,
+    when `holdings` is a company view, a company whose disruption is the value-added-weighted average of its segments."""
     loc_total, net_total = float(dloss.sum()), float(tloss.sum())
-    hold = [(i, e) for i, e in enumerate(entities) if e.in_demo_portfolio]
-    loc_f = pd.Series([rows[i]["direct_disruption"] for i, _ in hold])
-    net_f = pd.Series([rows[i]["final_disruption"] for i, _ in hold])
+    if holdings is None:
+        holdings = units_holdings(entities, default_weights(entities) if weights is None else weights)
+    company = holdings.view == "company"
+    idx = {e.id: i for i, e in enumerate(entities)}
+    hold = sorted(holdings.holdings, key=lambda h: min(idx[s.entity_id] for s in h.segments))      # network order, as v0.3
+    loc_d = [sum(s.share * rows[idx[s.entity_id]]["direct_disruption"] for s in h.segments) for h in hold]
+    net_d = [sum(s.share * rows[idx[s.entity_id]]["final_disruption"] for s in h.segments) for h in hold]
+    loc_f, net_f = pd.Series(loc_d, dtype=float), pd.Series(net_d, dtype=float)
     # average ranks: tied holdings (e.g. many with zero direct disruption) share the mean rank, so a tie is not read as "rank 1"
     r_loc = loc_f.rank(ascending=False, method="average") if len(hold) else loc_f
     r_net = net_f.rank(ascending=False, method="average") if len(hold) else net_f
     prow = []
-    for k, (i, e) in enumerate(hold):
-        hidden = rows[i]["direct_disruption"] < DIRECT_THR and (rows[i]["final_disruption"] - rows[i]["direct_disruption"]) >= 0.05
-        prow.append(dict(entity_id=e.id, name=e.name, location_disruption=rows[i]["direct_disruption"],
-                         network_disruption=rows[i]["final_disruption"], location_loss_musd=rows[i]["direct_loss_musd"],
-                         network_loss_musd=rows[i]["total_loss_musd"], rank_location=float(r_loc[k]), rank_network=float(r_net[k]),
-                         # a holding untouched in both views did not "move"
-                         rank_change=0.0 if rows[i]["final_disruption"] < 1e-4 else float(r_loc[k] - r_net[k]),
-                         hidden_exposure=bool(hidden)))
+    for k, h in enumerate(hold):
+        ld, nd = round(loc_d[k], 4), round(net_d[k], 4)
+        hidden = ld < DIRECT_THR and (nd - ld) >= 0.05
+        row = dict(entity_id=h.id, name=h.name, location_disruption=ld, network_disruption=nd,
+                   location_loss_musd=round(sum(rows[idx[s.entity_id]]["direct_loss_musd"] for s in h.segments), 3),
+                   network_loss_musd=round(sum(rows[idx[s.entity_id]]["total_loss_musd"] for s in h.segments), 3),
+                   rank_location=float(r_loc[k]), rank_network=float(r_net[k]),
+                   # a holding untouched in both views did not "move"
+                   rank_change=0.0 if nd < 1e-4 else float(r_loc[k] - r_net[k]),
+                   hidden_exposure=bool(hidden), weight=round(h.weight, 6), kind=h.kind, primary_entity_id=h.primary_entity_id)
+        if h.multi_segment:
+            fins = [rows[idx[s.entity_id]]["final_disruption"] for s in h.segments]
+            row.update(other_businesses_share=h.other_share, network_disruption_if_other_hit=round(nd / max(1.0 - h.other_share, 1e-12), 4),
+                       network_disruption_one_node=round(1.0 - float(np.prod([1.0 - f for f in fins])), 4),
+                       segments=[dict(entity_id=s.entity_id, name=s.name, segment=s.label, share=round(s.share, 4),
+                                      location_disruption=rows[idx[s.entity_id]]["direct_disruption"], network_disruption=f)
+                                 for s, f in zip(h.segments, fins)])
+        prow.append(row)
     prow.sort(key=lambda r: r["rank_network"])
     pl = sum(r["location_loss_musd"] for r in prow)
     pn = sum(r["network_loss_musd"] for r in prow)
     rel = lambda a, b: round((b - a) / a, 4) if a > 1e-9 else None  # noqa: E731
+    # position-weighted impact = sum_h w_h * disruption_h * T/365, i.e. share of each holding's annual value added lost
+    w_loc = sum(r["weight"] * r["location_disruption"] for r in prow) * period_fraction
+    w_net = sum(r["weight"] * r["network_disruption"] for r in prow) * period_fraction
+    upper = sum(r["weight"] * r.get("network_disruption_if_other_hit", r["network_disruption"]) for r in prow) * period_fraction
+    one = sum(r["weight"] * r.get("network_disruption_one_node", r["network_disruption"]) for r in prow) * period_fraction
+    curve = [dict(threshold=t, count=sum(1 for r in prow if r["location_disruption"] < DIRECT_THR
+                                        and r["network_disruption"] - r["location_disruption"] >= t)) for t in HIDDEN_THRESHOLDS]
+    n_multi = sum(1 for r in prow if r["kind"] == "multi_segment")
+    who = (f"{len(prow)} SYNTHETIC companies ({n_multi} with several business units, each company's disruption the value-added-weighted "
+           "average of its units; any share outside Food & Beverage is not modelled)" if company else f"{len(prow)} SYNTHETIC holdings")
     return dict(
         location_only_loss_musd=round(loc_total, 3), network_aware_loss_musd=round(net_total, 3),
         absolute_difference_musd=round(net_total - loc_total, 3), relative_difference=rel(loc_total, net_total),
         portfolio_location_loss_musd=round(pl, 3), portfolio_network_loss_musd=round(pn, 3),
         portfolio_absolute_difference_musd=round(pn - pl, 3), portfolio_relative_difference=rel(pl, pn),
         portfolio_rows=prow, hidden_exposure_count=sum(r["hidden_exposure"] for r in prow),
-        scope_note=("Location-only = direct losses at exposed facilities. Network-aware = direct + modelled indirect losses through "
-                    "supply links. Portfolio = 18 equal-weight SYNTHETIC holdings. Both are model outputs under stated assumptions; "
-                    "no study has validated this comparison end-to-end."))
+        portfolio_location_impact=round(w_loc, 6), portfolio_network_impact=round(w_net, 6),
+        portfolio_hidden_share=round(1 - w_loc / w_net, 4) if w_net > 1e-12 else None,
+        hidden_exposure_curve=curve, holding_view=holdings.view,
+        portfolio_network_impact_if_other_hit=round(upper, 6) if company else None,
+        portfolio_network_impact_one_node=round(one, 6) if company else None,
+        scope_note=(f"Location-only = direct losses at exposed facilities. Network-aware = direct + modelled indirect losses through "
+                    f"supply links. Portfolio = {who} with synthetic position weights; impact = position-weighted share "
+                    "of annual value added lost. The USD figures are an unweighted sum of the holdings' value-added loss. Both views are "
+                    "model outputs under stated assumptions; no study has validated this comparison end-to-end. 'Hidden exposure' flags "
+                    "holdings with <1% direct and >=5% propagated disruption; the curve shows how that count depends on the cut-off."))

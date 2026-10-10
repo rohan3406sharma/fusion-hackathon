@@ -7,12 +7,14 @@ import Results from './pages/Results'
 import EntityPage from './pages/EntityPage'
 import Mitigation from './pages/Mitigation'
 import Methodology from './pages/Methodology'
+import Finder from './pages/Finder'
 
 export default function App() {
   return (
     <Routes>
       <Route element={<Shell />}>
         <Route index element={<Overview />} />
+        <Route path="finder" element={<Finder />} />
         <Route path="network" element={<NetworkPage />} />
         <Route path="scenario" element={<Builder />} />
         <Route path="results" element={<Results />} />

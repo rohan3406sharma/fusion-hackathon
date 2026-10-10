@@ -121,4 +121,21 @@ describe('Audit regressions', () => {
     expect(screen.getByText('9.5')).toBeInTheDocument()
     expect(screen.getByText('Hidden exposure')).toBeInTheDocument()
   })
+  it('shows company rows with their business units, the one-node bound and links to each unit', async () => {
+    const run2 = JSON.parse(JSON.stringify((await import('../test/fixtures')).run))
+    run2.comparison = { ...run2.comparison, holding_view: 'company', portfolio_network_impact_one_node: 0.02, portfolio_rows: [{
+      entity_id: 'co_test', name: 'Test Consumer Group', location_disruption: 0, network_disruption: 0.12, location_loss_musd: 0, network_loss_musd: 1, rank_location: 1.5,
+      rank_network: 1, rank_change: 0.5, hidden_exposure: true, weight: 0.5, kind: 'multi_segment', primary_entity_id: 'bakery', other_businesses_share: 0.5,
+      network_disruption_if_other_hit: 0.24, network_disruption_one_node: 0.4,
+      segments: [{ entity_id: 'bakery', name: 'Test Bakery', segment: 'Bakery', share: 0.3, location_disruption: 0, network_disruption: 0.4 },
+        { entity_id: 'cafe', name: 'Test Coffee Roaster', segment: 'Coffee', share: 0.2, location_disruption: 0, network_disruption: 0 }] }] }
+    vi.stubGlobal('fetch', mockFetch({ '/api/v1/scenarios/sc_test/run': () => new Response(JSON.stringify(run2), { headers: { 'Content-Type': 'application/json' } }) }))
+    renderAt('/results')
+    expect(await screen.findByText('Company')).toBeInTheDocument()
+    expect(screen.getByText('Bakery 40% · Coffee 0% · 50% outside F&B (not modelled)')).toBeInTheDocument()
+    expect(screen.getByTestId('one-node-impact')).toHaveTextContent('2.00% if every company were one node')
+    const box = screen.getByTestId('company-breakdown')
+    expect(box).toHaveTextContent('up to 24.0%')
+    expect(within(box).getByRole('link', { name: 'Coffee' })).toHaveAttribute('href', '/entity/cafe')
+  })
 })

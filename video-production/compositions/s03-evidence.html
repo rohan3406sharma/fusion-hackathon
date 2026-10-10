@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>s03 evidence</title></head>
+  <body>
+    <template id="s03-evidence-template">
+      <style>
+        #s03-evidence { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+        #s03-evidence .stage { position: absolute; inset: 0; }
+        #s03-evidence .head { position: absolute; left: 120px; top: 150px; width: 1680px; }
+        #s03-evidence .head .fx-headline { font-size: 70px; margin-top: 14px; }
+        #s03-evidence .head2 { position: absolute; left: 120px; top: 150px; width: 1680px; }
+        #s03-evidence .head2 .fx-headline { font-size: 70px; margin-top: 14px; }
+        #s03-evidence svg.chain { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #s03-evidence .metric { position: absolute; width: 400px; font-family: var(--label); font-size: 20px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+        #s03-evidence .metric .track { margin-top: 10px; height: 16px; border-radius: 8px; background: var(--ink-3); overflow: hidden; }
+        #s03-evidence .metric .fill { width: 100%; height: 100%; background: var(--text-dim); transform-origin: 0 50%; }
+        #s03-evidence .metric svg { display: block; margin-top: 10px; width: 300px; height: 70px; overflow: visible; }
+        #s03-evidence .box { position: absolute; border: 3px dashed var(--safe); border-radius: 22px; }
+        #s03-evidence .box .lab { position: absolute; left: 0; right: 0; top: -54px; text-align: center; font-family: var(--label); font-weight: 700;
+          font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--safe); white-space: nowrap; }
+        #s03-evidence .box .ok { position: absolute; left: 0; right: 0; bottom: -60px; text-align: center; font-family: var(--label); font-weight: 700;
+          font-size: 24px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--safe); white-space: nowrap; }
+        #s03-evidence .blind { position: absolute; left: 120px; top: 770px; width: 1180px; }
+        #s03-evidence .blind .fx-headline { font-size: 74px; }
+        #s03-evidence .src1, #s03-evidence .src2 { position: absolute; left: 72px; bottom: 44px; }
+      </style>
+      <div id="s03-evidence" data-composition-id="s03-evidence" data-width="1920" data-height="1080">
+        <div class="stage">
+          <div class="head"><div class="fx-eyebrow">What the research shows</div><h2 class="fx-headline">A disaster at a supplier cuts its <em>customers'</em> output too.</h2></div>
+          <div class="head2"><div class="fx-eyebrow">Japan, 2011 earthquake</div><h2 class="fx-headline">The disruption travelled <em>further</em> down — and up — the chain.</h2></div>
+          <svg class="chain" viewBox="0 0 1920 1080"></svg>
+          <div class="metric m-out">Customer output<div class="track"><div class="fill"></div></div></div>
+          <div class="metric m-val">Customer market value<svg viewBox="0 0 300 70"><path class="spark" d="M0 22 L60 18 L110 24 L150 20 L190 50 L240 58 L300 60" fill="none" stroke="#9aa3b1" stroke-width="3"/></svg></div>
+          <div class="box"><div class="lab">Location-only site check</div><div class="ok">✓ No hazard at this site</div></div>
+          <div class="blind"><h2 class="fx-headline">A site-only screen sees <span class="hz">none of it.</span></h2></div>
+          <div class="fx-source src1">Source: <b>Barrot &amp; Sauvagnat (2016)</b>, “Input Specificity and the Propagation of Idiosyncratic Shocks in Production Networks”, <i>Quarterly Journal of Economics</i> 131(3) — major U.S. natural disasters as supplier shocks.</div>
+          <div class="fx-source src2">Source: <b>Carvalho, Nirei, Saito &amp; Tahbaz-Salehi (2021)</b>, “Supply Chain Disruptions: Evidence from the Great East Japan Earthquake”, <i>Quarterly Journal of Economics</i> 136(2).</div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const ID = 's03-evidence', FX = window.FX
+          const root = document.getElementById(ID), stage = root.querySelector('.stage'), L = FX.clock(ID)
+          const tl = gsap.timeline({ paused: true })
+          FX.envelope(tl, stage, ID)
+          const chap = FX.chapter(stage, '02', 'The problem')
+          const svg = root.querySelector('svg.chain')
+          const W = (t) => L(FX.word(t[0], t[1], t[2] || 0))
+
+          // node factory (outer <g> positions, inner <g> animates)
+          const node = (x, y, label, r = 58) => {
+            const outer = FX.svg('g', { transform: `translate(${x} ${y})` }, svg), g = FX.svg('g', {}, outer)
+            const c = FX.svg('circle', { cx: 0, cy: 0, r, fill: '#131922', stroke: '#8b97a8', 'stroke-width': 3 }, g)
+            const ring = FX.svg('circle', { cx: 0, cy: 0, r, fill: 'none', stroke: '#e0553b', 'stroke-width': 3, opacity: 0 }, g)
+            const icon = FX.svg('path', { d: 'M-22 18 L-22 -4 L-10 3 L-10 -4 L2 3 L2 -14 L12 -14 L12 3 L22 3 L22 18 Z', fill: '#ece6da' }, g)
+            const t = FX.svg('text', { x: 0, y: r + 44, 'text-anchor': 'middle', fill: '#9aa3b1', 'font-family': 'Space Grotesk', 'font-size': 24, 'letter-spacing': 2.5 }, g)
+            t.textContent = label.toUpperCase()
+            return { outer, g, c, ring, t, x, y, r }
+          }
+          const link = (a, b) => {
+            const x1 = a.x + a.r + 14, x2 = b.x - b.r - 22
+            const p = FX.svg('path', { d: `M${x1} ${a.y} L${x2} ${b.y}`, stroke: '#8b97a8', 'stroke-width': 3, fill: 'none', 'stroke-dasharray': x2 - x1, 'stroke-dashoffset': x2 - x1 }, svg)
+            const head = FX.svg('path', { d: `M${x2} ${b.y - 11} L${x2 + 18} ${b.y} L${x2} ${b.y + 11} Z`, fill: '#8b97a8', opacity: 0 }, svg)
+            return { p, head, len: x2 - x1 }
+          }
+          const drawLink = (lk, t, d = 0.5) => { tl.to(lk.p, { strokeDashoffset: 0, duration: d, ease: 'power2.inOut' }, t); tl.to(lk.head, { opacity: 1, duration: 0.15 }, t + d - 0.1) }
+          const pop = (n, t) => tl.fromTo(n.g, { opacity: 0, scale: 0.6, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(2)' }, t)
+          const hit = (n, t, col = '#e0553b', fill = '#3a1712') => {
+            tl.to(n.c, { attr: { stroke: col, fill }, duration: 0.3 }, t)
+            FX.burst(tl, n.ring, t, { opacity: 0.9, scale: 1, transformOrigin: '50% 50%', attr: { stroke: col } }, { opacity: 0, scale: 2.1, duration: 1.0, ease: 'power2.out' })
+          }
+
+          // ---- phase A: supplier -> customer (Barrot & Sauvagnat) ----
+          const head = root.querySelector('.head')
+          tl.fromTo(chap, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.3)
+          tl.fromTo(head, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, W(['L09', 'research']) - 0.1)
+          const A = node(700, 560, 'Supplier'), B = node(1220, 560, 'Customer')
+          const AB = link(A, B)
+          pop(A, W(['L09', 'when']) - 0.3); pop(B, W(['L09', 'when']) - 0.1); drawLink(AB, W(['L09', 'when']))
+          hit(A, W(['L09', 'hits']) - 0.05)
+          const mOut = root.querySelector('.m-out'), mVal = root.querySelector('.m-val')
+          gsap.set(mOut, { left: 1070, top: 710 }); gsap.set(mVal, { left: 1070, top: 790 })
+          tl.fromTo(mOut, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, W(['L09', 'customers']) - 0.2)
+          tl.to(mOut.querySelector('.fill'), { scaleX: 0.62, background: '#e0553b', duration: 0.8, ease: 'power2.inOut' }, W(['L09', 'lose']))
+          hit(B, W(['L09', 'lose']), '#f0a04b', '#2e2414')
+          tl.fromTo(mVal, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4 }, W(['L09', 'market']) - 0.3)
+          const spark = mVal.querySelector('.spark')
+          tl.fromTo(spark, { strokeDasharray: 330, strokeDashoffset: 330 }, { strokeDashoffset: 0, duration: 0.9, ease: 'power1.inOut' }, W(['L09', 'market']))
+          tl.to(spark, { attr: { stroke: '#e0553b' }, duration: 0.3 }, W(['L09', 'falls']) - 0.2)
+          const src1 = root.querySelector('.src1')
+          tl.fromTo(src1, { opacity: 0 }, { opacity: 1, duration: 0.5 }, W(['L09', 'when']))
+
+          // ---- phase B: the chain widens (Carvalho et al.) ----
+          const tB = L(FX.line('L10').start) - 0.35
+          tl.to([head, mOut, mVal, src1], { opacity: 0, y: -16, duration: 0.4, ease: 'power2.in' }, tB)
+          tl.to([A.outer, B.outer, AB.p, AB.head], { opacity: 0, duration: 0.35 }, tB)
+          const head2 = root.querySelector('.head2')
+          tl.fromTo(head2, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, tB + 0.3)
+          const xs = [300, 630, 960, 1290, 1620], labels = ["Supplier's supplier", 'Supplier', 'Hit firm', 'Customer', "Customer's customer"]
+          const C = xs.map((x, k) => node(x, 560, labels[k], k === 2 ? 64 : 54))
+          const links = [link(C[0], C[1]), link(C[1], C[2]), link(C[2], C[3]), link(C[3], C[4])]
+          C.forEach((n, k) => pop(n, tB + 0.4 + Math.abs(k - 2) * 0.12))
+          links.forEach((lk, k) => drawLink(lk, tB + 0.6 + k * 0.08, 0.45))
+          const tQuake = W(['L10', 'earthquake']) - 0.1
+          hit(C[2], tQuake)
+          // ripples outward: first order on "disruption travelled", second order on the named tiers
+          const ripple = (from, to, t) => {
+            const dot = FX.svg('circle', { cx: from.x, cy: from.y, r: 9, fill: '#ffb39c', opacity: 0 }, svg)
+            tl.set(dot, { opacity: 1 }, t)
+            tl.fromTo(dot, { attr: { cx: from.x } }, { attr: { cx: to.x }, duration: 0.6, ease: 'power1.inOut', immediateRender: false }, t)
+            tl.to(dot, { opacity: 0, duration: 0.15 }, t + 0.6)
+          }
+          const t1 = W(['L10', 'traveled']) - 0.3
+          ripple(C[2], C[1], t1); ripple(C[2], C[3], t1)
+          hit(C[1], t1 + 0.55, '#f0a04b', '#2e2414'); hit(C[3], t1 + 0.55, '#f0a04b', '#2e2414')
+          const tS = W(['L10', 'suppliers', 0]) - 0.35, tC = W(['L10', 'customers', 0]) - 0.35
+          ripple(C[1], C[0], tS); hit(C[0], tS + 0.55, '#e9c46a', '#29261a')
+          ripple(C[3], C[4], tC); hit(C[4], tC + 0.55, '#e9c46a', '#29261a')
+          tl.to(C[0].t, { attr: { fill: '#ece6da' }, duration: 0.3 }, tS + 0.4)
+          tl.to(C[4].t, { attr: { fill: '#ece6da' }, duration: 0.3 }, tC + 0.4)
+          const src2 = root.querySelector('.src2')
+          tl.fromTo(src2, { opacity: 0 }, { opacity: 1, duration: 0.5 }, tB + 0.6)
+
+          // ---- phase C: the location-only screen boxes one site and sees nothing ----
+          const tC2 = L(FX.line('L11').start) - 0.2
+          const box = root.querySelector('.box'), you = C[4]
+          gsap.set(box, { left: you.x - 160, top: you.y - 108, width: 320, height: 262 })
+          tl.to(head2, { opacity: 0, y: -16, duration: 0.4 }, tC2 - 0.2)
+          tl.fromTo(box, { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out' }, tC2)
+          const yours = FX.svg('text', { x: 0, y: you.r + 44, 'text-anchor': 'middle', fill: '#62b88d', 'font-family': 'Space Grotesk', 'font-size': 24, 'letter-spacing': 2.5, opacity: 0 }, you.g)
+          yours.textContent = 'YOUR HOLDING'
+          tl.to(C[4].t, { opacity: 0, duration: 0.25 }, tC2)
+          tl.to(yours, { opacity: 1, duration: 0.3 }, tC2 + 0.2)
+          const others = [C[0], C[1], C[2], C[3]].map((n) => n.outer).concat(links.slice(0, 3).flatMap((l) => [l.p, l.head]))
+          tl.to(others, { opacity: 0.12, duration: 0.6, ease: 'power2.inOut' }, W(['L11', 'sees']) - 0.25)
+          tl.fromTo(root.querySelector('.blind'), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, W(['L11', 'sees']) - 0.35)
+
+          window.__timelines[ID] = tl
+        })()
+      </script>
+    </template>
+  </body>
+</html>
